@@ -3,7 +3,7 @@ Calculate mortgage payments, total interest paid, interest savings with extra pa
 
 ### License Terms:
 
-* This use of this code or any part is restricted to personal use only.
+* The use of this code or any part is restricted to personal use only.
 * If you borrow any part, you must provide credit back to the original code and owner.
 * You are not allowed to sell or distribute this in any way be it as a service or as a product without prior written consent of the copyright owner.
 * I am not liable for any issues this code may cause or for any inaccuracies in the calculations.
