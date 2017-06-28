@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<header>
+	<meta http-equiv='cache-control' content='no-cache'>
+	<meta http-equiv='expires' content='0'>
+	<meta http-equiv='pragma' content='no-cache'>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</header>
+<style>
+	table, tr, th {
+		border: 1px solid black;
+	}
+	.divTable{
+		display: table;
+		width: auto;
+	}
+	.divTableRow {
+		display: table-row;
+	}
+	.divTableHeading {
+		background-color: green;
+		display: table-header-group;
+	}
+	.divTableCell, .divTableHead {
+		border: 0px;
+		display: table-cell;
+		padding: 3px 10px;
+		text-align: right;
+	}
+	.divTableCellR {
+		border: 0px;
+		display: table-cell;
+		padding: 3px 10px;
+		text-align: left;
+	}
+	.divTableHeading {
+		background-color: green;
+		display: table-header-group;
+		font-weight: bold;
+	}
+	.divTableFoot {
+		background-color: #EEE;
+		display: table-footer-group;
+		font-weight: bold;
+	}
+	.divTableBody {
+		display: table-row-group;
+	}
+	.divTableTitle {
+		text-align: left;
+	}
+</style>
+<body>
+	<div class="divTable">
+		<div class="divTableBody">
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Home Cost: </b></div>
+				<div class="divTableCell"><input type="text" id="Home_Cost" value="$300,000" size=10 maxlength=10></input></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Down Payment: </b></div>
+				<div class="divTableCell"><input type="text" id="Down_Payment" value="20.00%" size=10 maxlength=10></input></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Interest Rate (APR): </b></div>
+				<div class="divTableCell"><input type="text" id="Interest_Rate" value="3.00%" size=10 maxlength=10></input></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Loan Term: </b></div>
+				<div class="divTableCell"><input type="text" id="Loan_Term" value="15 years" size=10 maxlength=10></input></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Extra Payment: </b></div>
+				<div class="divTableCell"><input type="text" id="Extra_Payment" value="$0" size=10 maxlength=10></input></div>
+			</div>
+		</div>
+	</div>
+
+	<br><input type="button" value="Calculate" onclick="test()"></input>
+		<div class="divTable">
+		<div class="divTableBody">
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Down Payment: </b></div>
+				<div class="divTableCellR"><div id="dp"></div></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Loan Amount: </b></div>
+				<div class="divTableCellR"><div id="la"></div></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Monthly Payment: </b></div>
+				<div class="divTableCellR"><div id="mp"></div></div>
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Total Interest Paid: </b></div>
+				<div class="divTableCellR"><div id="ti"></div></div>
+			</div>
+		</div>
+	</div>
+
+	<!--<p><div class="divTableTitle"><b>Interest Rate (%) vs. Extra Monthly Payment ($)</b>
+		<table id="table1"></table>
+	</div></p>
+	<p><div class="divTableTitle"><b>Interest Rate (%) vs. Extra Down Payment (%)</b>
+		<table id="table2"></table>
+	</div></p>-->
+	<p>
+		<div class="divTableTitle"><b>Interest Rate (%) vs. Extra Monthly Payment ($)</b></div>
+		<div class="divTable">
+			<div class="divTableBody" id="table1">
+			</div>
+		</div>
+	</p>
+	<p>
+		<div class="divTableTitle"><b>Interest Rate (%) vs. Extra Down Payment (%)</b></div>
+		<div class="divTable">
+			<div class="divTableBody" id="table2">
+			</div>
+		</div>
+	</p>
+	<p>
+		<div class="divTable" id="test1">
+			<div class="divTableBody" id="test2">
+			</div>
+		</div>
+	</p>
+</body>
+<script type="text/javascript">
+	
+	$("#Home_Cost, #Extra_Payment").focusout(function(){
+		var a = $(this);
+		var x = a.val();
+		if (x != ""){
+			a.val("$"+addCommas(x));
+		}else{
+			a.val("$0");
+		}
+		
+	});
+	$("#Home_Cost, #Extra_Payment").focusin(function(){
+		var a = $(this);
+		var x = a.val();
+		a.val(removeCommas(x));
+		a.select();
+	});
+
+	$("#Down_Payment, #Interest_Rate").focusout(function(){
+		var a = $(this);
+		var x = a.val();
+		if (x != ""){
+			var temp = Number(a.val()).toFixed(2);
+			a.val(temp+"%");
+		}else{
+			a.val("0.00%");
+		}
+	});
+	$("#Down_Payment, #Interest_Rate").focusin(function(){
+		var a = $(this);
+		var x = a.val();
+		a.val(a.val().replace("%",""));
+		a.select();
+	});
+
+	$("#Loan_Term").focusout(function(){
+		var a = $(this);
+		var x = a.val();
+		if (x != ""){
+			a.val(a.val()+" years");
+		}else{
+			a.val("0 years");
+		}
+	});
+	$("#Loan_Term").focusin(function(){
+		var a = $(this);
+		var x = a.val();
+		a.val(a.val().replace(" years",""));
+		a.select();
+	});
+
+	function addCommas(x) {
+		return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	}
+	function removeCommas(x) {
+		return x.toString().replace(/,/g,"").replace("$","");
+	}
+
+    function test(){
+		var hv = Number(document.getElementById("Home_Cost").value.replace(/,/g,"").replace("$",""));
+		var dp = Number(document.getElementById("Down_Payment").value.replace("%",""));
+		var ir = Number(document.getElementById("Interest_Rate").value.replace("%",""));
+		var lt = Number(document.getElementById("Loan_Term").value.replace(" years",""));
+		var xm = Number(document.getElementById("Extra_Payment").value.replace(/,/g,"").replace("$",""));
+
+		var P = hv - (dp/100)*hv;
+		var i = ir/100/12;
+		var n = lt*12;
+		var M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+		
+		document.getElementById("dp").innerHTML = "$" + addCommas((dp/100)*hv);
+		document.getElementById("la").innerHTML = "$" + addCommas(P);
+		document.getElementById("mp").innerHTML = "$" + addCommas(Number(Math.round(M+'e2')+'e-2').toFixed(2));
+
+		var newP = P;
+		var newi = 0;
+		var ti = 0;
+
+		var principal = 0;
+
+		for (var j = 0; j < n; j++){
+			if (newP >= M){
+				newi = newP*i;
+				ti = ti + newi;
+				principal = M - newi;
+				newP = newP - principal;
+			}else{
+				newi = newP*i;
+				ti = ti + newi;
+				principal = M - newi;
+				newP = newP - principal;
+				break;
+			}
+		}
+		document.getElementById("ti").innerHTML = "$" + addCommas(Number(Math.round(ti+'e2')+'e-2'));
+		
+		//Create Headers for Extra Monthly Payments and Extra Down Payment
+		/*var table = document.getElementById("table1");
+		var row0 = document.createElement("tr");
+		table.appendChild(row0);
+
+		var table2 = document.getElementById("table2");
+		var row2 = document.createElement("tr");
+		table2.appendChild(row2);
+		for (var k = 0; k < 2.25; k+=.25){
+			var column0 = document.createElement("th");
+			var temp0 = Number(ir) + k;
+			var text0 = document.createTextNode(temp0.toFixed(2));
+			column0.appendChild(text0);
+			row0.appendChild(column0);
+
+			var column2 = document.createElement("th");
+			var temp0 = Number(ir) + k;
+			var text2 = document.createTextNode(temp0.toFixed(2));
+			column2.appendChild(text2);
+			row2.appendChild(column2);
+		}
+
+		//Calculate Total Interest Paid with Extra Monthly Payments
+		for (var m = 0; m < 1100; m+=100){
+			var row1 = document.createElement("tr");
+			for (var k = 0; k < 2.25; k+=.25){
+				var temp0 = Number(ir) + k;
+				P = hv - (dp/100)*hv;
+				i = temp0/100/12;
+				n = lt*12;
+				xm = m;
+				M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+				newP = P;
+				newi = 0;
+				ti = 0;
+				principal = 0;
+				for (var j = 0; j < n; j++){
+					if (newP >= M){
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+					}else{
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+						break;
+					}
+				}
+				var column1 = document.createElement("th");
+				var temp1 = Number(Math.round(ti+'e2')+'e-2');
+				var text1 = document.createTextNode(temp1.toFixed(2));
+				column1.appendChild(text1);
+				row1.appendChild(column1);
+			}
+			var column1 = document.createElement("th");
+			var temp1 = m;
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+			table.appendChild(row1);
+		}
+
+		//Calculate Total Interest Paid with Extra Down Payment
+		for (var d = 20; d < 55; d+=5){
+			var row1 = document.createElement("tr");
+			for (var k = 0; k < 2.25; k+=.25){
+				var temp0 = Number(ir) + k;
+				P = hv - (d/100)*hv;
+				i = temp0/100/12;
+				n = lt*12;
+				//xm = m;
+				M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+				newP = P;
+				newi = 0;
+				ti = 0;
+				principal = 0;
+				for (var j = 0; j < n; j++){
+					if (newP >= M){
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+					}else{
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+						break;
+					}
+				}
+				var column1 = document.createElement("th");
+				var temp1 = Number(Math.round(ti+'e2')+'e-2');
+				var text1 = document.createTextNode(temp1.toFixed(2));
+				column1.appendChild(text1);
+				row1.appendChild(column1);
+			}
+			var column1 = document.createElement("th");
+			var temp1 = d;
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+			table2.appendChild(row1);
+		}*/
+		
+		//Div Table Test
+		//Create Headers for Extra Monthly Payments and Extra Down Payment
+		var table = document.getElementById("table1");
+		var row0 = document.createElement("div");
+		row0.className = "divTableRow";
+		table.appendChild(row0);
+
+		var table2 = document.getElementById("table2");
+		var row2 = document.createElement("div");
+		row2.className = "divTableRow";
+		table2.appendChild(row2);
+
+		for (var k = 0; k < 2.25; k+=.25){
+			var column0 = document.createElement("div");
+			column0.className = "divTableCell";
+			column0.style = "border: 1px solid black; text-align: center; font-weight: bold;";
+			var temp0 = Number(ir) + k;
+			var text0 = document.createTextNode(temp0.toFixed(2));
+			column0.appendChild(text0);
+			row0.appendChild(column0);
+
+			var column2 = document.createElement("div");
+			column2.className = "divTableCell";
+			column2.style = "border: 1px solid black; text-align: center; font-weight: bold;";
+			var temp0 = Number(ir) + k;
+			var text2 = document.createTextNode(temp0.toFixed(2));
+			column2.appendChild(text2);
+			row2.appendChild(column2);
+		}
+
+		//Calculate Total Interest Paid with Extra Monthly Payments
+		for (var m = 0; m < 1100; m+=100){
+			var row1 = document.createElement("tr");
+			for (var k = 0; k < 2.25; k+=.25){
+				var temp0 = Number(ir) + k;
+				P = hv - (dp/100)*hv;
+				i = temp0/100/12;
+				n = lt*12;
+				xm = m;
+				M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+				newP = P;
+				newi = 0;
+				ti = 0;
+				principal = 0;
+				for (var j = 0; j < n; j++){
+					if (newP >= M){
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+					}else{
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+						break;
+					}
+				}
+				var column1 = document.createElement("div");
+				column1.className = "divTableCell";
+				column1.style = "border: 1px solid black;";
+				var temp1 = Number(Math.round(ti+'e2')+'e-2');
+				var text1 = document.createTextNode(temp1.toFixed(2));
+				column1.appendChild(text1);
+				row1.appendChild(column1);
+			}
+			var column1 = document.createElement("div");
+			column1.className = "divTableCell";
+			column1.style = "border: 1px solid black;";
+			var temp1 = m;
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+			table.appendChild(row1);
+		}
+
+		//Calculate Total Interest Paid with Extra Down Payment
+		for (var d = 20; d < 55; d+=5){
+			var row1 = document.createElement("tr");
+			for (var k = 0; k < 2.25; k+=.25){
+				var temp0 = Number(ir) + k;
+				P = hv - (d/100)*hv;
+				i = temp0/100/12;
+				n = lt*12;
+				//xm = m;
+				M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+				newP = P;
+				newi = 0;
+				ti = 0;
+				principal = 0;
+				for (var j = 0; j < n; j++){
+					if (newP >= M){
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+					}else{
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+						break;
+					}
+				}
+				var column1 = document.createElement("div");
+				column1.className = "divTableCell";
+				column1.style = "border: 1px solid black;";
+				var temp1 = Number(Math.round(ti+'e2')+'e-2');
+				var text1 = document.createTextNode(temp1.toFixed(2));
+				column1.appendChild(text1);
+				row1.appendChild(column1);
+			}
+			var column1 = document.createElement("div");
+			column1.className = "divTableCell";
+			column1.style = "border: 1px solid black;";
+			var temp1 = d;
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+			table2.appendChild(row1);
+		}
+
+		//Test Exact Calculations for Monthly Payment
+		for (var m = 0; m < 1100; m+=100){
+			var row1 = document.createElement("tr");
+			for (var k = 0; k < 2.25; k+=.25){
+				var temp0 = Number(ir) + k;
+				P = hv - (dp/100)*hv;
+				i = temp0/100/12;
+				n = lt*12;
+				xm = m;
+				M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+				newP = P;
+				newi = 0;
+				ti = 0;
+				principal = 0;
+				for (var j = 0; j < n; j++){
+					if (newP >= M){
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+					}else{
+						newi = newP*i;
+						ti = ti + newi;
+						principal = M - newi;
+						newP = newP - principal;
+						break;
+					}
+				}
+				var column1 = document.createElement("div");
+				column1.className = "divTableCell";
+				column1.style = "border: 1px solid black;";
+				var temp1 = Number(Math.round(ti+'e2')+'e-2');
+				var text1 = document.createTextNode(temp1.toFixed(2));
+				column1.appendChild(text1);
+				row1.appendChild(column1);
+			}
+			var column1 = document.createElement("div");
+			column1.className = "divTableCell";
+			column1.style = "border: 1px solid black;";
+			var temp1 = m;
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+			table.appendChild(row1);
+		}
+		
+	}
+</script>
