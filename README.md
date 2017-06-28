@@ -1,7 +1,7 @@
 # Erick's Mortgage Calculator
 Calculate mortgage payments, total interest paid, interest savings with extra payments, etc.
 
-License Terms:
+### License Terms:
 
 * This use of this code or any part is restricted to personal use only.
 * If you borrow any part, you must provide credit back to the original code and owner.
@@ -11,4 +11,4 @@ License Terms:
 * No warranty is included or implied.
 * Support of this code is not guaranteed in any way.
 
-Copyright © 2017 Erick Scott Johnson. All rights reserved.
+#### Copyright © 2017 Erick Scott Johnson. All rights reserved.
