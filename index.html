@@ -50,19 +50,8 @@
 		text-align: left;
 	}
 </style>
-<head>
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-101851721-1', 'auto');
-  ga('send', 'pageview');
-
-</script>	
-</head>
 <body>
+	<p><div id="answerloop"></div></p>
 	<div class="divTable">
 		<div class="divTableBody">
 			<div class="divTableRow">
@@ -463,14 +452,22 @@
 		}
 
 		//Test Exact Calculations for Monthly Payment
-		for (var m = 0; m < 1100; m+=100){
-			var row1 = document.createElement("tr");
-			for (var k = 0; k < 2.25; k+=.25){
-				var temp0 = Number(ir) + k;
+		var static = 58331.27;
+		var ilow = 3;
+		var ihigh = 4;
+		var low = 0;
+
+		//Loop
+		var array1 = [1100, 100, 10, 1, .1];
+		var array2 = [100, 10, 1, .1, .01];
+		var low = 0;
+		for (var q = 0; q < array1.length; q++){
+			for (var m = 0; m < array1[q]; m+=array2[q]){
+				var temp0 = Number(ihigh);
 				P = hv - (dp/100)*hv;
 				i = temp0/100/12;
 				n = lt*12;
-				xm = m;
+				xm = low + m;
 				M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
 				newP = P;
 				newi = 0;
@@ -490,23 +487,15 @@
 						break;
 					}
 				}
-				var column1 = document.createElement("div");
-				column1.className = "divTableCell";
-				column1.style = "border: 1px solid black;";
-				var temp1 = Number(Math.round(ti+'e2')+'e-2');
-				var text1 = document.createTextNode(temp1.toFixed(2));
-				column1.appendChild(text1);
-				row1.appendChild(column1);
+				if (ti >= static){
+					low = low + m;
+				}else {
+					break;
+				}
 			}
-			var column1 = document.createElement("div");
-			column1.className = "divTableCell";
-			column1.style = "border: 1px solid black;";
-			var temp1 = m;
-			var text1 = document.createTextNode(temp1.toFixed(2));
-			column1.appendChild(text1);
-			row1.appendChild(column1);
-			table.appendChild(row1);
 		}
+		var ans = document.getElementById("answerloop");
+		ans.innerText = Number(Math.round(low+'e2')+'e-2');
 		
 	}
 </script>
