@@ -1,6 +1,10 @@
 # Erick's Mortgage Calculator
 Calculate mortgage payments, total interest paid, interest savings with extra payments, etc.
 
+* Current Released Version: http://www.erickscottjohnson.com/mortgage-calculator
+
+* Latest Development Build: https://escottj.github.io/MortgageCalculator
+
 ### License Terms:
 
 * The use of this code or any part is restricted to personal use only.
