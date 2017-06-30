@@ -5,6 +5,7 @@
 	<meta http-equiv='expires' content='0'>
 	<meta http-equiv='pragma' content='no-cache'>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 </header>
 <style>
 	table, tr, th {
@@ -348,6 +349,14 @@
 		row2.className = "divTableRow";
 		table2.appendChild(row2);
 
+		var column2 = document.createElement("div");
+		column2.className = "divTableCell";
+		column2.style = "border: 1px solid black; text-align: center; font-weight: bold;";
+		var temp0 = Number(ir) + k;
+		var text2 = document.createTextNode("IR");
+		column2.appendChild(text2);
+		row2.appendChild(column2);
+
 		for (var k = 0; k < 2.25; k+=.25){
 			var column0 = document.createElement("div");
 			column0.className = "divTableCell";
@@ -413,7 +422,8 @@
 		}
 
 		//Calculate Total Interest Paid with Extra Down Payment
-		var colnum = 0;
+		//Working
+		/*var colnum = 0;
 		var rownum = 0;
 		for (var d = 20; d < 65; d+=5){
 			rownum++;
@@ -422,30 +432,7 @@
 			for (var k = 0; k < 2.25; k+=.25){
 				colnum++;
 				if (colnum == rownum){
-					var help = dploop(k);
-					/*var temp0 = Number(ir) + k;
-					P = hv - (d/100)*hv;
-					i = temp0/100/12;
-					n = lt*12;
-					M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
-					newP = P;
-					newi = 0;
-					ti = 0;
-					principal = 0;
-					for (var j = 0; j < n; j++){
-						if (newP >= M){
-							newi = newP*i;
-							ti = ti + newi;
-							principal = M - newi;
-							newP = newP - principal;
-						}else{
-							newi = newP*i;
-							ti = ti + newi;
-							principal = M - newi;
-							newP = newP - principal;
-							break;
-						}
-					}*/
+					var help = dploop2(k);
 					var column1 = document.createElement("div");
 					column1.className = "divTableCell";
 					column1.style = "border: 1px solid black;";
@@ -471,7 +458,75 @@
 			column1.appendChild(text1);
 			row1.appendChild(column1);
 			table2.appendChild(row1);
+		}*/
+
+		var colnum = 0;
+		var rownum = 0;
+		var row1 = document.createElement("tr");
+		var column1 = document.createElement("div");
+		column1.className = "divTableCell";
+		column1.style = "border: 1px solid black;";
+		var text1 = document.createTextNode("DP");
+		column1.appendChild(text1);
+		row1.appendChild(column1);
+
+		var row2 = document.createElement("tr");
+		var column2 = document.createElement("div");
+		column2.className = "divTableCell";
+		column2.style = "border: 1px solid black;";
+		var text2 = document.createTextNode("M");
+		column2.appendChild(text2);
+		row2.appendChild(column2);
+
+		var row3 = document.createElement("tr");
+		var column3 = document.createElement("div");
+		column3.className = "divTableCell";
+		column3.style = "border: 1px solid black;";
+		var text3 = document.createTextNode("P");
+		column3.appendChild(text3);
+		row3.appendChild(column3);
+		for (var d = 20; d < 65; d+=5){
+			rownum++;
+			colnum = 0;
+			for (var k = 0; k < 2.25; k+=.25){
+				colnum++;
+				if (colnum == rownum){
+					var help = dploop2(k);
+					var column1 = document.createElement("div");
+					column1.className = "divTableCell";
+					column1.style = "border: 1px solid black;";
+					var temp1 = Number(Math.round(help[1]+'e2')+'e-2');
+					var text1 = document.createTextNode(temp1.toFixed(2));
+				}
+			}
+			var column1 = document.createElement("div");
+			column1.className = "divTableCell";
+			column1.style = "border: 1px solid black;";
+			var temp1 = help[0];
+			var text1 = document.createTextNode(temp1.toFixed(2));
+			column1.appendChild(text1);
+			row1.appendChild(column1);
+
+			var column2 = document.createElement("div");
+			column2.className = "divTableCell";
+			column2.style = "border: 1px solid black;";
+			var temp2 = help[3];
+			var text2 = document.createTextNode(temp2.toFixed(2));
+			column2.appendChild(text2);
+			row2.appendChild(column2);
+
+			var column3 = document.createElement("div");
+			column3.className = "divTableCell";
+			column3.style = "border: 1px solid black;";
+			var temp3 = help[2];
+			var text3 = document.createTextNode(temp3.toFixed(2));
+			column3.appendChild(text3);
+			row3.appendChild(column3);
+			
 		}
+		table2.appendChild(row1);
+		table2.appendChild(row2);
+		table2.appendChild(row3);
 
 		//Test Exact Calculations for Monthly Payment
 		var static = 58331.27;
@@ -521,7 +576,7 @@
 		
 		//DP Loop
 		function dploop(k){
-			var array1 = [110, 10, 1, .1, .01, .001];
+			var array1 = [110, 11, 1.1, .11, .011, .0011];
 			var array2 = [10, 1, .1, .01, .001, .0001];
 			var lowdp = 0;
 			for (var q = 0; q < array1.length; q++){
@@ -564,6 +619,55 @@
 			var ans = document.getElementById("dploop");
 			ans.innerText = Number(Math.round(tempdp+'e3')+'e-3');
 			return [tempdp, ti];
+		}
+
+				//DP Loop
+		function dploop2(k){
+			var array1 = [110000, 11000, 1100, 110, 11, 1.1, .11, .011];
+			var array2 = [10000, 1000, 100, 10, 1, .1, .01, .001];
+			var lowdp = 0;
+			for (var q = 0; q < array1.length; q++){
+				for (var m = 0; m < array1[q]; m+=array2[q]){
+					var temp0 = Number(ir) + k;
+					//var tempdp = dp + lowdp + m;
+					var dp2 = (dp/100)*hv + lowdp + m;
+					//P = hv - (tempdp/100)*hv;
+					P = hv - dp2;
+					i = temp0/100/12;
+					n = lt*12;
+					M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+					newP = P;
+					newi = 0;
+					ti = 0;
+					principal = 0;
+					for (var j = 0; j < n; j++){
+						if (newP >= M){
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+						}else{
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+							break;
+						}
+					}
+					if (k == 0){
+						static = ti;
+						break;
+					}
+					if (ti >= static){
+						lowdp = lowdp + m;
+					}else {
+						break;
+					}
+				}
+			}
+			var ans = document.getElementById("dploop");
+			ans.innerText = Number(Math.round(dp2+'e2')+'e-2');
+			return [dp2, ti, P, M];
 		}
 
 	}
