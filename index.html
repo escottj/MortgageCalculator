@@ -8,7 +8,8 @@
 <head>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdn.rawgit.com/escottj/MortgageCalculator/master/myStyle.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://cdn.rawgit.com/escottj/MortgageCalculator/master/css/myStyle.css">
 	 <script>
    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -18,52 +19,83 @@
    ga('create', 'UA-101851721-1', 'auto');
    ga('send', 'pageview');
  
- </script>	
+ </script>
 </head>
 <body>
 	<div class="divTable">
 		<div class="divTableBody">
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Home Cost: </b></div>
-				<div class="divTableCell"><input type="text" id="Home_Cost" value="$325,000" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="home-cost" value="$325,000" size=10 maxlength=10></input></div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Down Payment: </b></div>
-				<div class="divTableCell"><input type="text" id="Down_Payment_Dollars" value="$65,000" size=10 maxlength=10></input></div>
-				<div class="divTableCell"><input type="text" id="Down_Payment" value="20.000%" size=10 maxlength=10></input></div>
-			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Interest Rate (APR): </b></div>
-				<div class="divTableCell"><input type="text" id="Interest_Rate" value="3.000%" size=10 maxlength=10></input></div>
+				<div class="divTableCellR">
+					<input type="text" id="down-payment-dollars" value="$65,000" size=10 maxlength=10></input>
+					<input type="text" id="down-payment" value="20.000%" size=10 maxlength=10></input>
+				</div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Loan Term: </b></div>
-				<div class="divTableCell"><input type="text" id="Loan_Term" value="15 years" size=10 maxlength=10></input></div>
+				<div class="divTableCellR">
+					<div class="btn-group" data-toggle="buttons" id="loan-term">
+						<!--<label class="btn btn-primary">
+							<input type="radio" name="loan-term" value="5" autocomplete="off" > 5 years
+						</label>
+						<label class="btn btn-primary">
+							<input type="radio" name="loan-term" value="7" autocomplete="off"> 7 years
+						</label>-->
+						<label class="btn btn-primary radio-style">
+							<input type="radio" name="loan-term" value="10" autocomplete="off"> 10 years
+						</label>
+						<label class="btn btn-primary active radio-style">
+							<input type="radio" name="loan-term" value="15" autocomplete="off" checked> 15 years
+						</label>
+						<label class="btn btn-primary radio-style">
+							<input type="radio" name="loan-term" value="20" autocomplete="off"> 20 years
+						</label>
+						<label class="btn btn-primary radio-style">
+							<input type="radio" name="loan-term" value="30" autocomplete="off"> 30 years
+						</label>
+						<label class="btn btn-primary radio-style">
+							<input type="radio" name="loan-term" value="0" autocomplete="off"> Compare All
+						</label>
+					</div>
+				</div>				
+			</div>
+			<div class="divTableRow">
+				<div class="divTableCell"><b>Interest Rate (APR): </b></div>
+				<div class="divTableCellR">
+					<input class="interest" type="text" id="interest-rate-10" value="3.125%" maxlength=10></input>
+					<input class="interest" type="text" id="interest-rate-15" value="3.250%" maxlength=10></input>
+					<input class="interest" type="text" id="interest-rate-20" value="3.750%" maxlength=10></input>
+					<input class="interest" type="text" id="interest-rate-30" value="4.025%" maxlength=10></input>
+				</div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>HOA: </b></div>
-				<div class="divTableCell"><input type="text" id="HOA" value="$120" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="hoa" value="$120" size=10 maxlength=10></input></div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Property Tax Rate: </b></div>
-				<div class="divTableCell"><input type="text" id="Property_Tax_Rate" value="0.840%" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="property-tax-rate" value="0.840%" size=10 maxlength=10></input></div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>PMI: </b></div>
-				<div class="divTableCell"><input type="text" id="PMI" value="1.000%" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="pmi" value="1.000%" size=10 maxlength=10></input></div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Home Owner's Insurance: </b></div>
-				<div class="divTableCell"><input type="text" id="HMI" value="$100.00" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="hmi" value="$100.00" size=10 maxlength=10></input></div>
 			</div>
 			<div class="divTableRow">
 				<div class="divTableCell"><b>Extra Payment: </b></div>
-				<div class="divTableCell"><input type="text" id="Extra_Payment" value="$0" size=10 maxlength=10></input></div>
+				<div class="divTableCellR"><input type="text" id="extra-payment" value="$0" size=10 maxlength=10></input></div>
 			</div>
 		</div>
 	</div>
 
-	<br><input type="button" value="Calculate" onclick="test()"></input>
+	<br><button type="button" class="btn btn-primary" onclick="test()">Calculate</button>
 	<input type="button" value="Beta" onclick="beta()"></input>
 		<div class="divTable">
 		<div class="divTableBody">
@@ -110,6 +142,13 @@
 		</div>
 	</div>
 	<p>
+		<div class="divTableTitle"><b>Compare All Interest Rates</b></div>
+		<div class="divTable">
+			<div class="divTableBody" id="table6">
+			</div>
+		</div>
+	</p>
+	<p>
 		<div class="divTableTitle"><b>When Does Total ($) Out of Pocket Become the Same?</b></div>
 		<div class="divTable">
 			<div class="divTableBody" id="table5">
@@ -146,5 +185,5 @@
 	</p>
 
 </body>
-<script type="text/javascript" src="https://cdn.rawgit.com/escottj/MortgageCalculator/master/myJava.js"></script>
-<script type="text/javascript" src="https://cdn.rawgit.com/escottj/MortgageCalculator/master/myJavaBeta.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/escottj/MortgageCalculator/master/js/myJava.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/escottj/MortgageCalculator/master/js/myJavaBeta.js"></script>
