@@ -21,7 +21,6 @@ $("#Home_Cost, #Extra_Payment, #HOA, #HMI, #Down_Payment_Dollars").focusout(func
             $("#Down_Payment").val("0.000%");
         }
     }
-    
 });
 $("#Home_Cost, #Extra_Payment, #HOA, #HMI, #Down_Payment_Dollars").focusin(function(){
     var a = $(this);
@@ -85,6 +84,7 @@ function test(){
     $("#table2").empty();
     $("#table3").empty();
     $("#table4").empty();
+    $("#table5").empty();
 
     var hv = Number(document.getElementById("Home_Cost").value.replace(/,/g,"").replace("$",""));
     var dp = Number(document.getElementById("Down_Payment").value.replace("%",""));
