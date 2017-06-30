@@ -1,4 +1,4 @@
-$("#home-cost, #extra-payment, #hoa, #hmi, #down-payment-dollars").focusout(function(){
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
     var a = $(this);
     var x = a.val();
     if (x != ""){
@@ -22,7 +22,7 @@ $("#home-cost, #extra-payment, #hoa, #hmi, #down-payment-dollars").focusout(func
         }
     }
 });
-$("#home-cost, #extra-payment, #hoa, #hmi, #down-payment-dollars").focusin(function(){
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusin(function(){
     var a = $(this);
     var x = a.val();
     a.val(removeCommas(x));
@@ -105,7 +105,7 @@ function calculate(){
     var $hoa = +$('#hoa').val().replace(/,/g,"").replace("$","");
     var $propertyTaxRate = +$('#property-tax-rate').val().replace("%","");
     var $pmi = +$('#pmi').val().replace("%","");
-    var $hmi = +$('#hmi').val().replace(/,/g,"").replace("$","");
+    var $hoi = +$('#hoi').val().replace(/,/g,"").replace("$","");
     var $extraPayment = +$('#extra-payment').val().replace(/,/g,"").replace("$","");
     
     var rowArray = [];
@@ -129,7 +129,7 @@ function calculate(){
     var termArray = [10, 15, 20, 30];
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
-            var monthlyPropertyTax = (($propertyTaxRate/100)*$homeCost)/12;
+            /*var monthlyPropertyTax = (($propertyTaxRate/100)*$homeCost)/12;
             var downPaymentAmount = ($downPayment/100)*$homeCost;
             var P = $homeCost - downPaymentAmount;
             var i = interestArray[t]/100/12;
@@ -139,7 +139,7 @@ function calculate(){
             if ($downPayment < 20){
                 monthlyPMI = (($pmi/100)*P)/12;
             }
-            var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hmi;
+            var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hoi;
             var newP = P;
             var interestPayment = 0;
             var totalInterest = 0;
@@ -165,16 +165,15 @@ function calculate(){
                     newP = newP - principalPayment;
                     break;
                 }
-            }
+            }*/
+            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+            //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
             var lt = termArray[t];
-            //alert(lt);
             var tempArray = [];
             var temploop = [10, 15, 20, 30];
             for (var w = 0; w < temploop.length; w++){
-                //alert(termArray[t] +" , "+ temploop[w]);
                 if (lt != temploop[w] && lt > temploop[w]){
                     var tentemp = earlymploop2(temploop[w], lt, i);
-                    //alert(tentemp[0]);
                     tempArray.push(tentemp[2]);
                 } else {
                     tempArray.push(0);
@@ -182,13 +181,12 @@ function calculate(){
             }
 
             var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
-            var dataArray = [termArray[t], istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
-                            $hmi, totalMonthlyPayment, totalPMI, equity, totalInterest, tempArray[0],
+            /*var dataArray = [termArray[t], istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
+                            $hoi, totalMonthlyPayment, totalPMI, equity, totalInterest, tempArray[0],
+                            tempArray[1], tempArray[2], tempArray[3]];*/
+            var dataArray = [termArray[t], istring, help[0], help[1], help[2], help[3], help[4],
+                            $hoi, help[5], help[6], help[7], help[8], tempArray[0],
                             tempArray[1], tempArray[2], tempArray[3]];
-            /*var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
-            var dataArray = [termArray[t], istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
-                            $hmi, totalMonthlyPayment, totalPMI, equity, totalInterest];*/
-
             for (var y = 0; y < dataArray.length; y++){
                 var column = document.createElement("div");
                 if (y == 0){
@@ -223,7 +221,7 @@ function calculate(){
         if ($downPayment < 20){
             monthlyPMI = (($pmi/100)*P)/12;
         }
-        var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hmi;
+        var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hoi;
         var newP = P;
         var interestPayment = 0;
         var totalInterest = 0;
@@ -265,7 +263,7 @@ function calculate(){
 
         var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
         var dataArray = [$loanTerm, istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
-                         $hmi, totalMonthlyPayment, totalPMI, equity, totalInterest, tempArray[0],
+                         $hoi, totalMonthlyPayment, totalPMI, equity, totalInterest, tempArray[0],
                          tempArray[1], tempArray[2], tempArray[3]];
         for (var y = 0; y < dataArray.length; y++){
             var column = document.createElement("div");
@@ -335,7 +333,6 @@ function calculate(){
             newP = newP - principalPayment;
         }
         maxti = totalInterest2;
-        //alert(totalInterest2);
         var low = 0;
         var maxSwitch = 0;
         var savings = 0;
@@ -347,7 +344,6 @@ function calculate(){
             for (var m = 0; m < array1[q]; m+=array2[q]){
                 var mdcount = 0;
                 P2 = $homeCost - $downPaymentDollars;
-                //i = ($interestRate/100)/12;
                 n2 = lt*12;
                 xm = low + m;
                 M2 = xm + P2*i*Math.pow(1+i,n2)/(Math.pow(1+i,n2)-1);
@@ -382,4 +378,39 @@ function calculate(){
         savings = maxti - totalInterest2;
         return [mdcount, addM, totalInterest2, savings];
     }
+}
+
+
+function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, ep){
+
+    var monthlyPropertyTax = ((ptr/100)*hc)/12;
+    var downPaymentAmount = (dp/100)*hc;
+    var P = hc - downPaymentAmount;
+    var i = ir/100/12;
+    var n = lt*12;
+    var M = ep + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+    var monthlyPMI = 0;
+    if (dp < 20){
+        monthlyPMI = ((pmi/100)*P)/12;
+    }
+    var totalMonthlyPayment = M + hoa + monthlyPropertyTax + monthlyPMI + hoi;
+    var newP = P;
+    var interestPayment = 0;
+    var totalInterest = 0;
+    var newPMI = 0;
+    var principalPayment = 0;
+    var totalPMI = 0;
+    var equity = 0;
+
+    for (var j = 0; j < n; j++){
+            interestPayment = newP*i;
+            totalInterest = totalInterest + interestPayment;
+            principalPayment = M - interestPayment;
+            newP = newP - principalPayment;
+            if (newP/hc > .8){
+                totalPMI = totalPMI + monthlyPMI;
+                equity = equity + 1;
+            }
+    }
+    return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
 }
