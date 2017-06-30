@@ -7,3 +7,10 @@ th{
 .table{
     width: auto;
 }
+.center {
+    margin: 0 auto;
+    width: 80%;
+}
+.glyphicon {
+    padding-right: 100px;
+}
