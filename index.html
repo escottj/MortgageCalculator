@@ -10,14 +10,17 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	 crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+	 crossorigin="anonymous">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+	 crossorigin="anonymous">
 	<link rel="stylesheet" href="https://cdn.rawgit.com/escottj/MortgageCalculator/master/css/myStyle.css">
 	<script>
 		(function (i, s, o, g, r, a, m) {
-		i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
-			(i[r].q = i[r].q || []).push(arguments)
-		}, i[r].l = 1 * new Date(); a = s.createElement(o),
-			m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
+			i['GoogleAnalyticsObject'] = r; i[r] = i[r] || function () {
+				(i[r].q = i[r].q || []).push(arguments)
+			}, i[r].l = 1 * new Date(); a = s.createElement(o),
+				m = s.getElementsByTagName(o)[0]; a.async = 1; a.src = g; m.parentNode.insertBefore(a, m)
 		})(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
 		ga('create', 'UA-101851721-1', 'auto');
@@ -33,7 +36,7 @@
 		<form class="form-horizontal">
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Home Cost</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Cost</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
@@ -44,7 +47,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Down Payment</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Down Payment</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
@@ -61,18 +64,19 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">HOA</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
 							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="120">
+							<div class="input-group-addon">monthly</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Property Tax Rate</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value=".840">
@@ -83,10 +87,10 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">PMI</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">PMI</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="pmi" placeholder="PMI" value="0.000">
+							<input type="text" class="form-control" id="pmi" placeholder="PMI" value="1.000">
 							<div class="input-group-addon">%</div>
 						</div>
 					</div>
@@ -94,29 +98,31 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
 							<input type="text" class="form-control" id="hoi" placeholder="(monthly)" value="100">
+							<div class="input-group-addon">monthly</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Extra Monthly Payment</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Extra Payment</label>
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="extra-payment" placeholder="Extra Monthly Payment" value="0">
+							<input type="text" class="form-control" id="extra-payment" placeholder="Extra Payment" value="0">
+							<div class="input-group-addon">monthly</div>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
 					<div class="col-sm-2">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control input-md" id="interest-rate-10" value="3.125">
@@ -145,7 +151,7 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<label class="col-sm-4 control-label" for="formGroupInputSmall">Loan Term</label>
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
 					<div class="col-sm-2">
 						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
 					</div>
@@ -162,21 +168,33 @@
 			</div>
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
-					<div class="col-sm-8 col-sm-offset-4">
+					<div class="col-sm-8 col-sm-offset-3">
 						<button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<div class="col-sm-8 col-sm-offset-3">
+						<button type="button" id="reset" class="btn-block btn btn-danger btn-md" onclick="resetAll();">Reset</button>
 					</div>
 				</div>
 			</div>
 		</form>
 	</div>
 	<p>
-		<div class="container" id="table7">
+		<div class="container">
+			<table class="table table-striped">
+				<tbody id="table8">
+				</tbody>
+			</table>
+
 		</div>
 	</p>
-	<p>
+	<!--<p>
 		<div class="divTableTitle"><b>Compare All Interest Rates</b></div>
 		<div class="divTable">
-			<div class="divTableBody" id="table6">
+			<div class="divTable" id="table6">
 			</div>
 		</div>
 	</p>
@@ -214,41 +232,7 @@
 			<div class="divTableBody" id="table3">
 			</div>
 		</div>
-	</p>
-
-	<div class="divTable">
-		<div class="divTableBody">
-			<div class="divTableRow">
-				<div class="divTableCell divTableInnerL">Home Cost</div>
-				<div class="divTableCell divTableInnerL">
-					<div class="divTable">
-						<div class="divTableBody">
-							<div class="divTableRow">
-								<div class="divTableCell divTableInnerR"><b>Home Cost: </b></div>
-								<div class="divTableCell divTableInnerL">test</div>
-							</div>
-							<div class="divTableRow">
-								<div class="divTableCell divTableInnerR"><b>Extra Payment: </b></div>
-								<div class="divTableCell divTableInnerL">test2</div>
-							</div>
-						</div>
-					</div>
-
-				</div>
-
-			</div>
-			<div class="divTableRow">
-				<div class="divTableCell divTableInnerL"><b>Extra Payment: </b></div>
-				<div class="divTableCell divTableInnerL">
-					<div class="divTableCell divTableInnerL">test</div>
-					<div class="divTableCell divTableInnerL">test</div>
-					<div class="divTableCell divTableInnerL">test</div>
-					<div class="divTableCell divTableInnerL">test</div>
-					<div class="divTableCell divTableInnerL">test</div>
-				</div>
-			</div>
-		</div>
-	</div>
+	</p>-->
 
 </body>
 <script type="text/javascript" src="https://cdn.rawgit.com/escottj/MortgageCalculator/master/js/myJava.js"></script>
