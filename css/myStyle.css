@@ -22,6 +22,11 @@ table, tr, th {
     display: table-cell;
     padding: 3px 10px;
     text-align: left;
+    align-content: center;
+}
+.interest {
+    text-align: left;
+    width: 75px;
 }
 .divTableHeading {
     background-color: green;
@@ -44,4 +49,24 @@ table, tr, th {
     border: 1px solid black;
     text-align: center;
     font-weight: bold;
+}
+.divTableHeaderR{
+    background-color: lightgray;
+    border: 1px solid black;
+    text-align: right;
+    font-weight: bold;
+}
+.divTableInnerL{
+    background-color: white;
+    border: 1px solid black;
+    text-align: left;
+    font-weight: bold;
+}
+.radio-style{
+    width: auto;
+}
+.interest2 {
+    text-align: left;
+    width: 75px;
+    visibility: hidden;
 }
