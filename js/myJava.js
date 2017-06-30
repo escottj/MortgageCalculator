@@ -31,7 +31,7 @@ function resetAll() {
     }
 };
 
-$("#helpBlock2").toggle();
+//$("#help-block").toggle();
 
 //Number Validation
 $(document).ready(function() {
@@ -53,20 +53,68 @@ $(document).ready(function() {
 });
 
 
-$("#hoa2").keyup(function (e) {
-    if (this.id == "hoa2"){
+$("#hoa").keyup(function (e) {
+    if (this.id == "hoa"){
         if (+$(this).val() >= 100 || +$(this).val() == ""){
-            $("#helpBlock2").show();
-            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-error');
+            $("#hoa-help-block").show();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-error required');
             $("#hoa-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
         }else{
-            $("#helpBlock2").hide();
-            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-success');
+            $("#hoa-help-block").hide();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-success required');
             $("#hoa-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
         }
     }
 });
+/*$("#down-payment-dollars").focusout(function(){
+    var x = $(this).val();
+    if (x == "" || x < 1){
+        $("#"+this.id+"-help-block").show();
+        $("#"+this.id+"-group").attr('class', 'form-group form-group-md nopadding has-error required');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
+    } else {
+        $("#"+this.id+"-help-block").hide();
+        $("#"+this.id+"-group").attr('class', 'form-group form-group-md nopadding has-success required');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
+    }
+});*/
 
+$("#home-cost, #down-payment-dollars").focusout(function(){
+    var x = $(this).val();
+    var min = 0;
+    var max = 0;
+    if (this.id == "home-cost"){
+        min = 10000;
+        max = 1000000000;
+    } else if (this.id == "down-payment-dollars"){
+        min = 0;
+        max = .8*removeCommas($("#home-cost").val());
+    }
+    if (x == "" || x < min || x > max){
+        $("#"+this.id+"-help-block").show();
+        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-error');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
+    } else {
+        $("#"+this.id+"-help-block").hide();
+        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-success');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
+        if (this.id == "home-cost"){
+            if ($("#down-payment-dollars").val() == "" || $("#down-payment-dollars").val() == 0){
+                if ($("#down-payment").val() == ""){
+                    $("#down-payment-dollars").val(addCommas(.2*$(this).val()));
+                    $("#down-payment-dollars-help-block").hide();
+                    $("#down-payment-dollars-check").attr('class', 'col-sm-4 has-success');
+                    $("#down-payment-dollars-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
+                    $("#down-payment").val("20.000");
+                    $("#down-payment-help-block").hide();
+                    $("#down-payment-check").attr('class', 'col-sm-4 has-success');
+                    $("#down-payment-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-left');
+                }
+            }
+        }
+        $(this).val(addCommas($(this).val()));
+    }
+});
 /*$("#hoa2").focusout(function (e) {
     if (this.id == "hoa2"){
         if (+$(this).val() >= 100){
@@ -86,7 +134,7 @@ $(document).ready(function() {
 
 });
 
-$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
+/*$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
     var a = $(this);
     var x = a.val();
     if (x != ""){
@@ -146,7 +194,7 @@ $("#loan-term").focusin(function(){
     var x = a.val();
     a.val(a.val().replace(" years",""));
     a.select();
-});
+});*/
 
 function addCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
