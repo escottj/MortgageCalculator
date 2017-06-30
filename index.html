@@ -63,7 +63,8 @@
  </script>	
  </head>
 <body>
-	<p><div id="answerloop"></div></p>
+	<p><div id="monthloop"></div></p>
+	<p><div id="dploop"></div></p>
 	<div class="divTable">
 		<div class="divTableBody">
 			<div class="divTableRow">
@@ -111,12 +112,6 @@
 		</div>
 	</div>
 
-	<!--<p><div class="divTableTitle"><b>Interest Rate (%) vs. Extra Monthly Payment ($)</b>
-		<table id="table1"></table>
-	</div></p>
-	<p><div class="divTableTitle"><b>Interest Rate (%) vs. Extra Down Payment (%)</b>
-		<table id="table2"></table>
-	</div></p>-->
 	<p>
 		<div class="divTableTitle"><b>Interest Rate (%) vs. Extra Monthly Payment ($)</b></div>
 		<div class="divTable">
@@ -209,8 +204,8 @@
 		var n = lt*12;
 		var M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
 		
-		document.getElementById("dp").innerHTML = "$" + addCommas((dp/100)*hv);
-		document.getElementById("la").innerHTML = "$" + addCommas(P);
+		document.getElementById("dp").innerHTML = "$" + addCommas(Number(Math.round((dp/100)*hv+'e2')+'e-2').toFixed(2));
+		document.getElementById("la").innerHTML = "$" + addCommas(Number(Math.round(P+'e2')+'e-2').toFixed(2));
 		document.getElementById("mp").innerHTML = "$" + addCommas(Number(Math.round(M+'e2')+'e-2').toFixed(2));
 
 		var newP = P;
@@ -418,45 +413,60 @@
 		}
 
 		//Calculate Total Interest Paid with Extra Down Payment
-		for (var d = 20; d < 55; d+=5){
+		var colnum = 0;
+		var rownum = 0;
+		for (var d = 20; d < 65; d+=5){
+			rownum++;
+			colnum = 0;
 			var row1 = document.createElement("tr");
 			for (var k = 0; k < 2.25; k+=.25){
-				var temp0 = Number(ir) + k;
-				P = hv - (d/100)*hv;
-				i = temp0/100/12;
-				n = lt*12;
-				//xm = m;
-				M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
-				newP = P;
-				newi = 0;
-				ti = 0;
-				principal = 0;
-				for (var j = 0; j < n; j++){
-					if (newP >= M){
-						newi = newP*i;
-						ti = ti + newi;
-						principal = M - newi;
-						newP = newP - principal;
-					}else{
-						newi = newP*i;
-						ti = ti + newi;
-						principal = M - newi;
-						newP = newP - principal;
-						break;
-					}
+				colnum++;
+				if (colnum == rownum){
+					var help = dploop(k);
+					/*var temp0 = Number(ir) + k;
+					P = hv - (d/100)*hv;
+					i = temp0/100/12;
+					n = lt*12;
+					M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+					newP = P;
+					newi = 0;
+					ti = 0;
+					principal = 0;
+					for (var j = 0; j < n; j++){
+						if (newP >= M){
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+						}else{
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+							break;
+						}
+					}*/
+					var column1 = document.createElement("div");
+					column1.className = "divTableCell";
+					column1.style = "border: 1px solid black;";
+					var temp1 = Number(Math.round(help[1]+'e2')+'e-2');
+					var text1 = document.createTextNode(temp1.toFixed(2));
+					column1.appendChild(text1);
+					row1.appendChild(column1);
 				}
-				var column1 = document.createElement("div");
-				column1.className = "divTableCell";
-				column1.style = "border: 1px solid black;";
-				var temp1 = Number(Math.round(ti+'e2')+'e-2');
-				var text1 = document.createTextNode(temp1.toFixed(2));
-				column1.appendChild(text1);
-				row1.appendChild(column1);
+				else{
+					var column1 = document.createElement("div");
+					column1.className = "divTableCell";
+					column1.style = "border: 1px solid black;";
+					var text1 = document.createTextNode("--");
+					column1.appendChild(text1);
+					row1.appendChild(column1);
+				}
 			}
 			var column1 = document.createElement("div");
 			column1.className = "divTableCell";
 			column1.style = "border: 1px solid black;";
-			var temp1 = d;
+			var temp1 = help[0];
 			var text1 = document.createTextNode(temp1.toFixed(2));
 			column1.appendChild(text1);
 			row1.appendChild(column1);
@@ -469,7 +479,7 @@
 		var ihigh = 4;
 		var low = 0;
 
-		//Loop
+		//Month Loop
 		var array1 = [1100, 100, 10, 1, .1];
 		var array2 = [100, 10, 1, .1, .01];
 		var low = 0;
@@ -506,8 +516,55 @@
 				}
 			}
 		}
-		var ans = document.getElementById("answerloop");
+		var ans = document.getElementById("monthloop");
 		ans.innerText = Number(Math.round(low+'e2')+'e-2');
 		
+		//DP Loop
+		function dploop(k){
+			var array1 = [110, 10, 1, .1, .01, .001];
+			var array2 = [10, 1, .1, .01, .001, .0001];
+			var lowdp = 0;
+			for (var q = 0; q < array1.length; q++){
+				for (var m = 0; m < array1[q]; m+=array2[q]){
+					var temp0 = Number(ir) + k;
+					var tempdp = dp + lowdp + m;
+					P = hv - (tempdp/100)*hv;
+					i = temp0/100/12;
+					n = lt*12;
+					M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+					newP = P;
+					newi = 0;
+					ti = 0;
+					principal = 0;
+					for (var j = 0; j < n; j++){
+						if (newP >= M){
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+						}else{
+							newi = newP*i;
+							ti = ti + newi;
+							principal = M - newi;
+							newP = newP - principal;
+							break;
+						}
+					}
+					if (k == 0){
+						static = ti;
+						break;
+					}
+					if (ti >= static){
+						lowdp = lowdp + m;
+					}else {
+						break;
+					}
+				}
+			}
+			var ans = document.getElementById("dploop");
+			ans.innerText = Number(Math.round(tempdp+'e3')+'e-3');
+			return [tempdp, ti];
+		}
+
 	}
 </script>
