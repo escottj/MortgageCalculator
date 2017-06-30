@@ -91,7 +91,7 @@ function beta(){
             newP = newP - p2;
         }
         tcp = tcp + p2 + newi + PMI;
-        var row = document.createElement("div");
+        /*var row = document.createElement("div");
         row.className = "divTableRow divTableHeader";
         var column = document.createElement("div");
         column.className = "divTableCell divTableHeader";
@@ -103,7 +103,7 @@ function beta(){
         column.style = "border: 1px solid black; background-color: white;";
         var text = document.createTextNode((tcp).toFixed(2));
         column.appendChild(text);
-        row.appendChild(column);
+        row.appendChild(column);*/
 
         if (newP2 >= M2){
             newi2 = newP2*i;
@@ -117,12 +117,35 @@ function beta(){
             newP2 = newP2 - p22;
         }
         tcp2 = tcp2 + p22 + newi2;
-        var column = document.createElement("div");
+        /*var column = document.createElement("div");
         column.className = "divTableCell";
         column.style = "border: 1px solid black; background-color: white;";
         var text = document.createTextNode((tcp2).toFixed(2));
         column.appendChild(text);
         row.appendChild(column);
-        table.append(row);
+        table.append(row);*/
+        if (tcp >= tcp2){
+            var row = document.createElement("div");
+            row.className = "divTableRow divTableHeader";
+            var column = document.createElement("div");
+            column.className = "divTableCell divTableHeader";
+            var text = document.createTextNode(j+1);
+            column.appendChild(text);
+            row.appendChild(column);
+            var column = document.createElement("div");
+            column.className = "divTableCell";
+            column.style = "border: 1px solid black; background-color: white;";
+            var text = document.createTextNode("$"+addCommas((tcp).toFixed(2)));
+            column.appendChild(text);
+            row.appendChild(column);
+            var column = document.createElement("div");
+            column.className = "divTableCell";
+            column.style = "border: 1px solid black; background-color: white;";
+            var text = document.createTextNode("$"+addCommas((tcp2).toFixed(2)));
+            column.appendChild(text);
+            row.appendChild(column);
+            table.append(row);
+            break;
+        }
     } 
 }

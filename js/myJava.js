@@ -1,60 +1,60 @@
-$("#Home_Cost, #Extra_Payment, #HOA, #HMI, #Down_Payment_Dollars").focusout(function(){
+$("#home-cost, #extra-payment, #hoa, #hmi, #down-payment-dollars").focusout(function(){
     var a = $(this);
     var x = a.val();
     if (x != ""){
         a.val("$"+addCommas(x));
-        if (this.id == "Down_Payment_Dollars"){
-            var hv = removeCommas($("#Home_Cost").val());
+        if (this.id == "down-payment-dollars"){
+            var hv = removeCommas($("#home-cost").val());
             var newdp = (x/hv)*100;
-            $("#Down_Payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3)+"%");
+            $("#down-payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3)+"%");
         }
-        if (this.id == "Home_Cost"){
-            var hv = removeCommas($("#Home_Cost").val());
-            var dp = $("#Down_Payment").val().replace("%","");
+        if (this.id == "home-cost"){
+            var hv = removeCommas($("#home-cost").val());
+            var dp = $("#down-payment").val().replace("%","");
             var newdp = (dp/100)*hv;
             var y = addCommas(Number(Math.round(newdp)));
-            $("#Down_Payment_Dollars").val("$"+y);
+            $("#down-payment-dollars").val("$"+y);
         }
     }else{
         a.val("$0");
-        if (this.id == "Down_Payment_Dollars"){
-            $("#Down_Payment").val("0.000%");
+        if (this.id == "down-payment-dollars"){
+            $("#down-payment").val("0.000%");
         }
     }
 });
-$("#Home_Cost, #Extra_Payment, #HOA, #HMI, #Down_Payment_Dollars").focusin(function(){
+$("#home-cost, #extra-payment, #hoa, #hmi, #down-payment-dollars").focusin(function(){
     var a = $(this);
     var x = a.val();
     a.val(removeCommas(x));
     a.select();
 });
-$("#Down_Payment, #Interest_Rate, #Property_Tax_Rate, #PMI").focusout(function(){
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(function(){
     var a = $(this);
     var x = a.val();
     if (x != ""){
         var temp = Number(a.val()).toFixed(3);
         a.val(temp+"%");
-        if (this.id == "Down_Payment"){
-            var hv = removeCommas($("#Home_Cost").val());
+        if (this.id == "down-payment"){
+            var hv = removeCommas($("#home-cost").val());
             var newdpd = (temp/100)*hv;
             var y = addCommas(Number(Math.round(newdpd)));
-            $("#Down_Payment_Dollars").val("$"+y);
+            $("#down-payment-dollars").val("$"+y);
         }
     }else{
         a.val("0.000%");
-        if (this.id == "Down_Payment"){
-            $("#Down_Payment_Dollars").val("$0.00");
+        if (this.id == "down-payment"){
+            $("#down-payment-dollars").val("$0.00");
         }
     }
 });
-$("#Down_Payment, #Interest_Rate, #Property_Tax_Rate, #PMI").focusin(function(){
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(function(){
     var a = $(this);
     var x = a.val();
     a.val(a.val().replace("%",""));
     a.select();
 });
 
-$("#Loan_Term").focusout(function(){
+$("#loan-term").focusout(function(){
     var a = $(this);
     var x = a.val();
     if (x != ""){
@@ -63,7 +63,7 @@ $("#Loan_Term").focusout(function(){
         a.val("0 years");
     }
 });
-$("#Loan_Term").focusin(function(){
+$("#loan-term").focusin(function(){
     var a = $(this);
     var x = a.val();
     a.val(a.val().replace(" years",""));
@@ -77,7 +77,11 @@ function removeCommas(x) {
     return x.toString().replace(/,/g,"").replace("$","");
 }
 
+
+
 function test(){
+//Testing
+//var radio = $("input[name='options']:checked").val();
 
     //Erase Existing Results
     $("#table1").empty();
@@ -85,17 +89,19 @@ function test(){
     $("#table3").empty();
     $("#table4").empty();
     $("#table5").empty();
+    $("#table6").empty();
 
-    var hv = Number(document.getElementById("Home_Cost").value.replace(/,/g,"").replace("$",""));
-    var dp = Number(document.getElementById("Down_Payment").value.replace("%",""));
-    var dpd = Number(document.getElementById("Down_Payment_Dollars").value.replace(/,/g,"").replace("$",""));
-    var ir = Number(document.getElementById("Interest_Rate").value.replace("%",""));
-    var lt = Number(document.getElementById("Loan_Term").value.replace(" years",""));
-    var hoa = Number(document.getElementById("HOA").value.replace(/,/g,"").replace("$",""));
-    var ptr = Number(document.getElementById("Property_Tax_Rate").value.replace("%",""));
-    var pmi = Number(document.getElementById("PMI").value.replace("%",""));
-    var hmi = Number(document.getElementById("HMI").value.replace(/,/g,"").replace("$",""));
-    var xm = Number(document.getElementById("Extra_Payment").value.replace(/,/g,"").replace("$",""));
+    /*var hv = Number(document.getElementById("home-cost").value.replace(/,/g,"").replace("$",""));
+    var dp = Number(document.getElementById("down-payment").value.replace("%",""));
+    var dpd = Number(document.getElementById("down-payment-dollars").value.replace(/,/g,"").replace("$",""));
+    var ir = Number(document.getElementById("interest-rate").value.replace("%",""));
+    //var lt = Number(document.getElementById("loan-term").value.replace(" years",""));
+    var lt = $("input[name='loan-term']:checked").val();
+    var hoa = Number(document.getElementById("hoa").value.replace(/,/g,"").replace("$",""));
+    var ptr = Number(document.getElementById("property-tax-rate").value.replace("%",""));
+    var pmi = Number(document.getElementById("pmi").value.replace("%",""));
+    var hmi = Number(document.getElementById("hmi").value.replace(/,/g,"").replace("$",""));
+    var xm = Number(document.getElementById("extra-payment").value.replace(/,/g,"").replace("$",""));
 
     var mpt = ((ptr/100)*hv)/12;
 
@@ -149,14 +155,163 @@ function test(){
     }
     document.getElementById("tpmi").innerHTML = "$" + addCommas(Number(Math.round(tpmi+'e2')+'e-2').toFixed(2));
     document.getElementById("equity").innerHTML = equity + " months";
-    document.getElementById("ti").innerHTML = "$" + addCommas(Number(Math.round(ti+'e2')+'e-2'));
+    document.getElementById("ti").innerHTML = "$" + addCommas(Number(Math.round(ti+'e2')+'e-2'));*/
+
+    //Compare All Table
+    var $homeCost = +$('#home-cost').val().replace(/,/g,"").replace("$","");
+    var $downPaymentDollars = +$('#down-payment-dollars').val().replace(/,/g,"").replace("$","");
+    var $downPayment = +$('#down-payment').val().replace("%","");
+    var $loanTerm = +$("input[name='loan-term']:checked").val();
+    //var $interestRate = +$('#interest-rate').val().replace("%","");
+    if ($loanTerm != 0){
+        var $interestRate = +$('#interest-rate-'+$loanTerm).val().replace("%","");
+    } else {
+        var interestArray = [+$('#interest-rate-10').val().replace("%",""),
+                             +$('#interest-rate-15').val().replace("%",""),
+                             +$('#interest-rate-20').val().replace("%",""),
+                             +$('#interest-rate-30').val().replace("%","")];
+    }
+    var $hoa = +$('#hoa').val().replace(/,/g,"").replace("$","");
+    var $propertyTaxRate = +$('#property-tax-rate').val().replace("%","");
+    var $pmi = +$('#pmi').val().replace("%","");
+    var $hmi = +$('#hmi').val().replace(/,/g,"").replace("$","");
+    var $extraPayment = +$('#extra-payment').val().replace(/,/g,"").replace("$","");
+    
+    var rowArray = [];
+    var $table6 = $("#table6");
+    var textArray = ["Loan Term", "Interest Rate", "Down Payment", "Loan Amount", "Monthly Mortgage Payment",
+                        "Monthly Property Tax", "Monthly pmi", "Monthly Home Owner's Imsurance",
+                        "Total Monthly Payment", "Total pmi", "Months Until 20% Equity", "Total Interest Paid"];
+    for (var x = 0; x < textArray.length; x++){
+        var row = document.createElement("div");
+        row.className = "divTableRow divTableHeader";
+        var column = document.createElement("div");
+        column.className = "divTableCell divTableHeaderR";
+        var text = document.createTextNode(textArray[x]);
+        column.appendChild(text);
+        row.appendChild(column);
+        rowArray.push(row);
+    }
+
+    var termArray = [10, 15, 20, 30];
+    //var interestArray = [3.125, 3.250, 3.725, 4.025];
+    //var interestArray = [$interestRate]
+    if ($loanTerm == 0){
+        for (var t = 0; t < termArray.length; t++){
+            var monthlyPropertyTax = (($propertyTaxRate/100)*$homeCost)/12;
+            var downPaymentAmount = ($downPayment/100)*$homeCost;
+            var P = $homeCost - downPaymentAmount;
+            var i = interestArray[t]/100/12;
+            var n = termArray[t]*12;
+            var M = $extraPayment + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+            var monthlyPMI = 0;
+            if ($downPayment < 20){
+                monthlyPMI = (($pmi/100)*P)/12;
+            }
+            var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hmi;
+            var newP = P;
+            var interestPayment = 0;
+            var totalInterest = 0;
+            var newPMI = 0;
+            var principalPayment = 0;
+            var totalPMI = 0;
+            var equity = 0;
+
+            for (var j = 0; j < n; j++){
+                if (newP >= M){
+                    interestPayment = newP*i;
+                    totalInterest = totalInterest + interestPayment;
+                    principalPayment = M - interestPayment;
+                    newP = newP - principalPayment;
+                    if (newP/$homeCost > .8){
+                        totalPMI = totalPMI + monthlyPMI;
+                        equity = equity + 1;
+                    }
+                }else{
+                    interestPayment = newP*i;
+                    totalInterest = totalInterest + interestPayment;
+                    principalPayment = M - interestPayment;
+                    newP = newP - principalPayment;
+                    break;
+                }
+            }
+
+
+            var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
+            var dataArray = [termArray[t], istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
+                            $hmi, totalMonthlyPayment, totalPMI, equity, totalInterest];
+
+            for (var y = 0; y < dataArray.length; y++){
+                var column = document.createElement("div");
+                if (y == 0){
+                    column.className = "divTableCell  divTableHeader";
+                } else {
+                    column.className = "divTableCell  divTableInnerL";
+                }
+                if (y == 0){
+                    var text = document.createTextNode(dataArray[y]+" years");
+                } else if (y == 1){
+                    var text = document.createTextNode(dataArray[y]);
+                } else if (y == 10){
+                    var text = document.createTextNode(dataArray[y]);
+                } else {
+                    var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
+                }
+                column.appendChild(text);
+                rowArray[y].appendChild(column);
+            }
+            for (var z = 0; z < rowArray.length; z++){
+                $table6.append(rowArray[z]);
+            }
+        }
+
+    } else {
+        var monthlyPropertyTax = (($propertyTaxRate/100)*$homeCost)/12;
+        var downPaymentAmount = ($downPayment/100)*$homeCost;
+        var P = $homeCost - downPaymentAmount;
+        var i = $interestRate/100/12;
+        var n = $loanTerm*12;
+        var M = $extraPayment + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+        var monthlyPMI = 0;
+        if ($downPayment < 20){
+            monthlyPMI = (($pmi/100)*P)/12;
+        }
+        var totalMonthlyPayment = M + $hoa + monthlyPropertyTax + monthlyPMI + $hmi;
+        var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
+        var dataArray = [$loanTerm, istring, downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI,
+                          $hmi, totalMonthlyPayment, "totalpmi", "monthsEquity", "totalInterest"];
+
+        for (var y = 0; y < dataArray.length; y++){
+            var column = document.createElement("div");
+            if (y == 0){
+                column.className = "divTableCell  divTableHeader";
+            } else {
+                column.className = "divTableCell  divTableInnerL";
+            }
+            if (y == 0){
+                var text = document.createTextNode(dataArray[y]+" years");
+            } else if (y > 1 && y < 9){
+                var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
+            } else {
+                var text = document.createTextNode(dataArray[y]);
+            }
+            column.appendChild(text);
+            rowArray[y].appendChild(column);
+        }
+        for (var z = 0; z < rowArray.length; z++){
+            $table6.append(rowArray[z]);
+        }
+    }
+
+
+
 
     var cti = ti;
     fhadataArray = [dpa, P, mpmi, tpmi, equity, ti, 0];
     //FHA (3.5%)
     //Table Header
     var table4 = $("#table4");
-    var fhatextArray = ["DP", "LA", "PMI", "Total PMI", "20% Equity", "TI", "TS", "ACB"];
+    var fhatextArray = ["DP", "LA", "pmi", "Total pmi", "20% Equity", "TI", "TS", "ACB"];
     var fhadp = (3.5/100)*hv;
     var fharowArray = [];
     var fhala = hv - fhadp;
