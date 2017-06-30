@@ -1,0 +1,47 @@
+table, tr, th {
+    border: 1px solid black;
+}
+.divTable{
+    display: table;
+    width: auto;
+}
+.divTableRow {
+    display: table-row;
+}
+.divTableHeading {
+    display: table-header-group;
+}
+.divTableCell, .divTableHead {
+    border: 0px;
+    display: table-cell;
+    padding: 3px 10px;
+    text-align: right;
+}
+.divTableCellR {
+    border: 0px;
+    display: table-cell;
+    padding: 3px 10px;
+    text-align: left;
+}
+.divTableHeading {
+    background-color: green;
+    display: table-header-group;
+    font-weight: bold;
+}
+.divTableFoot {
+    background-color: #EEE;
+    display: table-footer-group;
+    font-weight: bold;
+}
+.divTableBody {
+    display: table-row-group;
+}
+.divTableTitle {
+    text-align: left;
+}
+.divTableHeader{
+    background-color: lightgray;
+    border: 1px solid black;
+    text-align: center;
+    font-weight: bold;
+}
