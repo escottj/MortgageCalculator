@@ -31,6 +31,8 @@ function resetAll() {
     }
 };
 
+$("#helpBlock2").toggle();
+
 //Number Validation
 $(document).ready(function() {
     $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars, #down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keydown(function (e) {
@@ -48,6 +50,40 @@ $(document).ready(function() {
             e.preventDefault();
         }
     });
+});
+
+
+$("#hoa2").keyup(function (e) {
+    if (this.id == "hoa2"){
+        if (+$(this).val() >= 100 || +$(this).val() == ""){
+            $("#helpBlock2").show();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-error');
+            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
+        }else{
+            $("#helpBlock2").hide();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-success');
+            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
+        }
+    }
+});
+
+/*$("#hoa2").focusout(function (e) {
+    if (this.id == "hoa2"){
+        if (+$(this).val() >= 100){
+            $("#helpBlock2").show();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-error');
+            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
+        }else{
+            $("#helpBlock2").hide();
+            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-success');
+            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
+        }
+    }
+});*/
+
+
+$(document).ready(function() {
+
 });
 
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
