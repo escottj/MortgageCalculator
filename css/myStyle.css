@@ -1,72 +1,9 @@
-table, tr, th {
-    border: 1px solid black;
+.table-striped{
+    background-color:lightblue;
 }
-.divTable{
-    display: table;
-    width: auto;
-}
-.divTableRow {
-    display: table-row;
-}
-.divTableHeading {
-    display: table-header-group;
-}
-.divTableCell, .divTableHead {
-    border: 0px;
-    display: table-cell;
-    padding: 3px 10px;
+th{
     text-align: right;
 }
-.divTableCellR {
-    border: 0px;
-    display: table-cell;
-    padding: 3px 10px;
-    text-align: left;
-    align-content: center;
-}
-.interest {
-    text-align: left;
-    width: 75px;
-}
-.divTableHeading {
-    background-color: green;
-    display: table-header-group;
-    font-weight: bold;
-}
-.divTableFoot {
-    background-color: #EEE;
-    display: table-footer-group;
-    font-weight: bold;
-}
-.divTableBody {
-    display: table-row-group;
-}
-.divTableTitle {
-    text-align: left;
-}
-.divTableHeader{
-    background-color: lightgray;
-    border: 1px solid black;
-    text-align: center;
-    font-weight: bold;
-}
-.divTableHeaderR{
-    background-color: lightgray;
-    border: 1px solid black;
-    text-align: right;
-    font-weight: bold;
-}
-.divTableInnerL{
-    background-color: white;
-    border: 1px solid black;
-    text-align: left;
-    font-weight: bold;
-}
-.radio-style{
+.table{
     width: auto;
-}
-.interest2 {
-    text-align: left;
-    width: 75px;
-    visibility: hidden;
 }
