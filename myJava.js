@@ -8,6 +8,13 @@ $("#Home_Cost, #Extra_Payment, #HOA, #HMI, #Down_Payment_Dollars").focusout(func
             var newdp = (x/hv)*100;
             $("#Down_Payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3)+"%");
         }
+        if (this.id == "Home_Cost"){
+            var hv = removeCommas($("#Home_Cost").val());
+            var dp = $("#Down_Payment").val().replace("%","");
+            var newdp = (dp/100)*hv;
+            var y = addCommas(Number(Math.round(newdp)));
+            $("#Down_Payment_Dollars").val("$"+y);
+        }
     }else{
         a.val("$0");
         if (this.id == "Down_Payment_Dollars"){
@@ -77,6 +84,7 @@ function test(){
     $("#table1").empty();
     $("#table2").empty();
     $("#table3").empty();
+    $("#table4").empty();
 
     var hv = Number(document.getElementById("Home_Cost").value.replace(/,/g,"").replace("$",""));
     var dp = Number(document.getElementById("Down_Payment").value.replace("%",""));
@@ -96,7 +104,7 @@ function test(){
     var mpmi = 0;
 
     if (dp < 20){
-            mpmi = ((pmi/100)*P)/12;
+        mpmi = ((pmi/100)*P)/12;
     }
     
     var i = ir/100/12;
@@ -142,7 +150,103 @@ function test(){
     document.getElementById("tpmi").innerHTML = "$" + addCommas(Number(Math.round(tpmi+'e2')+'e-2').toFixed(2));
     document.getElementById("equity").innerHTML = equity + " months";
     document.getElementById("ti").innerHTML = "$" + addCommas(Number(Math.round(ti+'e2')+'e-2'));
+
+    var cti = ti;
+    fhadataArray = [dpa, P, mpmi, tpmi, equity, ti, 0];
+    //FHA (3.5%)
+    //Table Header
+    var table4 = $("#table4");
+    var fhatextArray = ["DP", "LA", "PMI", "Total PMI", "20% Equity", "TI", "TS", "ACB"];
+    var fhadp = (3.5/100)*hv;
+    var fharowArray = [];
+    var fhala = hv - fhadp;
+    var fhapmi = ((pmi/100)*fhala)/12;
+
+
+    var fharow = document.createElement("div");
+    fharow.className = "divTableRow divTableHeader";
+    table4.append(fharow);
+    var fhacolumn = document.createElement("div");
+    fhacolumn.className = "divTableCell divTableHeader";
+    var fhatext = document.createTextNode("LT");
+    fhacolumn.appendChild(fhatext);
+    fharow.appendChild(fhacolumn);
+
+    var fhacolumn = document.createElement("div");
+    fhacolumn.className = "divTableCell divTableHeader";
+    var fhatext = document.createTextNode("Conventional (20%)");
+    fhacolumn.appendChild(fhatext);
+    fharow.appendChild(fhacolumn);
+
+    var fhacolumn = document.createElement("div");
+    fhacolumn.className = "divTableCell divTableHeader";
+    var fhatext = document.createTextNode("FHA (3.5%)");
+    fhacolumn.appendChild(fhatext);
+    fharow.appendChild(fhacolumn);
+
+    for (var z = 0; z < fhatextArray.length; z++){
+        var row = document.createElement("tr");
+        var column = document.createElement("div");
+        column.className = "divTableCell  divTableHeader";
+        var text = document.createTextNode(fhatextArray[z]);
+        column.appendChild(text);
+        row.appendChild(column);
+        fharowArray.push(row);
+    }
+
     
+
+    for (var y = 0; y < fhadataArray.length; y++){
+        var fhacolumn = document.createElement("div");
+        fhacolumn.className = "divTableCell";
+        fhacolumn.style = "border: 1px solid black;";
+        var fhatext = document.createTextNode(addCommas(fhadataArray[y].toFixed(2)));
+        fhacolumn.appendChild(fhatext);
+        fharowArray[y].appendChild(fhacolumn);
+    }
+
+    var newP = fhala;
+    var newi = 0;
+    var ti = 0;
+    var newpmi = 0;
+    var principal = 0;
+    var tpmi = 0;
+    var equity = 0;
+
+    for (var j = 0; j < n; j++){
+        if (newP >= M){
+            newi = newP*i;
+            ti = ti + newi;
+            principal = M - newi;
+            newP = newP - principal;
+            if (newP/hv > .8){
+                tpmi = tpmi + fhapmi;
+                equity = equity + 1;
+            }
+        }else{
+            newi = newP*i;
+            ti = ti + newi;
+            principal = M - newi;
+            newP = newP - principal;
+            break;
+        }
+    }
+    
+    fhadataArray = [fhadp, fhala, fhapmi, tpmi, equity, ti, cti-ti];
+
+    for (var y = 0; y < fhadataArray.length; y++){
+        var fhacolumn = document.createElement("div");
+        fhacolumn.className = "divTableCell";
+        fhacolumn.style = "border: 1px solid black;";
+        var fhatext = document.createTextNode(addCommas(fhadataArray[y].toFixed(2)));
+        fhacolumn.appendChild(fhatext);
+        fharowArray[y].appendChild(fhacolumn);
+    }
+
+    for (var y = 0; y < fharowArray.length; y++){
+        table4.append(fharowArray[y]);
+    }
+
     //Div Table Test
     //Create Headers for Extra Monthly Payments and Extra Down Payment
     var table = document.getElementById("table1");
@@ -324,7 +428,7 @@ function test(){
     column3.appendChild(text3);
     row3.appendChild(column3);
 
-    for (var k = 1; k < 16; k+=1){
+    for (var k = 15; k > 0; k-=1){
         var column3 = document.createElement("div");
         column3.className = "divTableCell divTableHeader";
         var text3 = document.createTextNode(k);
@@ -345,7 +449,7 @@ function test(){
         rowArray.push(row);
     }
 
-    for (var d = 1; d < 16; d+=1){
+    for (var d = 15; d > 0; d-=1){
         var help = earlymploop(d);
         for (var y = 0; y < rowArray.length; y++){
                 var column = document.createElement("div");
@@ -363,21 +467,48 @@ function test(){
 
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
     function earlymploop(d){
-        var array1 = [21000, 1100, 110, 11, 1.1, .11, .011, .0011];
-        var array2 = [1000, 100, 10, 1, .1, .01, .001, .0001];
+        //var array1 = [21000, 1100, 110, 11, 1.1, .11, .011, .0011];
+        //var array2 = [1000, 100, 10, 1, .1, .01, .001, .0001];
+        var array1 = [10000, 1];
+        var array2 = [1, .001];
+        /*if (d == 1){
+            P = hv - dpd;
+            i = (ir/100)/12;
+            n = lt*12;
+            M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+            alert(M);
+            var digit = (''+M)[4];
+            alert(digit);
+        }*/
+        var maxti = 0;
+        //maxti Calculation
+        P = hv - dpd;
+        i = (ir/100)/12;
+        n = lt*12;
+        M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+        newP = P;
+        newi = 0;
+        ti = 0;
+        principal = 0;
+        for (var j = 0; j < n; j++){
+            mdcount = mdcount + 1;
+            newi = newP*i;
+            ti = ti + newi;
+            principal = M - newi;
+            newP = newP - principal;
+        }
+        maxti = ti;
         var low = 0;
         var maxSwitch = 0;
-        var maxti = 0;
         var savings = 0;
         var md = d*12;
         var mdcount = 0;
+        xm = 0;
         for (var q = 0; q < array1.length; q++){
             for (var m = 0; m < array1[q]; m+=array2[q]){
                 var mdcount = 0;
-                //var temp0 = Number(ir);
-                var dp2 = dpd;
-                P = hv - (dp/100)*hv;
-                i = ir/100/12;
+                P = hv - dpd;
+                i = (ir/100)/12;
                 n = lt*12;
                 xm = low + m;
                 M = xm + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
@@ -388,28 +519,35 @@ function test(){
                 principal = 0;
                 for (var j = 0; j < n; j++){
                     mdcount = mdcount + 1;
-                    if (newP >= M){
-                        newi = newP*i;
-                        ti = ti + newi;
-                        principal = M - newi;
-                        newP = newP - principal;
-                    }else{
-                        newi = newP*i;
-                        ti = ti + newi;
-                        principal = M - newi;
-                        newP = newP - principal;
+                    newi = newP*i;
+                    ti = ti + newi;
+                    principal = M - newi;
+                    newP = newP - principal;
+                    if (newP < 1){
+                        break;
+                    }
+                    if (mdcount > md){
                         break;
                     }
                 }
                 var addM = M - minM;
                 if (mdcount > md){
                     low = low + m;
+                }else if (mdcount < md){
+                    //low = low;
                 }else{
                     break;
                 }
             }
         }
-        //alert(principal);
+        /*if (d == 15){
+            maxti = ti;
+            savings = maxti - ti;
+            return [mdcount, addM, ti, newP, savings, maxti];
+        }else{
+            
+        }*/
+        savings = maxti - ti;
         return [mdcount, addM, ti, savings];
     }
 
