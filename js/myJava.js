@@ -80,7 +80,7 @@ function removeCommas(x) {
 
 
 function calculate(){
-    //Erase Existing Resu$loanTerms
+    //Erase Existing Results
     $("#table1").empty();
     $("#table2").empty();
     $("#table3").empty();
@@ -111,10 +111,10 @@ function calculate(){
     var rowArray = [];
     var $table6 = $("#table6");
     var textArray = ["Loan Term", "Interest Rate", "Down Payment", "Loan Amount", "Monthly Mortgage Payment",
-                        "Monthly Property Tax", "Monthly PMI", "Monthly Home Owner's Insurance",
-                        "Total Monthly Payment", "Total PMI Paid", "Months Until 20% Equity", "Total Interest Paid",
-                        "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years",
-                        "If Paid Off in 30 years"];
+                     "Monthly Property Tax", "Monthly PMI", "Monthly Home Owner's Insurance",
+                     "Total Monthly Payment", "Total PMI Paid", "Months Until 20% Equity", "Total Interest Paid",
+                     "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years",
+                     "If Paid Off in 30 years"];
     for (var x = 0; x < textArray.length; x++){
         var row = document.createElement("div");
         row.className = "divTableRow divTableHeader";
