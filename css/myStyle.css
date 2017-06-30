@@ -11,6 +11,16 @@ th{
     margin: 0 auto;
     width: 80%;
 }
-.glyphicon {
+.glyphicon-center {
     padding-right: 100px;
+}
+.glyphicon-right {
+    padding-right: 0px;
+}
+.glyphicon-left {
+    padding-right: 60px;
+}
+.form-group.required .control-label:before {
+  content:"*";
+  color:red;
 }
