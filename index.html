@@ -10,8 +10,6 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	 crossorigin="anonymous"></script>
-	<script src="3.2.1-jquery.min.js"></script>
-	<script src="3.3.7-bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 	<link rel="stylesheet" href="https://cdn.rawgit.com/escottj/MortgageCalculator/master/css/myStyle.css">
 	<script>
@@ -28,87 +26,153 @@
 </head>
 
 <body>
-	<div class="divTable">
-		<div class="divTableBody">
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Home Cost: </b></div>
-				<div class="divTableCellR"><input type="text" id="home-cost" value="$325,000" size=10 maxlength=10></input>
-				</div>
-			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Down Payment: </b></div>
-				<div class="divTableCellR">
-					<input type="text" id="down-payment-dollars" value="$65,000" size=10 maxlength=10></input>
-					<input type="text" id="down-payment" value="20.000%" size=10 maxlength=10></input>
-				</div>
-			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Loan Term: </b></div>
-				<div class="divTableCellR">
-					<div class="btn-group" data-toggle="buttons" id="loan-term">
-						<!--<label class="btn btn-primary">
-							<input type="radio" name="loan-term" value="5" autocomplete="off" > 5 years
-						</label>
-						<label class="btn btn-primary">
-							<input type="radio" name="loan-term" value="7" autocomplete="off"> 7 years
-						</label>-->
-						<label class="btn btn-primary radio-style">
-							<input type="radio" name="loan-term" value="10" autocomplete="off"> 10 years
-						</label>
-						<label class="btn btn-primary active radio-style">
-							<input type="radio" name="loan-term" value="15" autocomplete="off" checked> 15 years
-						</label>
-						<label class="btn btn-primary radio-style">
-							<input type="radio" name="loan-term" value="20" autocomplete="off"> 20 years
-						</label>
-						<label class="btn btn-primary radio-style">
-							<input type="radio" name="loan-term" value="30" autocomplete="off"> 30 years
-						</label>
-						<label class="btn btn-primary radio-style">
-							<input type="radio" name="loan-term" value="0" autocomplete="off"> Compare All
-						</label>
+	<div class="jumbotron text-center">
+		<h2>Erick's Mortgage Calculation Worksheet</h2>
+	</div>
+	<div class="container">
+		<form class="form-horizontal">
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Home Cost</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="300,000">
+						</div>
 					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Interest Rate (APR): </b></div>
-				<div class="divTableCellR">
-					<input class="interest" type="text" id="interest-rate-10" value="3.125%" maxlength=10></input>
-					<input class="interest" type="text" id="interest-rate-15" value="3.250%" maxlength=10></input>
-					<input class="interest" type="text" id="interest-rate-20" value="3.750%" maxlength=10></input>
-					<input class="interest" type="text" id="interest-rate-30" value="4.025%" maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Down Payment</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="60,000">
+						</div>
+					</div>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="down-payment" placeholder="Down Payment" value="20.000">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>HOA: </b></div>
-				<div class="divTableCellR"><input type="text" id="hoa" value="$120" size=10 maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">HOA</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="120">
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Property Tax Rate: </b></div>
-				<div class="divTableCellR"><input type="text" id="property-tax-rate" value="0.840%" size=10 maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Property Tax Rate</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value=".840">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>PMI: </b></div>
-				<div class="divTableCellR"><input type="text" id="pmi" value="1.000%" size=10 maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">PMI</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="pmi" placeholder="PMI" value="0.000">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Home Owner's Insurance: </b></div>
-				<div class="divTableCellR"><input type="text" id="hoi" value="$100.00" size=10 maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="hoi" placeholder="(monthly)" value="100">
+						</div>
+					</div>
 				</div>
 			</div>
-			<div class="divTableRow">
-				<div class="divTableCell"><b>Extra Payment: </b></div>
-				<div class="divTableCellR"><input type="text" id="extra-payment" value="$0" size=10 maxlength=10></input>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Extra Monthly Payment</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="extra-payment" placeholder="Extra Monthly Payment" value="0">
+						</div>
+					</div>
 				</div>
 			</div>
-		</div>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
+					<div class="col-sm-2">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control input-md" id="interest-rate-10" value="3.125">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="interest-rate-15" value="3.250">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="interest-rate-20" value="3.750">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+					<div class="col-sm-2">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<input type="text" class="form-control" id="interest-rate-30" value="4.025">
+							<div class="input-group-addon">%</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<label class="col-sm-4 control-label" for="formGroupInputSmall">Loan Term</label>
+					<div class="col-sm-2">
+						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
+					</div>
+					<div class="col-sm-2">
+						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="form-group form-group-md nopadding">
+					<div class="col-sm-8 col-sm-offset-4">
+						<button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
+					</div>
+				</div>
+			</div>
+		</form>
 	</div>
-
-	<br><button type="button" class="btn btn-primary" onclick="calculate()">Calculate</button>
-	<input type="button" value="Beta" onclick="beta()"></input>
+	<p>
+		<div class="container" id="table7">
+		</div>
+	</p>
 	<p>
 		<div class="divTableTitle"><b>Compare All Interest Rates</b></div>
 		<div class="divTable">
