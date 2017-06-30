@@ -31,6 +31,25 @@ function resetAll() {
     }
 };
 
+//Number Validation
+$(document).ready(function() {
+    $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars, #down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keydown(function (e) {
+        // Allow: backspace, delete, tab, escape, enter and .
+        if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
+             // Allow: Ctrl+A, Command+A
+            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
+             // Allow: home, end, left, right, down, up
+            (e.keyCode >= 35 && e.keyCode <= 40)) {
+                 // let it happen, don't do anything
+                 return;
+        }
+        // Ensure that it is a number and stop the keypress
+        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
+            e.preventDefault();
+        }
+    });
+});
+
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
     var a = $(this);
     var x = a.val();
@@ -48,11 +67,6 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(func
             var y = addCommas(Number(Math.round(newdp)));
             $("#down-payment-dollars").val(y);
         }
-    }else{
-        /*a.val("0");
-        if (this.id == "down-payment-dollars"){
-            $("#down-payment").val("0.000%");
-        }*/
     }
 });
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusin(function(){
@@ -73,11 +87,6 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(func
             var y = addCommas(Number(Math.round(newDownPaymentDollars)));
             $("#down-payment-dollars").val(y);
         }
-    }else{
-        /*a.val("0.000%");
-        if (this.id == "down-payment"){
-            $("#down-payment-dollars").val("$0.00");
-        }*/
     }
 });
 $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(function(){
@@ -209,11 +218,11 @@ function calculate(kl){
                     var column = document.createElement("td");
                     column.id = columnID;
 
-                    var bt = document.createElement('button');
+                    /*var bt = document.createElement('button');
                     bt.className = "btn btn-success btn-sm";
                     bt.setAttribute("onclick","saveTest('"+columnID+"')");
                     bt.innerText = "Save";
-                    column.appendChild(bt);
+                    column.appendChild(bt);*/
 
                     var bt = document.createElement('button');
                     bt.className = "btn btn-danger btn-sm";
@@ -269,11 +278,11 @@ function calculate(kl){
                 var column = document.createElement("td");
                 column.id = columnID;
 
-                var bt = document.createElement('button');
+                /*var bt = document.createElement('button');
                 bt.className = "btn btn-success btn-sm";
                 bt.setAttribute("onclick","saveTest('"+columnID+"')");
                 bt.innerText = "Save";
-                column.appendChild(bt);
+                column.appendChild(bt);*/
 
                 var bt = document.createElement('button');
                 bt.className = "btn btn-danger btn-sm";
