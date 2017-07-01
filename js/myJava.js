@@ -32,6 +32,12 @@ function resetAll() {
         var column = document.createElement("th");
         var text = document.createTextNode(textArray[x]);
         column.appendChild(text);
+        if (textArray[x] == ""){
+            column.setAttribute("style", "background-color: white;");
+        } else if (x == 0 || x == 5 || x == 12 || x == 17 || x == 20 || x == 25) {
+            column.className = "mergedTitle";
+            column.setAttribute("colspan", "100%");
+        }
         row.appendChild(column);
         rowArray.push(row);
     }
@@ -319,10 +325,210 @@ function myValidate(kl){
     var $hoi = $('#hoi').val().replace(/,/g,"");
     var $extraPayment = $('#extra-payment').val().replace(/,/g,"");
 
-    validate = 1;
+    var validate = 1;
 
     for (var j = 0; j < formArray.length; j++){
         var x = $('#'+formArray[j]).val().replace(/,/g,"");
+    /*switch(formArray[j]){
+        case "home-cost":
+            if (x.length == 0){
+                textRequired(formArray[j], "required", "right");
+            } else {
+                if (+x < 10000 || +x > 1000000000){
+                    validate = 0;
+                    wrongText(formArray[j], "required", "right");
+                } else {
+                    if ($downPaymentDollars.length > 0 && $downPayment.length == 0){
+                        $('#down-payment').val(((+$downPaymentDollars/+x)*100).toFixed(3));
+                        correctText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#3c763d");
+                    } else if ($downPayment.length > 0){
+                        $('#down-payment-dollars').val(addCommas(+$downPayment*+x));
+                        correctText("down-payment-dollars", "required", "right");
+                        $("#down-payment-label").css("color", "#3c763d");
+                        correctText("down-payment", "required", "right");
+                    }
+                    correctText(formArray[j], "required", "right");
+                }
+            }
+            break;
+        case "down-payment-dollars":
+            if (x.length == 0){
+                if ($downPayment.length == 0){
+                    textRequired("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#a94442");
+                    textRequired("down-payment", "required", "left");
+                    textNotRequired("pmi", "", "left");
+                } else {
+                    $("#down-payment-dollars").val(addCommas((+$downPayment/100)*$homeCost));
+                    correctText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                    if (+$downPayment < 20){
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
+                    } else {
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
+                    }
+                    correctText("down-payment", "required", "left");
+                }
+            } else {
+                if ($homeCost.length == 0){
+                    correctText(formArray[j], "required", "right");
+                    if ($downPayment.length == 0){
+                        //$('#down-payment').val("0.000");
+                    } else {
+                        correctText("down-payment", "required", "left");
+                    }
+                    
+                    $("#down-payment-label").css("color", "#3c763d");
+                } else {
+                    if (+x >= +$homeCost){
+                        validate = 0;
+                        wrongText(formArray[j], "required", "right");
+                        wrongText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#a94442");
+                    } else {
+                        correctText(formArray[j], "required", "right");
+                        correctText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#3c763d");
+                        $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
+                        $downPayment = $('#down-payment').val();
+                        if (+$downPayment < 20){
+                            $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
+                        } else {
+                            $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
+                        }
+                    }
+                }
+            }
+            break;
+        case "down-payment":
+            if (x.length == 0){
+                if ($downPaymentDollars.length == 0){
+                    textRequired("down-payment", "required", "left");
+                    $("#down-payment-label").css("color", "#a94442");
+                    textRequired("down-payment-dollars", "required", "right");
+                    textNotRequired("pmi", "", "left");
+                } else {
+                    $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
+                    correctText("down-payment", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                    $downPayment = $('#down-payment').val();
+                    if (+$downPayment < 20){
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
+                    } else {
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
+                    }
+                    correctText("down-payment-dollars", "required", "right");
+                }
+            } else {
+                if (+x >= 100 ){
+                    validate = 0;
+                    wrongText(formArray[j], "required", "left");
+                    wrongText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#a94442");
+                } else {
+                    if (+x >= 20){
+                        textNotRequired("pmi", "", "left");
+                    } else {
+                        if ($pmi.length > 0){
+                            if (+$pmi > 10){
+                                wrongText("pmi", "required", "left");
+                            } else {
+                                correctText("pmi", "required", "left");
+                            }
+                        } else {
+                            if ($('#pmi-group').hasClass("has-error")){
+
+                            } else {
+                                $("#pmi-group").attr('class', 'form-group form-group-md nopadding required');
+                            }
+                        }
+                    }
+                    correctText(formArray[j], "required", "left");
+                    correctText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                }
+            }
+            break;
+        case "hoa":
+            if (x.length == 0){
+                textNotRequired(formArray[j], "", "center");
+            } else {
+                if (+$hoa > 1000 ){
+                    validate = 0;
+                    wrongText(formArray[j], "", "center");
+                } else {
+                    correctText(formArray[j], "", "center");
+                }
+            }
+
+            break;
+        case "property-tax-rate":
+            if (x.length == 0){
+                textRequired(formArray[j], "required", "left");
+            } else {
+                if (+$propertyTaxRate > 10 ){
+                    validate = 0;
+                    wrongText(formArray[j], "required", "left");
+                } else {
+                    correctText(formArray[j], "required", "left");
+                }
+            }
+            break;
+        case "pmi":
+            if (x.length == 0){
+                if ($downPayment.length > 0){
+                    if (+$downPayment >= 20){
+                        textNotRequired(formArray[j], "", "left");
+                    } else {
+                        textRequired(formArray[j], "required", "left");
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required has-error');
+                    }
+                } else {
+                    textNotRequired("pmi", "", "left");
+                }
+            } else {
+                if ($downPayment.length > 0){
+                    if (+$downPayment >= 20){
+                        textNotRequired("pmi", "", "left");
+                    } else {
+                        if (+$pmi > 10 ){
+                            validate = 0;
+                            wrongText(formArray[j], "required", "left");
+                        } else {
+                            correctText(formArray[j], "required", "left");
+                        }
+                    }
+                } else {
+                    textNotRequired(formArray[j], "", "left");
+                }
+            }
+            break;
+        case "hoi":
+            if (x.length == 0){
+                textRequired(formArray[j], "required", "center");
+            } else {
+                if (+$hoi > 1000 ){
+                    validate = 0;
+                    wrongText(formArray[j], "required", "center");
+                } else {
+                    correctText(formArray[j], "required", "center");
+                }
+            }
+            break;
+        case "extra-payment":
+            if (x.length == 0){
+                textNotRequired(formArray[j], "", "center");
+            } else {
+                if (+$extraPayment > 5000){
+                    validate = 0;
+                    wrongText(formArray[j], "", "center");
+                } else {
+                    correctText(formArray[j], "", "center");
+                }
+            }
+            break;
+    }*/
         if (x.length == 0){
             if (formRequired[j] == "required"){
                 validate = 0;
@@ -593,8 +799,7 @@ function calculate(kl){
 
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
-            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
-            //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
+            var dict = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
             var lt = termArray[t];
             var i = interestArray[t]/100/12;
             var n = termArray[t]*12;
@@ -610,19 +815,19 @@ function calculate(kl){
             }
 
             var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
-            var dataArray = ["", termArray[t], istring, help[0], help[1], help[2], help[3], help[4],
-                            $hoi, help[5], help[6], help[7], help[8], tempArray[0],
-                            tempArray[1], tempArray[2], tempArray[3]];
+            var dataArray = ["Loan Details", termArray[t], istring, dict["downPaymentAmount"], dict["loanAmount"],
+                            "Monthly Payment Breakdown", dict["monthlyMortgagePayment"], dict["monthlyPropertyTax"], $hoi, dict["monthlyPMI"], $hoa, dict["totalMonthlyPayment"],
+                            "Early Mortgage Payoff", $extraPayment, dict["mdcount"], dict["totalInterest2"], dict["totalSavings"],
+                            "PMI Details", dict["equity"], dict["totalPMI"],
+                            "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
+                            "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
             for (var y = 0; y < dataArray.length; y++){
-                if (y != 0) {
+                if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25){
                     var column = document.createElement("td");
                     column.id = columnID;
-
                     if (y == 1){
                         var text = document.createTextNode(dataArray[y]+" years");
-                    } else if (y == 2){
-                        var text = document.createTextNode(dataArray[y]);
-                    } else if (y == 11){
+                    } else if (y == 2 || y == 12 || y == 18){
                         var text = document.createTextNode(dataArray[y]);
                     } else {
                         var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
@@ -630,7 +835,7 @@ function calculate(kl){
                     column.appendChild(text);
                     rowArray[y].appendChild(column);
 
-                    if (y == 16){
+                    if (y == dataArray.length - 1){
                         var column = document.createElement("td");
                         column.id = columnID;
 
@@ -642,8 +847,8 @@ function calculate(kl){
                         column.setAttribute("style", "background-color: white;");
                         column.setAttribute("align", "center");
 
-                        rowArray[17].appendChild(column);
-                    } 
+                        rowArray[dataArray.length].appendChild(column);
+                    }
                 }
             }
             for (var z = 0; z <= rowArray.length; z++){
@@ -652,10 +857,7 @@ function calculate(kl){
             columnID++;
         }
     } else {
-        //var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
         var dict = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
-        alert(dict["monthlyPropertyTax"]);
-        //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
         var n = $loanTerm*12;
@@ -669,20 +871,19 @@ function calculate(kl){
             }
         }
         var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
-        var dataArray = ["Loan Details", $loanTerm, istring, help[0], help[1],
-                         "Monthly Payment Breakdown", help[2], help[3], $hoi, help[4], $hoa, help[5]];
-        /*var dataArray = [$loanTerm, istring, help[0], help[1], help[2], help[3], help[4],
-                    $hoi, help[5], help[6], help[7], help[8], tempArray[0],
-                    tempArray[1], tempArray[2], tempArray[3]];*/
+        var dataArray = ["Loan Details", $loanTerm, istring, dict["downPaymentAmount"], dict["loanAmount"],
+                         "Monthly Payment Breakdown", dict["monthlyMortgagePayment"], dict["monthlyPropertyTax"], $hoi, dict["monthlyPMI"], $hoa, dict["totalMonthlyPayment"],
+                         "Early Mortgage Payoff", $extraPayment, dict["mdcount"], dict["totalInterest2"], dict["totalSavings"],
+                         "PMI Details", dict["equity"], dict["totalPMI"],
+                         "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
+                         "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
         for (var y = 0; y < dataArray.length; y++){
-            if (y != 0 && y != 5 && y != 13){
+            if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25){
                 var column = document.createElement("td");
                 column.id = columnID;
                 if (y == 1){
                     var text = document.createTextNode(dataArray[y]+" years");
-                } else if (y == 2){
-                    var text = document.createTextNode(dataArray[y]);
-                } else if (y == 12){
+                } else if (y == 2 || y == 12 || y == 18){
                     var text = document.createTextNode(dataArray[y]);
                 } else {
                     var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
@@ -690,7 +891,7 @@ function calculate(kl){
                 column.appendChild(text);
                 rowArray[y].appendChild(column);
 
-                if (y == 16){
+                if (y == dataArray.length - 1){
                     var column = document.createElement("td");
                     column.id = columnID;
 
@@ -702,7 +903,7 @@ function calculate(kl){
                     column.setAttribute("style", "background-color: white;");
                     column.setAttribute("align", "center");
 
-                    rowArray[17].appendChild(column);
+                    rowArray[dataArray.length].appendChild(column);
                 }
             }
         }
@@ -819,6 +1020,8 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
                 equity = equity + 1;
             }
     }
+    var totalCost = P + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+
     var dict = {};
     dict["downPaymentAmount"] = downPaymentAmount;
     dict["loanAmount"] = P;
@@ -826,8 +1029,10 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     dict["monthlyPropertyTax"] = monthlyPropertyTax;
     dict["monthlyPMI"] = monthlyPMI;
     dict["totalMonthlyPayment"] = totalMonthlyPayment;
-    return dict;
-    /*var totalCost = P + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+    dict["equity"] = equity;
+    dict["totalPMI"] = totalPMI;
+    dict["totalCost"] = totalCost;
+    dict["totalInterest"] = totalInterest;
 
     //Extra Monthly Payment
     var mdcount = 0;
@@ -856,9 +1061,14 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
                 break;
             }
         }
-    }*/
+    }
 
-    //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest, totalCost, mdcount];
+    var totalCost2 = P + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+    dict["mdcount"] = mdcount;
+    dict["totalInterest2"] = totalInterest;
+    dict["totalCost2"] = totalCost2;
+    dict["totalSavings"] = totalCost - totalCost2;
+    return dict;
 }
 function deleteTest(x){
     var a = '[id="'+x+'"]';
