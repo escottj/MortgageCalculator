@@ -29,6 +29,12 @@ th{
     color: white;
 }
 
+.mergedTitle {
+    text-align: center;
+    background-color: #45a9e8;
+    color: white;
+}
+
 /*.table {
     border-spacing: 0;
     border-collapse: collapse;
