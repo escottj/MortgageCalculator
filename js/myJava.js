@@ -88,131 +88,209 @@ $("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #
     var $hoi = $('#hoi').val().replace(/,/g,"");
     var $extraPayment = $('#extra-payment').val().replace(/,/g,"");
 
-    /*if (x.length == 0){
-        validate = 0;
-        if (this.id == "down-payment-dollars" || this.id == "down-payment"){
-            if ($downPaymentDollars.length == 0){
-                textRequired("down-payment-dollars", "required", "right");
-                $("#down-payment-label").css("color", "#a94442");
-            }
-            if ($downPayment == 0){
-                textRequired("down-payment", "required", "left");
-                $("#down-payment-label").css("color", "#a94442");
-            }
-        } else if (this.id == "home-cost"){
-            textRequired(this.id, "required", "right");
-        } else if (this.id == "property-tax-rate" || this.id == "hoi"){
-            textRequired(this.id, "required", "left");
-        }
-    } else {*/
-        switch(this.id){
-            case "home-cost":
-                if (x.length == 0){
-                    textRequired(this.id, "required", "right");
+    var validate = 0;
+    switch(this.id){
+        case "home-cost":
+            if (x.length == 0){
+                textRequired(this.id, "required", "right");
+            } else {
+                if (+x < 10000 || +x > 1000000000){
+                    validate = 0;
+                    wrongText(this.id, "required", "right");
                 } else {
-                    if (+x < 10000 || +x > 1000000000){
-                        validate = 0;
-                        wrongText(this.id, "required", "right");
-                    } else {
-                        correctText(this.id, "required", "right");
-                    }
-                }
-                break;
-            case "down-payment-dollars":
-                if (x.length == 0){
-                    textRequired("down-payment-dollars", "required", "right");
-                    $("#down-payment-label").css("color", "#a94442");
-                    if ($downPayment.length == 0){
-                        textRequired("down-payment", "required", "left");
-                        $("#down-payment-label").css("color", "#a94442");
-                    }
-                } else {
-                    var $homeCost = $('#home-cost').val().replace(/,/g,"");
-                    var $downPayment = $('#down-payment').val();
-                    if ($homeCost.length == 0){
-                        correctText(this.id, "required", "right");
-                        if ($downPayment.length == 0){
-                            $('#down-payment').val(0);
-                        }
+                    if ($downPaymentDollars.length > 0 && $downPayment.length == 0){
+                        $('#down-payment').val(((+$downPaymentDollars/+x)*100).toFixed(3));
                         correctText("down-payment", "required", "left");
                         $("#down-payment-label").css("color", "#3c763d");
+                    } else if ($downPayment.length > 0){
+                        $('#down-payment-dollars').val(addCommas(+$downPayment*+x));
+                        correctText("down-payment-dollars", "required", "right");
+                        $("#down-payment-label").css("color", "#3c763d");
+                        correctText("down-payment", "required", "right");
+                    }
+                    correctText(this.id, "required", "right");
+                }
+            }
+            break;
+        case "down-payment-dollars":
+            if (x.length == 0){
+                if ($downPayment.length == 0){
+                    textRequired("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#a94442");
+                    textRequired("down-payment", "required", "left");
+                    textNotRequired("pmi", "", "left");
+                } else {
+                    $("#down-payment-dollars").val(addCommas((+$downPayment/100)*$homeCost));
+                    correctText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                    if (+$downPayment < 20){
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                     } else {
-                        if (+x >= +$homeCost){
-                            validate = 0;
-                            wrongText(this.id, "required", "right");
-                            wrongText("down-payment", "required", "left");
-                            $("#down-payment-label").css("color", "#a94442");
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
+                    }
+                    correctText("down-payment", "required", "left");
+                }
+            } else {
+                if ($homeCost.length == 0){
+                    correctText(this.id, "required", "right");
+                    if ($downPayment.length == 0){
+                        //$('#down-payment').val("0.000");
+                    } else {
+                        correctText("down-payment", "required", "left");
+                    }
+                    
+                    $("#down-payment-label").css("color", "#3c763d");
+                } else {
+                    if (+x >= +$homeCost){
+                        validate = 0;
+                        wrongText(this.id, "required", "right");
+                        wrongText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#a94442");
+                    } else {
+                        correctText(this.id, "required", "right");
+                        correctText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#3c763d");
+                        $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
+                        $downPayment = $('#down-payment').val();
+                        //alert(+$downPayment);
+                        if (+$downPayment < 20){
+                            $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                         } else {
-                            correctText(this.id, "required", "right");
-                            correctText("down-payment", "required", "left");
-                            $("#down-payment-label").css("color", "#3c763d");
+                            $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
                         }
                     }
                 }
-                break;
-            case "down-payment":
-                if (x.length == 0){
+            }
+            break;
+        case "down-payment":
+            if (x.length == 0){
+                if ($downPaymentDollars.length == 0){
                     textRequired("down-payment", "required", "left");
                     $("#down-payment-label").css("color", "#a94442");
-                    if ($downPaymentDollars.length == 0){
-                        textRequired("down-payment-dollars", "required", "right");
-                        $("#down-payment-label").css("color", "#a94442");
-                    }
+                    textRequired("down-payment-dollars", "required", "right");
+                    textNotRequired("pmi", "", "left");
                 } else {
-                    if (+x >= 100 ){
-                        validate = 0;
-                        wrongText(this.id, "required", "left");
-                        wrongText("down-payment-dollars", "required", "right");
-                        $("#down-payment-label").css("color", "#a94442");
+                    $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
+                    correctText("down-payment", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                    $downPayment = $('#down-payment').val();
+                    if (+$downPayment < 20){
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                     } else {
-                        correctText(this.id, "required", "left");
-                        correctText("down-payment-dollars", "required", "right");
-                        $("#down-payment-label").css("color", "#3c763d");
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
                     }
+                    correctText("down-payment-dollars", "required", "right");
                 }
-                break;
-            case "hoa":
+            } else {
+                if (+x >= 100 ){
+                    validate = 0;
+                    wrongText(this.id, "required", "left");
+                    wrongText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#a94442");
+                } else {
+                    if (+x >= 20){
+                        textNotRequired("pmi", "", "left");
+                    } else {
+                        if ($pmi.length > 0){
+                            if (+$pmi > 10){
+                                wrongText("pmi", "required", "left");
+                            } else {
+                                correctText("pmi", "required", "left");
+                            }
+                        } else {
+                            if ($('#pmi-group').hasClass("has-error")){
+
+                            } else {
+                                $("#pmi-group").attr('class', 'form-group form-group-md nopadding required');
+                            }
+                        }
+                    }
+                    correctText(this.id, "required", "left");
+                    correctText("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#3c763d");
+                }
+            }
+            break;
+        case "hoa":
+            if (x.length == 0){
+                textNotRequired(this.id, "", "center");
+            } else {
                 if (+$hoa > 1000 ){
                     validate = 0;
                     wrongText(this.id, "", "center");
                 } else {
                     correctText(this.id, "", "center");
                 }
-                break;
-            case "property-tax-rate":
+            }
+
+            break;
+        case "property-tax-rate":
+            if (x.length == 0){
+                textRequired(this.id, "required", "left");
+            } else {
                 if (+$propertyTaxRate > 10 ){
                     validate = 0;
                     wrongText(this.id, "required", "left");
                 } else {
                     correctText(this.id, "required", "left");
                 }
-                break;
-            case "pmi":
-                if (+$pmi > 10 ){
-                    validate = 0;
-                    wrongText(this.id, "", "left");
+            }
+            break;
+        case "pmi":
+            if (x.length == 0){
+                if ($downPayment.length > 0){
+                    if (+$downPayment >= 20){
+                        textNotRequired(this.id, "", "left");
+                    } else {
+                        textRequired(this.id, "required", "left");
+                        $("#pmi-group").attr('class', 'form-group form-group-md nopadding required has-error');
+                    }
                 } else {
-                    correctText(this.id, "", "left");
+                    textNotRequired("pmi", "", "left");
                 }
-                break;
-            case "hoi":
+            } else {
+                if ($downPayment.length > 0){
+                    if (+$downPayment >= 20){
+                        textNotRequired("pmi", "", "left");
+                    } else {
+                        if (+$pmi > 10 ){
+                            validate = 0;
+                            wrongText(this.id, "required", "left");
+                        } else {
+                            correctText(this.id, "required", "left");
+                        }
+                    }
+                } else {
+                    textNotRequired(this.id, "", "left");
+                }
+            }
+            break;
+        case "hoi":
+            if (x.length == 0){
+                textRequired(this.id, "required", "center");
+            } else {
                 if (+$hoi > 1000 ){
                     validate = 0;
                     wrongText(this.id, "required", "center");
                 } else {
                     correctText(this.id, "required", "center");
                 }
-                break;
-            case "extra-payment":
-                if (+$extraPayment >= $homeCost - $downPaymentDollars){
+            }
+            break;
+        case "extra-payment":
+            if (x.length == 0){
+                textNotRequired(this.id, "", "center");
+            } else {
+                if (+$extraPayment > 5000){
                     validate = 0;
                     wrongText(this.id, "", "center");
                 } else {
                     correctText(this.id, "", "center");
                 }
-                break;
-        }
-    //}   
+            }
+            break;
+    }
+    return(validate);
 });
 
 function myValidate(kl){
@@ -246,6 +324,9 @@ function myValidate(kl){
             if (formRequired[j] == "required"){
                 validate = 0;
                 textRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                if (formArray[j] == "down-payment-dollars"){
+                    $("#down-payment-label").css("color", "#a94442");
+                }
             } else {
                 textNotRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
             }
@@ -263,8 +344,10 @@ function myValidate(kl){
                     if (+$downPaymentDollars >= +$homeCost){
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                        $("#down-payment-label").css("color", "#a94442");
                     } else {
                         correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                        $("#down-payment-label").css("color", "#3c763d");
                     }
                     break;
                 case "down-payment":
@@ -308,7 +391,7 @@ function myValidate(kl){
                     }
                     break;
                 case "extra-payment":
-                    if (+$extraPayment >= $homeCost - $downPaymentDollars){
+                    if (+$extraPayment > 5000){
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -414,65 +497,6 @@ function correctText(x, y, z){
     $("#"+x+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-'+z);
     return;
 }
-/*$("#home-cost").focusout(function(){
-    var x = $(this).val();
-    var min = 0;
-    var max = 0;
-    if (this.id == "home-cost"){
-        min = 10000;
-        max = 1000000000;
-    }else if (this.id == "down-payment-dollars"){
-        min = 0;
-        max = .8*removeCommas($("#home-cost").val());
-    }
-    if (x == "" || x < min || x > max){
-        $("#"+this.id+"-help-block").show();
-        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-error');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
-    } else {
-        $("#"+this.id+"-help-block").hide();
-        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-success');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
-        if (this.id == "home-cost"){
-            if ($("#down-payment-dollars").val() == "" || $("#down-payment-dollars").val() == 0){
-                if ($("#down-payment").val() == ""){
-                    $("#down-payment-dollars").val(addCommas(.2*$(this).val()));
-                    $("#down-payment-dollars-help-block").hide();
-                    $("#down-payment-dollars-check").attr('class', 'col-sm-4 has-success');
-                    $("#down-payment-dollars-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
-                    $("#down-payment").val("20.000");
-                    $("#down-payment-help-block").hide();
-                    $("#down-payment-check").attr('class', 'col-sm-4 has-success');
-                    $("#down-payment-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-left');
-                }
-            }
-        }
-        $(this).val(addCommas($(this).val()));
-    }
-});
-
-$("#down-payment-dollars").focusout(function(){
-    var x = +removeCommas($(this).val());
-    var min = 0;
-    var max = 0;
-    var test = +removeCommas($("#home-cost").val());
-    if (test == ""){
-        $("#"+this.id+"-help-block").hide();
-        $("#"+this.id+"-check").attr('class', 'col-sm-4');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-right');
-    } else if (x >= test) {
-        $("#"+this.id+"-help-block").show();
-        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-error');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
-    } else {
-        $("#"+this.id+"-help-block").hide();
-        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-success');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
-    }
-    $(this).val(addCommas($(this).val()));
-});*/
-
-
 
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
     var a = $(this);
@@ -603,7 +627,8 @@ function calculate(kl){
             var tempArray = [];
             var temploop = [10, 15, 20, 30];
             for (var w = 0; w < temploop.length; w++){
-                if (lt != temploop[w] && lt > temploop[w]){
+                //if (lt != temploop[w] && lt > temploop[w]){
+                if (lt >= temploop[w]){
                     var tentemp = earlymploop2(temploop[w], lt, i);
                     tempArray.push(tentemp[2]);
                 } else {
@@ -666,6 +691,7 @@ function calculate(kl){
         var i = $interestRate/100/12;
         for (var w = 0; w < temploop.length; w++){
             if ($loanTerm != temploop[w] && $loanTerm > temploop[w]){
+            //if ($loanTerm == temploop[w]){
                 var tentemp = earlymploop2(temploop[w], $loanTerm, i);
                 tempArray.push(tentemp[2]);
             } else {
@@ -829,3 +855,28 @@ function deleteTest(x){
     var a = '[id="'+x+'"]';
     $(a).remove();
 }
+
+
+function firefoxFix() {
+    if ( /firefox/.test( window.navigator.userAgent.toLowerCase() ) ) {
+        var tds = document.getElementsByTagName( 'td' ),
+            ths = document.getElementsByTagName( 'th' );
+        for( var index = 0; index < tds.length; index++ ) {
+            tds[index].innerHTML = '<div class="ff-fix">' + tds[index].innerHTML + '</div>';                     
+        };
+        for( var index = 0; index < ths.length; index++ ) {
+            ths[index].innerHTML = 
+                  '<div class="' + ths[index].className + '">' 
+                + ths[index].innerHTML 
+                + '</div>';                     
+            ths[index].className = '';
+        };
+        var style = '<style>'
+            + 'td, th { padding: 0 !important; }' 
+            + 'td:hover::before, td:hover::after { background-color: transparent !important; }'
+            + '</style>';
+        document.head.insertAdjacentHTML( 'beforeEnd', style );
+    };
+};
+
+firefoxFix();
