@@ -30,7 +30,7 @@
 
 <body>
 	<div class="jumbotron text-center">
-		<h2>Erick's Mortgage Calculation Worksheet</h2>
+		<h2>Erick's Mortgage Calculator</h2>
 	</div>
 	<div class="container">
 		<form class="form-horizontal">
@@ -69,20 +69,6 @@
 				</div>
 			</div>
 			<div class="row">
-				<div id="hoa-group" class="form-group form-group-md nopadding">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
-					<div id="hoa-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="100" aria-describedby="hoa-help-block">
-							<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">monthly</div>
-						</div>
-						<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
 				<div id="property-tax-rate-group" class="form-group form-group-md nopadding required">
 					<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
 					<div id="property-tax-rate-check" class="col-sm-4">
@@ -92,6 +78,20 @@
 							<div class="input-group-addon">%</div>
 						</div>
 						<span style="display: none;" id="property-tax-rate-help-block" class="help-block">Please enter a value no larger than 10.</span>
+					</div>
+				</div>
+			</div>
+			<div class="row">
+				<div id="hoi-group" class="form-group form-group-md nopadding required">
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
+					<div class="col-sm-4">
+						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+							<div class="input-group-addon">$</div>
+							<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="100" aria-describedby="hoi-help-block">
+							<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+							<div class="input-group-addon">monthly</div>
+						</div>
+						<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
 					</div>
 				</div>
 			</div>
@@ -109,16 +109,16 @@
 				</div>
 			</div>
 			<div class="row">
-				<div id="hoi-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
-					<div class="col-sm-4">
+				<div id="hoa-group" class="form-group form-group-md nopadding">
+					<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
+					<div id="hoa-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="100" aria-describedby="hoi-help-block">
-							<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="100" aria-describedby="hoa-help-block">
+							<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
-						<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
+						<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
 					</div>
 				</div>
 			</div>
@@ -312,18 +312,18 @@
 							<td id="3">$210.00</td>
 						</tr>
 						<tr>
-							<th>Monthly PMI</th>
-							<td id="0">$0.00</td>
-							<td id="1">$0.00</td>
-							<td id="2">$0.00</td>
-							<td id="3">$0.00</td>
-						</tr>
-						<tr>
 							<th>Monthly Home Owner's Insurance</th>
 							<td id="0">$100.00</td>
 							<td id="1">$100.00</td>
 							<td id="2">$100.00</td>
 							<td id="3">$100.00</td>
+						</tr>
+						<tr>
+							<th>Monthly PMI</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$0.00</td>
 						</tr>
 						<tr>
 							<th>Monthly HOA</th>
@@ -413,6 +413,23 @@
 						</tr>
 						<tr>
 							<th>If Paid Off in 30 years</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$173,733.05</td>
+						</tr>
+						<tr>
+							<th colspan="100%" style="text-align: center; background-color: #45a9e8; color: white;">Total Out Of Pocket Cost Over Life of Loan</th>
+						</tr>
+						<tr>
+							<th>Total Cost (Obligation)</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$173,733.05</td>
+						</tr>
+						<tr>
+							<th>Total Cost (Obligation + Optional)</th>
 							<td id="0">$0.00</td>
 							<td id="1">$0.00</td>
 							<td id="2">$0.00</td>
