@@ -10,9 +10,11 @@ var rowArray = [];
 for (var x = 0; x < textArray.length; x++){
     var row = document.createElement("tr");
     var column = document.createElement("th");
-    //column.className = "col-sm-3";
     var text = document.createTextNode(textArray[x]);
     column.appendChild(text);
+    if (textArray[x] == ""){
+        column.setAttribute("style", "background-color: white;");
+    }
     row.appendChild(column);
     rowArray.push(row);
 }
@@ -23,15 +25,12 @@ function resetAll() {
     for (var x = 0; x < textArray.length; x++){
         var row = document.createElement("tr");
         var column = document.createElement("th");
-        //column.className = "col-sm-3";
         var text = document.createTextNode(textArray[x]);
         column.appendChild(text);
         row.appendChild(column);
         rowArray.push(row);
     }
 };
-
-//$("#help-block").toggle();
 
 //Number Validation
 $(document).ready(function() {
@@ -152,7 +151,6 @@ $("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #
                         $("#down-payment-label").css("color", "#3c763d");
                         $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
                         $downPayment = $('#down-payment').val();
-                        //alert(+$downPayment);
                         if (+$downPayment < 20){
                             $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                         } else {
@@ -523,12 +521,14 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(func
         }
     }
 });
+
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusin(function(){
     var a = $(this);
     var x = a.val();
     a.val(removeCommas(x));
     a.select();
 });
+
 $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(function(){
     var a = $(this);
     var x = a.val();
@@ -543,6 +543,7 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(func
         }
     }
 });
+
 $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(function(){
     var a = $(this);
     var x = a.val();
@@ -553,26 +554,17 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(funct
 function addCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
+
 function removeCommas(x) {
     return x.toString().replace(/,/g,"").replace("$","");
 }
 
-
-
 function calculate(kl){
-        var validate = myValidate(kl);
-        if (validate == 0){
-            return;
-        }
-    //Erase Existing Results
-    /*$("#table1").empty();
-    $("#table2").empty();
-    $("#table3").empty();
-    $("#table4").empty();
-    $("#table5").empty();
-    $("#table6").empty();
-    $("#table7").empty();
-    $("#table8").empty();*/
+    //Validate Form Fields
+    var validate = myValidate(kl);
+    if (validate == 0){
+        return;
+    }
 
     //Compare All Table
     var $homeCost = +$('#home-cost').val().replace(/,/g,"").replace("$","");
@@ -592,34 +584,11 @@ function calculate(kl){
     var $pmi = +$('#pmi').val().replace("%","");
     var $hoi = +$('#hoi').val().replace(/,/g,"").replace("$","");
     var $extraPayment = +$('#extra-payment').val().replace(/,/g,"").replace("$","");
-    
-    //var rowArray = [];
-    var $table6 = $("#table6");
-    var $table7 = $("#table7");
-    //var $table8 = $("#table8");
-    /*var textArray = ["Loan Term", "Interest Rate", "Down Payment", "Loan Amount", "Monthly Mortgage Payment",
-                     "Monthly Property Tax", "Monthly PMI", "Monthly Home Owner's Insurance",
-                     "Total Monthly Payment", "Total PMI Paid", "Months Until 20% Equity", "Total Interest Paid",
-                     "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years",
-                     "If Paid Off in 30 years", ""];
-
-    if ($table8.data('headers') == null){
-        for (var x = 0; x < textArray.length; x++){
-            var row = document.createElement("tr");
-            var column = document.createElement("th");
-            var text = document.createTextNode(textArray[x]);
-            column.appendChild(text);
-            row.appendChild(column);
-            rowArray.push(row);
-            $table8.data('headers', 'true');
-        }
-    }*/
-
-
     var termArray = [10, 15, 20, 30];
+
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
-            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi);
             //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
             var lt = termArray[t];
             var i = interestArray[t]/100/12;
@@ -627,7 +596,6 @@ function calculate(kl){
             var tempArray = [];
             var temploop = [10, 15, 20, 30];
             for (var w = 0; w < temploop.length; w++){
-                //if (lt != temploop[w] && lt > temploop[w]){
                 if (lt >= temploop[w]){
                     var tentemp = earlymploop2(temploop[w], lt, i);
                     tempArray.push(tentemp[2]);
@@ -661,17 +629,13 @@ function calculate(kl){
                     var column = document.createElement("td");
                     column.id = columnID;
 
-                    /*var bt = document.createElement('button');
-                    bt.className = "btn btn-success btn-sm";
-                    bt.setAttribute("onclick","saveTest('"+columnID+"')");
-                    bt.innerText = "Save";
-                    column.appendChild(bt);*/
-
                     var bt = document.createElement('button');
                     bt.className = "btn btn-danger btn-sm";
                     bt.setAttribute("onclick","deleteTest('"+columnID+"')");
                     bt.innerText = "Delete";
                     column.appendChild(bt);
+                    column.setAttribute("style", "background-color: white;");
+                    column.setAttribute("align", "center");
 
                     rowArray[16].appendChild(column);
                 }
@@ -680,18 +644,16 @@ function calculate(kl){
                 $table8.append(rowArray[z]);
             }
             columnID++;
-
         }
     } else {
-        var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi);
         //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
         var n = $loanTerm*12;
         var i = $interestRate/100/12;
         for (var w = 0; w < temploop.length; w++){
-            if ($loanTerm != temploop[w] && $loanTerm > temploop[w]){
-            //if ($loanTerm == temploop[w]){
+            if ($loanTerm >= temploop[w]){
                 var tentemp = earlymploop2(temploop[w], $loanTerm, i);
                 tempArray.push(tentemp[2]);
             } else {
@@ -705,7 +667,6 @@ function calculate(kl){
         for (var y = 0; y < dataArray.length; y++){
             var column = document.createElement("td");
             column.id = columnID;
-
             if (y == 0){
                 var text = document.createTextNode(dataArray[y]+" years");
             } else if (y == 1){
@@ -722,22 +683,16 @@ function calculate(kl){
                 var column = document.createElement("td");
                 column.id = columnID;
 
-                /*var bt = document.createElement('button');
-                bt.className = "btn btn-success btn-sm";
-                bt.setAttribute("onclick","saveTest('"+columnID+"')");
-                bt.innerText = "Save";
-                column.appendChild(bt);*/
-
                 var bt = document.createElement('button');
                 bt.className = "btn btn-danger btn-sm";
                 bt.setAttribute("onclick","deleteTest('"+columnID+"')");
                 bt.innerText = "Delete";
                 column.appendChild(bt);
+                column.setAttribute("style", "background-color: white;");
+                column.setAttribute("align", "center");
 
                 rowArray[16].appendChild(column);
             }
-            
-            //rowArray[y].appendChild(column);
         }
 
         for (var z = 0; z < rowArray.length; z++){
@@ -745,7 +700,7 @@ function calculate(kl){
         }
         columnID++;
     }
-    //var helptest = earlymploop2(10);
+
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
     function earlymploop2(d, lt, i){
         //var array1 = [21000, 1100, 110, 11, 1.1, .11, .011, .0011];
@@ -818,14 +773,14 @@ function calculate(kl){
 }
 
 
-function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, ep){
+function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi){
     
     var monthlyPropertyTax = ((ptr/100)*hc)/12;
     var downPaymentAmount = (dp/100)*hc;
     var P = hc - downPaymentAmount;
     var i = ir/100/12;
     var n = lt*12;
-    var M = ep + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+    var M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
     var monthlyPMI = 0;
     if (dp < 20){
         monthlyPMI = ((pmi/100)*P)/12;
@@ -855,28 +810,3 @@ function deleteTest(x){
     var a = '[id="'+x+'"]';
     $(a).remove();
 }
-
-
-function firefoxFix() {
-    if ( /firefox/.test( window.navigator.userAgent.toLowerCase() ) ) {
-        var tds = document.getElementsByTagName( 'td' ),
-            ths = document.getElementsByTagName( 'th' );
-        for( var index = 0; index < tds.length; index++ ) {
-            tds[index].innerHTML = '<div class="ff-fix">' + tds[index].innerHTML + '</div>';                     
-        };
-        for( var index = 0; index < ths.length; index++ ) {
-            ths[index].innerHTML = 
-                  '<div class="' + ths[index].className + '">' 
-                + ths[index].innerHTML 
-                + '</div>';                     
-            ths[index].className = '';
-        };
-        var style = '<style>'
-            + 'td, th { padding: 0 !important; }' 
-            + 'td:hover::before, td:hover::after { background-color: transparent !important; }'
-            + '</style>';
-        document.head.insertAdjacentHTML( 'beforeEnd', style );
-    };
-};
-
-firefoxFix();
