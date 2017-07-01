@@ -588,7 +588,7 @@ function calculate(kl){
 
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
-            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi);
+            var help = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
             //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
             var lt = termArray[t];
             var i = interestArray[t]/100/12;
@@ -646,7 +646,7 @@ function calculate(kl){
             columnID++;
         }
     } else {
-        var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi);
+        var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
         //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
@@ -773,7 +773,7 @@ function calculate(kl){
 }
 
 
-function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi){
+function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     
     var monthlyPropertyTax = ((ptr/100)*hc)/12;
     var downPaymentAmount = (dp/100)*hc;
@@ -804,7 +804,37 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi){
                 equity = equity + 1;
             }
     }
-    return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
+
+    //Extra Monthly Payment
+    var mdcount = 0;
+    if (xp > 0){
+        var newP = P;
+        var interestPayment = 0;
+        var totalInterest = 0;
+        var newPMI = 0;
+        var principalPayment = 0;
+        var totalPMI = 0;
+        var equity = 0;
+        var mdcount = 0;
+        var M = xp + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+
+        for (var j = 0; j < n; j++){
+            mdcount = mdcount + 1;
+            interestPayment = newP*i;
+            totalInterest = totalInterest + interestPayment;
+            principalPayment = M - interestPayment;
+            newP = newP - principalPayment;
+            if (newP/hc > .8){
+                totalPMI = totalPMI + monthlyPMI;
+                equity = equity + 1;
+            }
+            if (newP < 1){
+                break;
+            }
+        }
+    }
+
+    return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest, mdcount];
 }
 function deleteTest(x){
     var a = '[id="'+x+'"]';
