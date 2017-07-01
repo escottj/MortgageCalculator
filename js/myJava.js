@@ -5,7 +5,7 @@ var textArray = ["Loan Details", "Loan Term", "Interest Rate", "Down Payment", "
                  "Early Mortgage Payoff", "Extra Monthly Payment", "Months Until Mortgage is Paid Off", "Total Interest Paid", "Total Interest Savings",
                  "PMI Details", "Months Until 20% Equity", "Total PMI Paid",
                  "Total Interest Paid", "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years", "If Paid Off in 30 years",
-                 "Total Out Of Pocket Cost Over Life of Loan", "Total Cost (Obligation)", "Total Cost (Obligation + Optional)", ""];
+                 "Total Out Of Pocket Cost Over Life of Loan", "Total Cost (w/o Extra Payment)", "Total Cost (w/ Extra Payment)", ""];
 
 var $table8 = $("#table8");
 var rowArray = [];
@@ -43,56 +43,65 @@ function resetAll() {
     }
 };
 
+//Delete Column
+function deleteCol(x){
+    var a = '[id="'+x+'"]';
+    $(a).remove();
+}
+
 //Number Validation
-$(document).ready(function() {
-    $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars, #down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keypress(function (e) {
-        var charCode = e.keyCode;
-        var number = this.value.split('.');
-        if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-            return false;
-        }
-        if(number.length > 1 && charCode == 46){
-            return false;
-        }
-        var caratPos = getSelectionStart(this);
-        var dotPos = this.value.indexOf(".");
-        
-        if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
-            return false;
-        }
-        return true;
-        function getSelectionStart(o) {
-            if (o.createTextRange) {
-                var r = document.selection.createRange().duplicate()
-                r.moveEnd('character', o.value.length)
-                if (r.text == '') return o.value.length
-                return o.value.lastIndexOf(r.text)
-            } else return o.selectionStart
-        }
-        
-        
-        /*if ($.inArray(e.keyCode, [46, 8, 9, 27, 13, 110, 190]) !== -1 ||
-            (e.keyCode === 65 && (e.ctrlKey === true || e.metaKey === true)) || 
-            (e.keyCode >= 35 && e.keyCode <= 40)) {
-                if (e.keyCode == 110 || e.keyCode == 190){
-                    $currentVal = $(this).val();
-                    if ($currentVal.includes(".") == 1){
-                        e.preventDefault();
-                    }
-                }
-                 return;
-        }
-        if ((e.shiftKey || (e.keyCode < 48 || e.keyCode > 57)) && (e.keyCode < 96 || e.keyCode > 105)) {
-            e.preventDefault();
-        }
-        $currentVal = $(this).val();
-        var startPos = this.selectionStart;
-        var endPos = this.selectionEnd;
-        alert(startPos + ", " + endPos);
-        if ($currentVal.includes(".") == 1){
-            //e.preventDefault();
-        }*/
-    });
+//Monetary Amounts
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(function (e) {
+    var charCode = e.keyCode;
+    var number = $(this).val().split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    if(number.length > 1 && charCode == 46){
+        return false;
+    }
+    var caratPos = getSelectionStart(this);
+    var dotPos = $(this).val().indexOf(".");
+    
+    if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
+        return false;
+    }
+    return true;
+    function getSelectionStart(o) {
+        if (o.createTextRange) {
+            var r = document.selection.createRange().duplicate()
+            r.moveEnd('character', o.value.length)
+            if (r.text == '') return o.value.length
+            return o.value.lastIndexOf(r.text)
+        } else return o.selectionStart
+    }
+});
+
+//Percentages
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keypress(function (e) {
+    var charCode = e.keyCode;
+    var number = this.value.split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    if(number.length > 1 && charCode == 46){
+        return false;
+    }
+    var caratPos = getSelectionStart(this);
+    var dotPos = this.value.indexOf(".");
+    
+    if( caratPos > dotPos && dotPos > -1 && (number[1].length > 2)){
+        return false;
+    }
+    return true;
+    function getSelectionStart(o) {
+        if (o.createTextRange) {
+            var r = document.selection.createRange().duplicate()
+            r.moveEnd('character', o.value.length)
+            if (r.text == '') return o.value.length
+            return o.value.lastIndexOf(r.text)
+        } else return o.selectionStart
+    }
 });
 
 $("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #pmi, #hoi, #extra-payment, [id^=interest-rate-]").focusout(function(){
@@ -536,20 +545,6 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(func
     var x = removeCommas(a.val());
     if (x.length != 0){
         x = Number(x).toFixed(2);
-        /*var number = x.split('.');
-        if (number.length > 1 && (number[0] != "" || number[1] != "")) {
-            //var newVal = Number(number[0]) + (Number("." + number[1]).toFixed(2)).replace(0,"");
-            if (number[1] == ""){
-                number[1] = 0;
-            }
-            var newVal = Number(number[0]) + Number((Number("." + number[1]).toFixed(2)));
-            newVal = newVal.toFixed(2);
-            a.val(addCommas(newVal));
-        } else if (number.length > 1 && number[0] == "" && number[1] == "") {
-            a.val("0.00");
-        } else {
-            a.val(addCommas(x));
-        }*/
         a.val(addCommas(x));
         if (this.id == "down-payment-dollars"){
             var $homeCost = removeCommas($("#home-cost").val());
@@ -560,14 +555,14 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(func
         }
         if (this.id == "home-cost"){
             var $homeCost = removeCommas($("#home-cost").val());
-            /*if ($homeCost != ""){
+            if ($homeCost != ""){
                 var dp = $("#down-payment").val().replace("%","");
                 if (dp.length != 0){
                     var newdp = (dp/100)*$homeCost;
-                    var y = addCommas(Number(Math.round(newdp)));
+                    var y = addCommas(Number(Math.round(newdp)).toFixed(2));
                     $("#down-payment-dollars").val(y);
                 }
-            }*/
+            }
         }
     }
 });
@@ -587,8 +582,8 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(func
         a.val(temp);
         if (this.id == "down-payment"){
             var $homeCost = removeCommas($("#home-cost").val());
-            var newDownPaymentDollars = (temp/100)*$homeCost;
-            var y = addCommas(Number(Math.round(newDownPaymentDollars)));
+            var newDownPaymentDollars = ((temp/100)*$homeCost);
+            var y = addCommas(Number(newDownPaymentDollars).toFixed(2));
             $("#down-payment-dollars").val(y);
         }
     }
@@ -638,7 +633,9 @@ function calculate(kl){
 
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
-            var dict = test($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+            var dict = loanPayment($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+            var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + interestArray[t] + ";" + termArray[t];
+            ga('send', 'event', 'Calculations', 'Calculate', googleSend);
             var lt = termArray[t];
             var i = interestArray[t]/100/12;
             var n = termArray[t]*12;
@@ -680,7 +677,7 @@ function calculate(kl){
 
                         var bt = document.createElement('button');
                         bt.className = "btn btn-danger btn-sm";
-                        bt.setAttribute("onclick","deleteTest('"+columnID+"')");
+                        bt.setAttribute("onclick","deleteCol('"+columnID+"')");
                         bt.innerText = "Delete";
                         column.appendChild(bt);
                         column.setAttribute("style", "background-color: white;");
@@ -696,7 +693,9 @@ function calculate(kl){
             columnID++;
         }
     } else {
-        var dict = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        var dict = loanPayment($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + $interestRate + ";" + $loanTerm;
+        ga('send', 'event', 'Calculations', 'Calculate', googleSend);
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
         var n = $loanTerm*12;
@@ -736,7 +735,7 @@ function calculate(kl){
 
                     var bt = document.createElement('button');
                     bt.className = "btn btn-danger btn-sm";
-                    bt.setAttribute("onclick","deleteTest('"+columnID+"')");
+                    bt.setAttribute("onclick","deleteCol('"+columnID+"')");
                     bt.innerText = "Delete";
                     column.appendChild(bt);
                     column.setAttribute("style", "background-color: white;");
@@ -824,8 +823,7 @@ function calculate(kl){
     }
 }
 
-
-function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
+function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     
     var monthlyPropertyTax = ((ptr/100)*hc)/12;
     var downPaymentAmount = (dp/100)*hc;
@@ -900,18 +898,18 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
                 break;
             }
         }
+        var totalPropertyTax = monthlyPropertyTax*mdcount;
+        var totalHOI = hoi*mdcount;
+        var totalHOA = hoa*mdcount;
         dict["totalInterest2"] = totalInterest;
+        var totalCost2 = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
     } else {
         dict["totalInterest2"] = 0;
+        var totalCost2 = 0;
     }
 
-    var totalCost2 = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
     dict["mdcount"] = mdcount;
     dict["totalCost2"] = totalCost2;
     dict["totalSavings"] = totalCost - totalCost2;
     return dict;
-}
-function deleteTest(x){
-    var a = '[id="'+x+'"]';
-    $(a).remove();
 }
