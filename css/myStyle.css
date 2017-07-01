@@ -24,3 +24,43 @@ th{
   content:"*";
   color:red;
 }
+.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+    background-color: black;
+    color: white;
+}
+
+.table {
+    border-spacing: 0;
+    border-collapse: collapse;
+    overflow: hidden;
+    z-index: 1;
+}
+
+td, th {
+    cursor: pointer;
+    padding: 10px;
+    position: relative;
+}
+
+td:hover::before { 
+    background-color: #ffa;
+    content: '\00a0';  
+    height: 100%;
+    left: -5000px;
+    position: absolute;  
+    top: 0;
+    width: 10000px;   
+    z-index: -1;        
+}
+
+td:hover::after { 
+    background-color: #ffa;
+    content: '\00a0';  
+    height: 10000px;    
+    left: 0;
+    position: absolute;  
+    top: -5000px;
+    width: 100%;
+    z-index: -1;        
+}
+
