@@ -40,7 +40,7 @@
 					<div id="home-cost-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="" aria-describedby="home-cost-help-block">
+							<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="300,000" aria-describedby="home-cost-help-block">
 							<span id="home-cost-glyph" class="glyphicon form-control-feedback glyphicon-right" aria-hidden="true"></span>
 						</div>
 						<span style="display: none;" id="home-cost-help-block" class="help-block">Please enter a value between 10,000 and 1,000,000,000.</span>
@@ -53,14 +53,14 @@
 					<div id="down-payment-dollars-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="" aria-describedby="down-payment-dollars-help-block">
+							<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="60,000" aria-describedby="down-payment-dollars-help-block">
 							<span id="down-payment-dollars-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 						</div>
 						<span style="display: none;" id="down-payment-dollars-help-block" class="help-block">Please enter a down payment that is less than home cost.</span>
 					</div>
 					<div id="down-payment-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="down-payment" placeholder="Down Payment" value="" aria-describedby="down-payment-help-block">
+							<input type="text" class="form-control" id="down-payment" placeholder="Down Payment" value="20.000" aria-describedby="down-payment-help-block">
 							<span id="down-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
@@ -74,7 +74,7 @@
 					<div id="hoa-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="" aria-describedby="hoa-help-block">
+							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="100" aria-describedby="hoa-help-block">
 							<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
@@ -87,7 +87,7 @@
 					<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
 					<div id="property-tax-rate-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value="" aria-describedby="property-tax-rate-help-block">
+							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value="0.840" aria-describedby="property-tax-rate-help-block">
 							<span id="property-tax-rate-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
@@ -114,7 +114,7 @@
 					<div class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="" aria-describedby="hoi-help-block">
+							<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="100" aria-describedby="hoi-help-block">
 							<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
@@ -132,7 +132,7 @@
 							<span id="extra-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
-						<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value less than (home cost - down payment).</span>
+						<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value no larger than 5000.</span>
 					</div>
 				</div>
 			</div>
@@ -209,7 +209,7 @@
 	<p>
 		<div class="container">
 			<div class="col-sm-12">
-				<table class="table table-striped" align="center">
+				<table class="table table-striped table-hover" align="center">
 					<tbody id="table8">
 					</tbody>
 				</table>
@@ -258,7 +258,140 @@
 			</div>
 		</div>
 	</p>-->
-
+	<div class="container">
+		<div class="col-sm-12">
+			<div class="table-responsive">
+				<table class="table table-striped" align="center">
+					<tbody id="table8">
+						<tr>
+							<th colspan="100%" style="text-align: center; background-color: #45a9e8; color: white;">Loan Details</th>
+						</tr>
+						<tr>
+							<th>Loan Term</th>
+							<td id="0">10 years</td>
+							<td id="1">15 years</td>
+							<td id="2">20 years</td>
+							<td id="3">30 years</td>
+						</tr>
+						<tr>
+							<th>Interest Rate</th>
+							<td id="0">3.125%</td>
+							<td id="1">3.250%</td>
+							<td id="2">3.750%</td>
+							<td id="3">4.025%</td>
+						</tr>
+						<tr>
+							<th>Down Payment</th>
+							<td id="0">$60,000.00</td>
+							<td id="1">$60,000.00</td>
+							<td id="2">$60,000.00</td>
+							<td id="3">$60,000.00</td>
+						</tr>
+						<tr>
+							<th>Loan Amount</th>
+							<td id="0">$240,000.00</td>
+							<td id="1">$240,000.00</td>
+							<td id="2">$240,000.00</td>
+							<td id="3">$240,000.00</td>
+						</tr>
+						<tr>
+							<th colspan="100%" style="text-align: center; background-color: #45a9e8; color: white;">Monthly Payment Breakdown</th>
+						</tr>
+						<tr>
+							<th>Monthly Mortgage Payment</th>
+							<td id="0">$2,331.33</td>
+							<td id="1">$1,686.41</td>
+							<td id="2">$1,422.93</td>
+							<td id="3">$1,149.26</td>
+						</tr>
+						<tr>
+							<th>Monthly Property Tax</th>
+							<td id="0">$210.00</td>
+							<td id="1">$210.00</td>
+							<td id="2">$210.00</td>
+							<td id="3">$210.00</td>
+						</tr>
+						<tr>
+							<th>Monthly PMI</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$0.00</td>
+						</tr>
+						<tr>
+							<th>Monthly Home Owner's Insurance</th>
+							<td id="0">$100.00</td>
+							<td id="1">$100.00</td>
+							<td id="2">$100.00</td>
+							<td id="3">$100.00</td>
+						</tr>
+						<tr>
+							<th>Total Monthly Payment</th>
+							<td id="0">$2,741.33</td>
+							<td id="1">$2,096.41</td>
+							<td id="2">$1,832.93</td>
+							<td id="3">$1,559.26</td>
+						</tr>
+						<tr>
+							<th colspan="100%" style="text-align: center; background-color: #45a9e8; color: white;">PMI Details</th>
+						</tr>
+						<tr>
+							<th>Total PMI Paid</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$0.00</td>
+						</tr>
+						<tr>
+							<th>Months Until 20% Equity</th>
+							<td id="0">0</td>
+							<td id="1">0</td>
+							<td id="2">0</td>
+							<td id="3">0</td>
+						</tr>
+						<tr>
+							<th colspan="100%" style="text-align: center; background-color: #45a9e8; color: white;">Total Interest Paid</th>
+						</tr>
+						<tr>
+							<th>If Paid Off in 10 years</th>
+							<td id="0">$39,759.79</td>
+							<td id="1">$41,429.33</td>
+							<td id="2">$48,173.79</td>
+							<td id="3">$51,927.28</td>
+						</tr>
+						<tr>
+							<th>If Paid Off in 15 years</th>
+							<td id="0">$0.00</td>
+							<td id="1">$63,552.91</td>
+							<td id="2">$74,149.33</td>
+							<td id="3">$80,074.00</td>
+						</tr>
+						<tr>
+							<th>If Paid Off in 20 years</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$101,503.67</td>
+							<td id="3">$109,804.15</td>
+						</tr>
+						<tr>
+							<th>If Paid Off in 30 years</th>
+							<td id="0">$0.00</td>
+							<td id="1">$0.00</td>
+							<td id="2">$0.00</td>
+							<td id="3">$173,733.05</td>
+						</tr>
+						<tr>
+							<th></th>
+							<td id="0"><button class="btn btn-danger btn-sm" onclick="deleteTest('0')">Delete</button></td>
+							<td id="1"><button class="btn btn-danger btn-sm" onclick="deleteTest('1')">Delete</button></td>
+							<td id="2"><button class="btn btn-danger btn-sm" onclick="deleteTest('2')">Delete</button></td>
+							<td id="3"><button class="btn btn-danger btn-sm" onclick="deleteTest('3')">Delete</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
 </body>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJava.js"></script>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJavaBeta.js"></script>
