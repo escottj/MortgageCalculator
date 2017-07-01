@@ -49,14 +49,14 @@
 			</div>
 			<div class="row">
 				<div id="down-payment-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Down Payment</label>
+					<label id="down-payment-label" class="col-sm-3 control-label" for="formGroupInputSmall">Down Payment</label>
 					<div id="down-payment-dollars-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
 							<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="" aria-describedby="down-payment-dollars-help-block">
 							<span id="down-payment-dollars-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 						</div>
-						<span style="display: none;" id="down-payment-dollars-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="down-payment-dollars-help-block" class="help-block">Please enter a down payment that is less than home cost.</span>
 					</div>
 					<div id="down-payment-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
@@ -64,34 +64,34 @@
 							<span id="down-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
+						<span style="display: none;" id="down-payment-help-block" class="help-block">Please enter a value below 100.</span>
 					</div>
-					<span style="display: none;" id="down-payment-help-block" class="help-block">Please enter a value below 100.</span>
 				</div>
 			</div>
 			<div class="row">
 				<div id="hoa-group" class="form-group form-group-md nopadding">
 					<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
-					<div class="col-sm-4">
+					<div id="hoa-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
 							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="" aria-describedby="hoa-help-block">
 							<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
-						<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div id="property-tax-rate-group" class="form-group form-group-md nopadding required">
 					<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
-					<div class="col-sm-4">
+					<div id="property-tax-rate-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value="" aria-describedby="property-tax-rate-help-block">
 							<span id="property-tax-rate-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="property-tax-rate-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="property-tax-rate-help-block" class="help-block">Please enter a value no larger than 10.</span>
 					</div>
 				</div>
 			</div>
@@ -104,7 +104,7 @@
 							<span id="pmi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="pmi-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="pmi-help-block" class="help-block">Please enter a value no larger than 10.</span>
 					</div>
 				</div>
 			</div>
@@ -118,7 +118,7 @@
 							<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
-						<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
 					</div>
 				</div>
 			</div>
@@ -132,44 +132,44 @@
 							<span id="extra-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">monthly</div>
 						</div>
-						<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value less than (home cost - down payment).</span>
 					</div>
 				</div>
 			</div>
 			<div class="row">
 				<div id="interest-rate-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
-					<div class="col-sm-2">
+					<label id="interest-rate-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
+					<div id="interest-rate-10-check" class="col-sm-2">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control input-md" id="interest-rate-10" placeholder="10 yr APR" value="3.125" aria-describedby="interest-rate-10-block">
 							<span id="interest-rate-10-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value no larger than 20.</span>
 					</div>
-					<div class="col-sm-2">
+					<div id="interest-rate-15-check" class="col-sm-2">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control input-md" id="interest-rate-15" placeholder="15 yr APR" value="3.250" aria-describedby="interest-rate-15-block">
 							<span id="interest-rate-15-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value no larger than 20.</span>
 					</div>
-					<div class="col-sm-2">
+					<div id="interest-rate-20-check" class="col-sm-2">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control input-md" id="interest-rate-20" placeholder="20 yr APR" value="3.750" aria-describedby="interest-rate-20-block">
 							<span id="interest-rate-20-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value no larger than 20.</span>
 					</div>
-					<div class="col-sm-2">
+					<div id="interest-rate-30-check" class="col-sm-2">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<input type="text" class="form-control input-md" id="interest-rate-30" placeholder="30 yr APR" value="4.025" aria-describedby="interest-rate-30-block">
 							<span id="interest-rate-30-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 							<div class="input-group-addon">%</div>
 						</div>
-						<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value below 100.</span>
+						<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value no larger than 20.</span>
 					</div>
 				</div>
 			</div>
