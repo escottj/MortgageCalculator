@@ -1,9 +1,11 @@
 var columnID = 0;
-var textArray = ["Loan Term", "Interest Rate", "Down Payment", "Loan Amount", "Monthly Mortgage Payment",
-                    "Monthly Property Tax", "Monthly PMI", "Monthly Home Owner's Insurance",
-                    "Total Monthly Payment", "Total PMI Paid", "Months Until 20% Equity", "Total Interest Paid",
-                    "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years",
-                    "If Paid Off in 30 years", ""];
+var textArray = ["Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Loan Amount", 
+                 "Monthly Payment Breakdown", "Monthly Mortgage Payment", "Monthly Property Tax", "Monthly Home Owner's Insurance",
+                 "Monthly PMI", "Monthly HOA", "Total Monthly Payment",
+                 "Early Mortgage Payoff", "Extra Monthly Payment", "Months Until Mortgage is Paid Off", "Total Interest Paid", "Total Interest Savings",
+                 "PMI Details", "Months Until 20% Equity", "Total PMI Paid",
+                 "Total Interest Paid", "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years", "If Paid Off in 30 years",
+                 "Total Out Of Pocket Cost Over Life of Loan", "Total Cost (Obligation)", "Total Cost (Obligation + Optional)", ""];
 
 var $table8 = $("#table8");
 var rowArray = [];
@@ -14,6 +16,9 @@ for (var x = 0; x < textArray.length; x++){
     column.appendChild(text);
     if (textArray[x] == ""){
         column.setAttribute("style", "background-color: white;");
+    } else if (x == 0 || x == 5 || x == 12 || x == 17 || x == 20 || x == 25) {
+        column.className = "mergedTitle";
+        column.setAttribute("colspan", "100%");
     }
     row.appendChild(column);
     rowArray.push(row);
@@ -605,39 +610,40 @@ function calculate(kl){
             }
 
             var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
-            var dataArray = [termArray[t], istring, help[0], help[1], help[2], help[3], help[4],
+            var dataArray = ["", termArray[t], istring, help[0], help[1], help[2], help[3], help[4],
                             $hoi, help[5], help[6], help[7], help[8], tempArray[0],
                             tempArray[1], tempArray[2], tempArray[3]];
             for (var y = 0; y < dataArray.length; y++){
-
-                var column = document.createElement("td");
-                column.id = columnID;
-
-                if (y == 0){
-                    var text = document.createTextNode(dataArray[y]+" years");
-                } else if (y == 1){
-                    var text = document.createTextNode(dataArray[y]);
-                } else if (y == 10){
-                    var text = document.createTextNode(dataArray[y]);
-                } else {
-                    var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
-                }
-                column.appendChild(text);
-                rowArray[y].appendChild(column);
-
-                if (y == 15){
+                if (y != 0) {
                     var column = document.createElement("td");
                     column.id = columnID;
 
-                    var bt = document.createElement('button');
-                    bt.className = "btn btn-danger btn-sm";
-                    bt.setAttribute("onclick","deleteTest('"+columnID+"')");
-                    bt.innerText = "Delete";
-                    column.appendChild(bt);
-                    column.setAttribute("style", "background-color: white;");
-                    column.setAttribute("align", "center");
+                    if (y == 1){
+                        var text = document.createTextNode(dataArray[y]+" years");
+                    } else if (y == 2){
+                        var text = document.createTextNode(dataArray[y]);
+                    } else if (y == 11){
+                        var text = document.createTextNode(dataArray[y]);
+                    } else {
+                        var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
+                    }
+                    column.appendChild(text);
+                    rowArray[y].appendChild(column);
 
-                    rowArray[16].appendChild(column);
+                    if (y == 16){
+                        var column = document.createElement("td");
+                        column.id = columnID;
+
+                        var bt = document.createElement('button');
+                        bt.className = "btn btn-danger btn-sm";
+                        bt.setAttribute("onclick","deleteTest('"+columnID+"')");
+                        bt.innerText = "Delete";
+                        column.appendChild(bt);
+                        column.setAttribute("style", "background-color: white;");
+                        column.setAttribute("align", "center");
+
+                        rowArray[17].appendChild(column);
+                    } 
                 }
             }
             for (var z = 0; z <= rowArray.length; z++){
@@ -646,7 +652,9 @@ function calculate(kl){
             columnID++;
         }
     } else {
-        var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        //var help = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        var dict = test($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
+        alert(dict["monthlyPropertyTax"]);
         //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest];
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
@@ -661,37 +669,41 @@ function calculate(kl){
             }
         }
         var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
-        var dataArray = [$loanTerm, istring, help[0], help[1], help[2], help[3], help[4],
+        var dataArray = ["Loan Details", $loanTerm, istring, help[0], help[1],
+                         "Monthly Payment Breakdown", help[2], help[3], $hoi, help[4], $hoa, help[5]];
+        /*var dataArray = [$loanTerm, istring, help[0], help[1], help[2], help[3], help[4],
                     $hoi, help[5], help[6], help[7], help[8], tempArray[0],
-                    tempArray[1], tempArray[2], tempArray[3]];
+                    tempArray[1], tempArray[2], tempArray[3]];*/
         for (var y = 0; y < dataArray.length; y++){
-            var column = document.createElement("td");
-            column.id = columnID;
-            if (y == 0){
-                var text = document.createTextNode(dataArray[y]+" years");
-            } else if (y == 1){
-                var text = document.createTextNode(dataArray[y]);
-            } else if (y == 10){
-                var text = document.createTextNode(dataArray[y]);
-            } else {
-                var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
-            }
-            column.appendChild(text);
-            rowArray[y].appendChild(column);
-
-            if (y == 15){
+            if (y != 0 && y != 5 && y != 13){
                 var column = document.createElement("td");
                 column.id = columnID;
+                if (y == 1){
+                    var text = document.createTextNode(dataArray[y]+" years");
+                } else if (y == 2){
+                    var text = document.createTextNode(dataArray[y]);
+                } else if (y == 12){
+                    var text = document.createTextNode(dataArray[y]);
+                } else {
+                    var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
+                }
+                column.appendChild(text);
+                rowArray[y].appendChild(column);
 
-                var bt = document.createElement('button');
-                bt.className = "btn btn-danger btn-sm";
-                bt.setAttribute("onclick","deleteTest('"+columnID+"')");
-                bt.innerText = "Delete";
-                column.appendChild(bt);
-                column.setAttribute("style", "background-color: white;");
-                column.setAttribute("align", "center");
+                if (y == 16){
+                    var column = document.createElement("td");
+                    column.id = columnID;
 
-                rowArray[16].appendChild(column);
+                    var bt = document.createElement('button');
+                    bt.className = "btn btn-danger btn-sm";
+                    bt.setAttribute("onclick","deleteTest('"+columnID+"')");
+                    bt.innerText = "Delete";
+                    column.appendChild(bt);
+                    column.setAttribute("style", "background-color: white;");
+                    column.setAttribute("align", "center");
+
+                    rowArray[17].appendChild(column);
+                }
             }
         }
 
@@ -793,6 +805,9 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     var principalPayment = 0;
     var totalPMI = 0;
     var equity = 0;
+    var totalPropertyTax = monthlyPropertyTax*n;
+    var totalHOI = hoi*n;
+    var totalHOA = hoa*n;
 
     for (var j = 0; j < n; j++){
             interestPayment = newP*i;
@@ -804,6 +819,15 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
                 equity = equity + 1;
             }
     }
+    var dict = {};
+    dict["downPaymentAmount"] = downPaymentAmount;
+    dict["loanAmount"] = P;
+    dict["monthlyMortgagePayment"] = M;
+    dict["monthlyPropertyTax"] = monthlyPropertyTax;
+    dict["monthlyPMI"] = monthlyPMI;
+    dict["totalMonthlyPayment"] = totalMonthlyPayment;
+    return dict;
+    /*var totalCost = P + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
 
     //Extra Monthly Payment
     var mdcount = 0;
@@ -832,9 +856,9 @@ function test(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
                 break;
             }
         }
-    }
+    }*/
 
-    return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest, mdcount];
+    //return [downPaymentAmount, P, M, monthlyPropertyTax, monthlyPMI, totalMonthlyPayment, totalPMI, equity, totalInterest, totalCost, mdcount];
 }
 function deleteTest(x){
     var a = '[id="'+x+'"]';
