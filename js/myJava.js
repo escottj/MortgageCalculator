@@ -53,7 +53,7 @@ $(document).ready(function() {
 });
 
 
-$("#hoa").keyup(function (e) {
+/*$("#hoa").keyup(function (e) {
     if (this.id == "hoa"){
         if (+$(this).val() >= 100 || +$(this).val() == ""){
             $("#hoa-help-block").show();
@@ -65,28 +65,363 @@ $("#hoa").keyup(function (e) {
             $("#hoa-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
         }
     }
-});
-/*$("#down-payment-dollars").focusout(function(){
-    var x = $(this).val();
-    if (x == "" || x < 1){
-        $("#"+this.id+"-help-block").show();
-        $("#"+this.id+"-group").attr('class', 'form-group form-group-md nopadding has-error required');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
-    } else {
-        $("#"+this.id+"-help-block").hide();
-        $("#"+this.id+"-group").attr('class', 'form-group form-group-md nopadding has-success required');
-        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
-    }
 });*/
 
-$("#home-cost, #down-payment-dollars").focusout(function(){
+$("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #pmi, #hoi, #extra-payment, [id^=interest-rate-]").focusout(function(){
+    var x = removeCommas($(this).val());
+    var $homeCost = $('#home-cost').val().replace(/,/g,"");
+    var $downPaymentDollars = $('#down-payment-dollars').val().replace(/,/g,"");
+    var $downPayment = $('#down-payment').val();
+    var $loanTerm = 10;
+    var loanTermArray = [10, 15, 20, 30];
+    if ($loanTerm != 0){
+        var $interestRate = $('#interest-rate-'+$loanTerm).val();
+    } else {
+        var interestArray = [$('#interest-rate-10').val(),
+                             $('#interest-rate-15').val(),
+                             $('#interest-rate-20').val(),
+                             $('#interest-rate-30').val()];
+    }
+    var $hoa = $('#hoa').val().replace(/,/g,"");
+    var $propertyTaxRate = $('#property-tax-rate').val();
+    var $pmi = $('#pmi').val();
+    var $hoi = $('#hoi').val().replace(/,/g,"");
+    var $extraPayment = $('#extra-payment').val().replace(/,/g,"");
+
+    /*if (x.length == 0){
+        validate = 0;
+        if (this.id == "down-payment-dollars" || this.id == "down-payment"){
+            if ($downPaymentDollars.length == 0){
+                textRequired("down-payment-dollars", "required", "right");
+                $("#down-payment-label").css("color", "#a94442");
+            }
+            if ($downPayment == 0){
+                textRequired("down-payment", "required", "left");
+                $("#down-payment-label").css("color", "#a94442");
+            }
+        } else if (this.id == "home-cost"){
+            textRequired(this.id, "required", "right");
+        } else if (this.id == "property-tax-rate" || this.id == "hoi"){
+            textRequired(this.id, "required", "left");
+        }
+    } else {*/
+        switch(this.id){
+            case "home-cost":
+                if (x.length == 0){
+                    textRequired(this.id, "required", "right");
+                } else {
+                    if (+x < 10000 || +x > 1000000000){
+                        validate = 0;
+                        wrongText(this.id, "required", "right");
+                    } else {
+                        correctText(this.id, "required", "right");
+                    }
+                }
+                break;
+            case "down-payment-dollars":
+                if (x.length == 0){
+                    textRequired("down-payment-dollars", "required", "right");
+                    $("#down-payment-label").css("color", "#a94442");
+                    if ($downPayment.length == 0){
+                        textRequired("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#a94442");
+                    }
+                } else {
+                    var $homeCost = $('#home-cost').val().replace(/,/g,"");
+                    var $downPayment = $('#down-payment').val();
+                    if ($homeCost.length == 0){
+                        correctText(this.id, "required", "right");
+                        if ($downPayment.length == 0){
+                            $('#down-payment').val(0);
+                        }
+                        correctText("down-payment", "required", "left");
+                        $("#down-payment-label").css("color", "#3c763d");
+                    } else {
+                        if (+x >= +$homeCost){
+                            validate = 0;
+                            wrongText(this.id, "required", "right");
+                            wrongText("down-payment", "required", "left");
+                            $("#down-payment-label").css("color", "#a94442");
+                        } else {
+                            correctText(this.id, "required", "right");
+                            correctText("down-payment", "required", "left");
+                            $("#down-payment-label").css("color", "#3c763d");
+                        }
+                    }
+                }
+                break;
+            case "down-payment":
+                if (x.length == 0){
+                    textRequired("down-payment", "required", "left");
+                    $("#down-payment-label").css("color", "#a94442");
+                    if ($downPaymentDollars.length == 0){
+                        textRequired("down-payment-dollars", "required", "right");
+                        $("#down-payment-label").css("color", "#a94442");
+                    }
+                } else {
+                    if (+x >= 100 ){
+                        validate = 0;
+                        wrongText(this.id, "required", "left");
+                        wrongText("down-payment-dollars", "required", "right");
+                        $("#down-payment-label").css("color", "#a94442");
+                    } else {
+                        correctText(this.id, "required", "left");
+                        correctText("down-payment-dollars", "required", "right");
+                        $("#down-payment-label").css("color", "#3c763d");
+                    }
+                }
+                break;
+            case "hoa":
+                if (+$hoa > 1000 ){
+                    validate = 0;
+                    wrongText(this.id, "", "center");
+                } else {
+                    correctText(this.id, "", "center");
+                }
+                break;
+            case "property-tax-rate":
+                if (+$propertyTaxRate > 10 ){
+                    validate = 0;
+                    wrongText(this.id, "required", "left");
+                } else {
+                    correctText(this.id, "required", "left");
+                }
+                break;
+            case "pmi":
+                if (+$pmi > 10 ){
+                    validate = 0;
+                    wrongText(this.id, "", "left");
+                } else {
+                    correctText(this.id, "", "left");
+                }
+                break;
+            case "hoi":
+                if (+$hoi > 1000 ){
+                    validate = 0;
+                    wrongText(this.id, "required", "center");
+                } else {
+                    correctText(this.id, "required", "center");
+                }
+                break;
+            case "extra-payment":
+                if (+$extraPayment >= $homeCost - $downPaymentDollars){
+                    validate = 0;
+                    wrongText(this.id, "", "center");
+                } else {
+                    correctText(this.id, "", "center");
+                }
+                break;
+        }
+    //}   
+});
+
+function myValidate(kl){
+    var formArray = ["home-cost", "down-payment-dollars", "down-payment", "hoa", "property-tax-rate", "pmi", "hoi", "extra-payment"];
+    var formGlypPositionArray = ["right", "right", "left", "center", "left", "left", "center", "center"];
+    var formRequired = ["required", "required", "required", "", "required", "", "required", ""];
+    var $homeCost = $('#home-cost').val().replace(/,/g,"");
+    var $downPaymentDollars = $('#down-payment-dollars').val().replace(/,/g,"");
+    var $downPayment = $('#down-payment').val();
+    var $loanTerm = kl;
+    var loanTermArray = [10, 15, 20, 30];
+    if ($loanTerm != 0){
+        var $interestRate = $('#interest-rate-'+$loanTerm).val();
+    } else {
+        var interestArray = [$('#interest-rate-10').val(),
+                             $('#interest-rate-15').val(),
+                             $('#interest-rate-20').val(),
+                             $('#interest-rate-30').val()];
+    }
+    var $hoa = $('#hoa').val().replace(/,/g,"");
+    var $propertyTaxRate = $('#property-tax-rate').val();
+    var $pmi = $('#pmi').val();
+    var $hoi = $('#hoi').val().replace(/,/g,"");
+    var $extraPayment = $('#extra-payment').val().replace(/,/g,"");
+
+    validate = 1;
+
+    for (var j = 0; j < formArray.length; j++){
+        var x = $('#'+formArray[j]).val().replace(/,/g,"");
+        if (x.length == 0){
+            if (formRequired[j] == "required"){
+                validate = 0;
+                textRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
+            } else {
+                textNotRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
+            }
+        } else {
+            switch(formArray[j]){
+                case "home-cost":
+                    if (+$homeCost < 10000 || +$homeCost > 1000000000){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "down-payment-dollars":
+                    if (+$downPaymentDollars >= +$homeCost){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "down-payment":
+                    if (+$downPayment >= 100 ){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "hoa":
+                    if (+$hoa > 1000 ){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "property-tax-rate":
+                    if (+$propertyTaxRate > 10 ){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "pmi":
+                    if (+$pmi > 10 ){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "hoi":
+                    if (+$hoi > 1000 ){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+                case "extra-payment":
+                    if (+$extraPayment >= $homeCost - $downPaymentDollars){
+                        validate = 0;
+                        wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    } else {
+                        correctText(formArray[j], formRequired[j], formGlypPositionArray[j]);
+                    }
+                    break;
+            }
+        }
+    }
+
+    if ($loanTerm != 0){
+        if ($interestRate.length == 0){
+            validate = 0;
+            textRequired('interest-rate-'+$loanTerm, "required", "left");
+            $("#interest-rate-label").css("color", "#a94442");
+        } else {
+            if (+$interestRate >= 20){
+                validate = 0;
+                wrongText('interest-rate-'+$loanTerm, "required", "left");
+                $("#interest-rate-label").css("color", "#a94442");
+            } else {
+                correctText('interest-rate-'+$loanTerm, "required", "left");
+                $("#interest-rate-label").css("color", "#3c763d");
+            }
+        }
+
+        for (var k = 0; k < loanTermArray.length; k++){
+            if (+loanTermArray[k] != +$loanTerm){
+                textNotRequired('interest-rate-'+loanTermArray[k], "required", "left");
+            }
+        }
+
+    } else {
+        var iTest = 0;
+        for (var k = 0; k < interestArray.length; k++){
+            if (interestArray[k].length == 0){
+                validate = 0;
+                textRequired('interest-rate-'+loanTermArray[k], "required", "left");
+                iTest = 1;
+            } else {
+                if (+interestArray[k] >= 20){
+                    validate = 0;
+                    wrongText('interest-rate-'+loanTermArray[k], "required", "left");
+                    iTest = 1;
+                } else {
+                    correctText('interest-rate-'+loanTermArray[k], "required", "left");
+                }
+            }
+        }
+        if (iTest == 1){
+            $("#interest-rate-label").css("color", "#a94442");
+        } else {
+            $("#interest-rate-label").css("color", "#3c763d");
+        }
+    }
+
+
+    return(validate);
+}
+function textNotRequired(x, y, z){
+    $("#"+x+"-help-block").hide();
+    if (x.match(/interest-rate-.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-2');
+    } else {
+        $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding '+y);
+    }
+    $("#"+x+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-'+z);
+    return;
+}
+function textRequired(x, y, z){
+    $("#"+x+"-help-block").hide();
+    if (x.match(/down-payment.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-4 has-error');
+    } else if (x.match(/interest-rate-.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-2 has-error');
+    } else {
+        $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-error '+y);
+    }
+    $("#"+x+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-'+z);
+    return;
+}
+function wrongText(x, y, z){
+    $("#"+x+"-help-block").show();
+    if (x.match(/down-payment.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-4 has-error');
+    } else if(x.match(/interest-rate-.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-2 has-error');
+    } else {
+        $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-error '+y);
+    }
+    $("#"+x+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-'+z);
+    return;
+}
+function correctText(x, y, z){
+    $("#"+x+"-help-block").hide();
+    if (x.match(/down-payment.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-4 has-success');
+    } else if(x.match(/interest-rate-.*/)){
+        $("#"+x+"-check").attr('class', 'col-sm-2 has-success');
+    } else {
+        $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-success '+y);
+    }
+    $("#"+x+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-'+z);
+    return;
+}
+/*$("#home-cost").focusout(function(){
     var x = $(this).val();
     var min = 0;
     var max = 0;
     if (this.id == "home-cost"){
         min = 10000;
         max = 1000000000;
-    } else if (this.id == "down-payment-dollars"){
+    }else if (this.id == "down-payment-dollars"){
         min = 0;
         max = .8*removeCommas($("#home-cost").val());
     }
@@ -115,41 +450,52 @@ $("#home-cost, #down-payment-dollars").focusout(function(){
         $(this).val(addCommas($(this).val()));
     }
 });
-/*$("#hoa2").focusout(function (e) {
-    if (this.id == "hoa2"){
-        if (+$(this).val() >= 100){
-            $("#helpBlock2").show();
-            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-error');
-            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback');
-        }else{
-            $("#helpBlock2").hide();
-            $("#hoa-group").attr('class', 'form-group form-group-md nopadding has-success');
-            $("#hoa-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback');
-        }
+
+$("#down-payment-dollars").focusout(function(){
+    var x = +removeCommas($(this).val());
+    var min = 0;
+    var max = 0;
+    var test = +removeCommas($("#home-cost").val());
+    if (test == ""){
+        $("#"+this.id+"-help-block").hide();
+        $("#"+this.id+"-check").attr('class', 'col-sm-4');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-right');
+    } else if (x >= test) {
+        $("#"+this.id+"-help-block").show();
+        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-error');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-right');
+    } else {
+        $("#"+this.id+"-help-block").hide();
+        $("#"+this.id+"-check").attr('class', 'col-sm-4 has-success');
+        $("#"+this.id+"-glyph").attr('class', 'glyphicon glyphicon-ok form-control-feedback glyphicon-right');
     }
+    $(this).val(addCommas($(this).val()));
 });*/
 
 
-$(document).ready(function() {
 
-});
-
-/*$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
     var a = $(this);
-    var x = a.val();
-    if (x != ""){
+    var x = removeCommas(a.val());
+    if (x.length != 0){
         a.val(addCommas(x));
         if (this.id == "down-payment-dollars"){
             var $homeCost = removeCommas($("#home-cost").val());
-            var newdp = (x/$homeCost)*100;
-            $("#down-payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3));
+            if ($homeCost != ""){
+                var newdp = (x/$homeCost)*100;
+                $("#down-payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3));
+            }
         }
         if (this.id == "home-cost"){
             var $homeCost = removeCommas($("#home-cost").val());
-            var dp = $("#down-payment").val().replace("%","");
-            var newdp = (dp/100)*$homeCost;
-            var y = addCommas(Number(Math.round(newdp)));
-            $("#down-payment-dollars").val(y);
+            if ($homeCost != ""){
+                var dp = $("#down-payment").val().replace("%","");
+                if (dp.length != 0){
+                    var newdp = (dp/100)*$homeCost;
+                    var y = addCommas(Number(Math.round(newdp)));
+                    $("#down-payment-dollars").val(y);
+                }
+            }
         }
     }
 });
@@ -180,22 +526,6 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(funct
     a.select();
 });
 
-$("#loan-term").focusout(function(){
-    var a = $(this);
-    var x = a.val();
-    if (x != ""){
-        a.val(a.val()+" years");
-    }else{
-        a.val("0 years");
-    }
-});
-$("#loan-term").focusin(function(){
-    var a = $(this);
-    var x = a.val();
-    a.val(a.val().replace(" years",""));
-    a.select();
-});*/
-
 function addCommas(x) {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
@@ -206,6 +536,10 @@ function removeCommas(x) {
 
 
 function calculate(kl){
+        var validate = myValidate(kl);
+        if (validate == 0){
+            return;
+        }
     //Erase Existing Results
     /*$("#table1").empty();
     $("#table2").empty();
