@@ -111,13 +111,27 @@ $("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #
     var $downPayment = $('#down-payment').val();
     var $loanTerm = 10;
     var loanTermArray = [10, 15, 20, 30];
-    if ($loanTerm != 0){
-        var $interestRate = $('#interest-rate-'+$loanTerm).val();
+    //Check if Mobile
+    if ($('#interest-rate-apr').is(':visible')) {
+        //Mobile
+        if ($loanTerm != 0){
+            var $interestRate = +$('#interest-rate-apr').val().replace("%","");
+        } else {
+            var interestArray = [+$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%","")];
+        }
     } else {
-        var interestArray = [$('#interest-rate-10').val(),
-                             $('#interest-rate-15').val(),
-                             $('#interest-rate-20').val(),
-                             $('#interest-rate-30').val()];
+        //Desktop
+        if ($loanTerm != 0){
+            var $interestRate = +$('#interest-rate-'+$loanTerm).val().replace("%","");
+        } else {
+            var interestArray = [+$('#interest-rate-10').val().replace("%",""),
+                                +$('#interest-rate-15').val().replace("%",""),
+                                +$('#interest-rate-20').val().replace("%",""),
+                                +$('#interest-rate-30').val().replace("%","")];
+        }
     }
     var $hoa = $('#hoa').val().replace(/,/g,"");
     var $propertyTaxRate = $('#property-tax-rate').val();
@@ -342,13 +356,27 @@ function myValidate(kl){
     var $downPayment = $('#down-payment').val();
     var $loanTerm = kl;
     var loanTermArray = [10, 15, 20, 30];
-    if ($loanTerm != 0){
-        var $interestRate = $('#interest-rate-'+$loanTerm).val();
+    //Check if Mobile
+    if ($('#interest-rate-apr').is(':visible')) {
+        //Mobile
+        if ($loanTerm != 0){
+            var $interestRate = $('#interest-rate-apr').val().replace("%","");
+        } else {
+            var interestArray = [$('#interest-rate-apr').val().replace("%",""),
+                                 $('#interest-rate-apr').val().replace("%",""),
+                                 $('#interest-rate-apr').val().replace("%",""),
+                                 $('#interest-rate-apr').val().replace("%","")];
+        }
     } else {
-        var interestArray = [$('#interest-rate-10').val(),
-                             $('#interest-rate-15').val(),
-                             $('#interest-rate-20').val(),
-                             $('#interest-rate-30').val()];
+        //Desktop
+        if ($loanTerm != 0){
+            var $interestRate = $('#interest-rate-'+$loanTerm).val().replace("%","");
+        } else {
+            var interestArray = [$('#interest-rate-10').val().replace("%",""),
+                                 $('#interest-rate-15').val().replace("%",""),
+                                 $('#interest-rate-20').val().replace("%",""),
+                                 $('#interest-rate-30').val().replace("%","")];
+        }
     }
     var $hoa = $('#hoa').val().replace(/,/g,"");
     var $propertyTaxRate = $('#property-tax-rate').val();
@@ -443,54 +471,96 @@ function myValidate(kl){
             }
         }
     }
-
-    if ($loanTerm != 0){
-        if ($interestRate.length == 0){
-            validate = 0;
-            textRequired('interest-rate-'+$loanTerm, "required", "left");
-            $("#interest-rate-label").css("color", "#a94442");
-        } else {
-            if (+$interestRate >= 20){
+    
+    //Check if Mobile
+    if ($('#interest-rate-apr').is(':visible')) {
+        //Mobile
+        if ($loanTerm != 0){
+            if ($interestRate.length == 0){
                 validate = 0;
-                wrongText('interest-rate-'+$loanTerm, "required", "left");
+                textRequired('interest-rate-apr', "required", "left");
+                $("#interest-rate-apr-label").css("color", "#a94442");
+            } else {
+                if (+$interestRate >= 20){
+                    validate = 0;
+                    wrongText('interest-rate-apr', "required", "left");
+                    $("#interest-rate-apr-label").css("color", "#a94442");
+                } else {
+                    correctText('interest-rate-apr', "required", "left");
+                    $("#interest-rate-apr-label").css("color", "#3c763d");
+                }
+            }
+        } else {
+            var iTest = 0;
+            for (var k = 0; k < interestArray.length; k++){
+                if (interestArray[k].length == 0){
+                    validate = 0;
+                    textRequired('interest-rate-apr', "required", "left");
+                    iTest = 1;
+                } else {
+                    if (+interestArray[k] >= 20){
+                        validate = 0;
+                        wrongText('interest-rate-apr', "required", "left");
+                        iTest = 1;
+                    } else {
+                        correctText('interest-rate-apr', "required", "left");
+                    }
+                }
+            }
+            if (iTest == 1){
+                $("#interest-rate-apr-label").css("color", "#a94442");
+            } else {
+                $("#interest-rate-apr-label").css("color", "#3c763d");
+            }
+        }
+    } else {
+        //Desktop
+        if ($loanTerm != 0){
+            if ($interestRate.length == 0){
+                validate = 0;
+                textRequired('interest-rate-'+$loanTerm, "required", "left");
                 $("#interest-rate-label").css("color", "#a94442");
             } else {
-                correctText('interest-rate-'+$loanTerm, "required", "left");
+                if (+$interestRate >= 20){
+                    validate = 0;
+                    wrongText('interest-rate-'+$loanTerm, "required", "left");
+                    $("#interest-rate-label").css("color", "#a94442");
+                } else {
+                    correctText('interest-rate-'+$loanTerm, "required", "left");
+                    $("#interest-rate-label").css("color", "#3c763d");
+                }
+            }
+
+            for (var k = 0; k < loanTermArray.length; k++){
+                if (+loanTermArray[k] != +$loanTerm){
+                    textNotRequired('interest-rate-'+loanTermArray[k], "required", "left");
+                }
+            }
+        } else {
+            var iTest = 0;
+            for (var k = 0; k < interestArray.length; k++){
+                if (interestArray[k].length == 0){
+                    validate = 0;
+                    textRequired('interest-rate-'+loanTermArray[k], "required", "left");
+                    iTest = 1;
+                } else {
+                    if (+interestArray[k] >= 20){
+                        validate = 0;
+                        wrongText('interest-rate-'+loanTermArray[k], "required", "left");
+                        iTest = 1;
+                    } else {
+                        correctText('interest-rate-'+loanTermArray[k], "required", "left");
+                    }
+                }
+            }
+            if (iTest == 1){
+                $("#interest-rate-label").css("color", "#a94442");
+            } else {
                 $("#interest-rate-label").css("color", "#3c763d");
             }
         }
-
-        for (var k = 0; k < loanTermArray.length; k++){
-            if (+loanTermArray[k] != +$loanTerm){
-                textNotRequired('interest-rate-'+loanTermArray[k], "required", "left");
-            }
-        }
-
-    } else {
-        var iTest = 0;
-        for (var k = 0; k < interestArray.length; k++){
-            if (interestArray[k].length == 0){
-                validate = 0;
-                textRequired('interest-rate-'+loanTermArray[k], "required", "left");
-                iTest = 1;
-            } else {
-                if (+interestArray[k] >= 20){
-                    validate = 0;
-                    wrongText('interest-rate-'+loanTermArray[k], "required", "left");
-                    iTest = 1;
-                } else {
-                    correctText('interest-rate-'+loanTermArray[k], "required", "left");
-                }
-            }
-        }
-        if (iTest == 1){
-            $("#interest-rate-label").css("color", "#a94442");
-        } else {
-            $("#interest-rate-label").css("color", "#3c763d");
-        }
     }
-
-
+    
     return(validate);
 }
 function textNotRequired(x, y, z){
@@ -616,14 +686,30 @@ function calculate(kl){
     var $downPaymentDollars = +$('#down-payment-dollars').val().replace(/,/g,"").replace("$","");
     var $downPayment = +$('#down-payment').val().replace("%","");
     var $loanTerm = kl;
-    if ($loanTerm != 0){
-        var $interestRate = +$('#interest-rate-'+$loanTerm).val().replace("%","");
+
+    //Check if Mobile
+    if ($('#interest-rate-apr').is(':visible')) {
+        //Mobile
+        if ($loanTerm != 0){
+            var $interestRate = +$('#interest-rate-apr').val().replace("%","");
+        } else {
+            var interestArray = [+$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%",""),
+                                 +$('#interest-rate-apr').val().replace("%","")];
+        }
     } else {
-        var interestArray = [+$('#interest-rate-10').val().replace("%",""),
-                             +$('#interest-rate-15').val().replace("%",""),
-                             +$('#interest-rate-20').val().replace("%",""),
-                             +$('#interest-rate-30').val().replace("%","")];
+        //Desktop
+        if ($loanTerm != 0){
+            var $interestRate = +$('#interest-rate-'+$loanTerm).val().replace("%","");
+        } else {
+            var interestArray = [+$('#interest-rate-10').val().replace("%",""),
+                                +$('#interest-rate-15').val().replace("%",""),
+                                +$('#interest-rate-20').val().replace("%",""),
+                                +$('#interest-rate-30').val().replace("%","")];
+        }
     }
+
     var $hoa = +$('#hoa').val().replace(/,/g,"").replace("$","");
     var $propertyTaxRate = +$('#property-tax-rate').val().replace("%","");
     var $pmi = +$('#pmi').val().replace("%","");
@@ -750,6 +836,83 @@ function calculate(kl){
             $table8.append(rowArray[z]);
         }
         columnID++;
+
+    //Create Google Chart
+
+        //Google Chart Data
+        var gData = {};
+        gData["Mortgage"] = +dict["monthlyMortgagePayment"].toFixed(2);
+        gData["Property Tax"] = +dict["monthlyPropertyTax"].toFixed(2);
+        gData["Home Owner's Insurance"] = $hoi;
+        gData["HOA"] = $hoa;
+        gData["PMI"] = +dict["monthlyPMI"].toFixed(2);
+
+        //Chart 1
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(googleChart);
+
+        function googleChart() {
+            var data = google.visualization.arrayToDataTable([
+                ['Monthly Payment', '$'],
+                //['Mortgage: $'+addCommas(gData["Mortgage"]), gData["Mortgage"]],
+                ['Mortgage', gData["Mortgage"]],
+                ['Property Tax', gData["Property Tax"]],
+                ["Home Owner's Insurance", gData["Home Owner's Insurance"]],
+                ['HOA', gData["HOA"]],
+                ['PMI', gData["PMI"]]
+            ]);
+            var options = {
+                title: 'Monthly Payment Breakdown',
+                is3D: true,
+                //pieSliceText: 'value-and-percentage',
+            };
+            var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+            chartStyle = $("#piechart").css({"width":"900px", "height":"500px"})
+            chart.draw(data, options);
+        }
+
+        //Chart 2
+        var $container = $('#charts');
+        var activeCheck = 0;
+        if ($container.hasClass("active")) {
+            activeCheck = 1;
+        } else {
+            $container.addClass("active");
+        }
+
+        google.charts.load('current', {'packages':['corechart']});
+        google.charts.setOnLoadCallback(drawVisualization);
+
+        function drawVisualization() {
+        // Some raw data (not necessarily accurate)
+        var data = google.visualization.arrayToDataTable([
+            ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
+            ['Total Monthly Payment',  165,      938,         522,             998,           450,      614.6],
+            ['Mortgage',  135,      1120,        599,             1268,          288,      682],
+            ['Total Interest',  157,      1167,        587,             807,           397,      623],
+            ['Total PMI',  139,      1110,        615,             968,           215,      609.4],
+            ['Total Cost',  139,      1110,        615,             968,           215,      609.4]
+        ]);
+
+            var options = {
+                title : 'Monthly Coffee Production by Country',
+                vAxis: {title: 'Cups'},
+                hAxis: {title: 'Month'},
+                seriesType: 'bars',
+                series: {5: {type: 'line'}}
+            };
+
+            var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
+            google.visualization.events.addListener(chart, 'ready', function () {
+                if (activeCheck == 0) {
+                    $container.removeClass("active");
+                }
+            });
+            chartStyle = $("#chart_div").css({"width":"1000px", "height":"500px"})
+            chart.draw(data, options);
+        }
+
+
     }
 
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
