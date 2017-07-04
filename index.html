@@ -30,9 +30,6 @@
 
 <body>
 	<div class="container col-sm-12">
-		<div class="jumbotron text-center">
-			<h2>Erick's Mortgage Calculator</h2>
-		</div>
 		<form class="form-horizontal col-sm-12">
 			<div class="row">
 				<div id="home-cost-group" class="form-group form-group-md nopadding required">
@@ -138,42 +135,54 @@
 			</div>
 			<div class="row">
 				<div id="interest-rate-group" class="form-group form-group-md nopadding required">
-					<label id="interest-rate-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
-					<div id="interest-rate-10-check" class="col-sm-2">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control input-md" id="interest-rate-10" placeholder="10 yr APR" value="3.125" aria-describedby="interest-rate-10-block">
-							<span id="interest-rate-10-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
+					<label id="interest-rate-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)/Loan Term</label>
+					<p>
+						<div id="interest-rate-10-check" class="col-sm-2">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control input-md" id="interest-rate-10" placeholder="10 yr APR" value="3.125" aria-describedby="interest-rate-10-block">
+								<span id="interest-rate-10-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
+							<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value no larger than 20.</span>
 						</div>
-						<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value no larger than 20.</span>
-					</div>
-					<div id="interest-rate-15-check" class="col-sm-2">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control input-md" id="interest-rate-15" placeholder="15 yr APR" value="3.250" aria-describedby="interest-rate-15-block">
-							<span id="interest-rate-15-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
+					</p>
+					<p>
+						<div id="interest-rate-15-check" class="col-sm-2">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control input-md" id="interest-rate-15" placeholder="15 yr APR" value="3.250" aria-describedby="interest-rate-15-block">
+								<span id="interest-rate-15-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
+							<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value no larger than 20.</span>
 						</div>
-						<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value no larger than 20.</span>
-					</div>
-					<div id="interest-rate-20-check" class="col-sm-2">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control input-md" id="interest-rate-20" placeholder="20 yr APR" value="3.750" aria-describedby="interest-rate-20-block">
-							<span id="interest-rate-20-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
+					</p>
+					<p>
+						<div id="interest-rate-20-check" class="col-sm-2">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control input-md" id="interest-rate-20" placeholder="20 yr APR" value="3.750" aria-describedby="interest-rate-20-block">
+								<span id="interest-rate-20-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
+							<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value no larger than 20.</span>
 						</div>
-						<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value no larger than 20.</span>
-					</div>
-					<div id="interest-rate-30-check" class="col-sm-2">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control input-md" id="interest-rate-30" placeholder="30 yr APR" value="4.025" aria-describedby="interest-rate-30-block">
-							<span id="interest-rate-30-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
+					</p>
+					<p>
+						<div id="interest-rate-30-check" class="col-sm-2">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control input-md" id="interest-rate-30" placeholder="30 yr APR" value="4.025" aria-describedby="interest-rate-30-block">
+								<span id="interest-rate-30-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
+							<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value no larger than 20.</span>
 						</div>
-						<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value no larger than 20.</span>
-					</div>
+					</p>
 				</div>
 			</div>
-			<div class="row">
+			<!--<div class="row">
 				<div class="form-group form-group-md nopadding">
 					<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
 					<div class="col-sm-2">
@@ -189,7 +198,7 @@
 						<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
 					</div>
 				</div>
-			</div>
+			</div>-->
 			<div class="row">
 				<div class="form-group form-group-md nopadding">
 					<div class="col-sm-8 col-sm-offset-3">
@@ -208,11 +217,13 @@
 	</div>
 	<p>
 		<div class="container col-sm-12">
-			<table class="table table-striped table-hover" align="center">
-				<tbody id="table8">
-				</tbody>
-			</table>
-		</div>
+			<div class="table-responsive">
+				<table class="table table-striped table-hover" align="center">
+					<tbody id="table8">
+					</tbody>
+				</table>
+				</dvi>
+			</div>
 	</p>
 	</div>
 </body>
