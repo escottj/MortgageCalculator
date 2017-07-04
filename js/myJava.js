@@ -634,8 +634,8 @@ function calculate(kl){
     if ($loanTerm == 0){
         for (var t = 0; t < termArray.length; t++){
             var dict = loanPayment($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
-            var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + interestArray[t] + ";" + termArray[t];
-            ga('send', 'event', 'Calculations', 'Calculate', googleSend);
+            //var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + interestArray[t] + ";" + termArray[t];
+            //ga('send', 'event', 'Calculations', 'Calculate', googleSend);
             var lt = termArray[t];
             var i = interestArray[t]/100/12;
             var n = termArray[t]*12;
@@ -694,8 +694,8 @@ function calculate(kl){
         }
     } else {
         var dict = loanPayment($homeCost, $downPayment, $loanTerm, $interestRate, $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
-        var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + $interestRate + ";" + $loanTerm;
-        ga('send', 'event', 'Calculations', 'Calculate', googleSend);
+        //var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + $interestRate + ";" + $loanTerm;
+        //ga('send', 'event', 'Calculations', 'Calculate', googleSend);
         var tempArray = [];
         var temploop = [10, 15, 20, 30];
         var n = $loanTerm*12;
