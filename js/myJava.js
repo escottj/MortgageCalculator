@@ -1,3 +1,27 @@
+//Testing
+
+$(document).ready(function() {
+    $("tr").not(':first').hover(
+    function() {
+        alert('h');
+        $(this).addClass('highlight');
+    }, function() {
+        $(this).removeClass('highlight');
+    }
+    )
+});
+
+$("th").not(':first').hover(
+  function () {
+          alert('g');
+    $(this).css("background","yellow");
+  },
+  function () {
+    $(this).css("background","");
+  }
+);
+
+
 //Google Charts Global Variables
 var gData2 = {};
 var gArrayID = ["Loan"];
@@ -7,7 +31,8 @@ var gArrayTotalInterest = ["Total Interest"];
 
 
 var columnID = 0;
-var textArray = ["Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Loan Amount", 
+var textArray = ["Home Details", "Home Cost", "Square Footage", "Price per Square Foot", "Property Tax Rate", 
+                 "Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Loan Amount", 
                  "Monthly Payment Breakdown", "Monthly Mortgage Payment", "Monthly Property Tax", "Monthly Home Owner's Insurance",
                  "Monthly PMI", "Monthly HOA", "Total Monthly Payment",
                  "Early Mortgage Payoff", "Extra Monthly Payment", "Months Until Mortgage is Paid Off", "Total Interest Paid", "Total Interest Savings",
@@ -24,7 +49,7 @@ for (var x = 0; x < textArray.length; x++){
     column.appendChild(text);
     if (textArray[x] == ""){
         column.setAttribute("style", "background-color: white;");
-    } else if (x == 0 || x == 5 || x == 12 || x == 17 || x == 20 || x == 25) {
+    } else if (x == 0 || x == 5 || x == 10 || x == 17 || x == 22 || x == 25 || x == 30) {
         column.className = "mergedTitle";
         column.setAttribute("colspan", "100%");
     }
@@ -99,7 +124,7 @@ function resetAll() {
         column.appendChild(text);
         if (textArray[x] == ""){
             column.setAttribute("style", "background-color: white;");
-        } else if (x == 0 || x == 5 || x == 12 || x == 17 || x == 20 || x == 25) {
+        } else if (x == 0 || x == 5 || x == 10 || x == 17 || x == 22 || x == 25 || x == 30) {
             column.className = "mergedTitle";
             column.setAttribute("colspan", "100%");
         }
@@ -877,20 +902,25 @@ function calculate(kl){
                 tempArray.push(0);
             }
         }
+        var costFoot = Number(Math.round($homeCost/2900+'e2')+'e-2');
+        var ptrString = Number(Math.round($propertyTaxRate+'e3')+'e-3').toFixed(3)+"%";
         var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
-        var dataArray = ["Loan Details", $loanTerm, istring, dict["downPaymentAmount"], dict["loanAmount"],
+        var dataArray = ["Home Details", $homeCost, 2900, costFoot, ptrString,
+                         "Loan Details", $loanTerm, istring, dict["downPaymentAmount"], dict["loanAmount"],
                          "Monthly Payment Breakdown", dict["monthlyMortgagePayment"], dict["monthlyPropertyTax"], $hoi, dict["monthlyPMI"], $hoa, dict["totalMonthlyPayment"],
                          "Early Mortgage Payoff", $extraPayment, dict["mdcount"], dict["totalInterest2"], dict["totalSavings"],
                          "PMI Details", dict["equity"], dict["totalPMI"],
                          "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
                          "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
         for (var y = 0; y < dataArray.length; y++){
-            if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25){
+            if (y != 0 && y != 5 && y != 10 && y != 17 && y != 22 && y != 25 && y != 30){
                 var column = document.createElement("td");
                 column.id = columnID;
-                if (y == 1){
+                if (y == 2){
+                    var text = document.createTextNode(addCommas(dataArray[y]));
+                } else if (y == 6){
                     var text = document.createTextNode(dataArray[y]+" years");
-                } else if (y == 2 || y == 14 || y == 18){
+                } else if (y == 4 || y == 7 || y == 19 || y == 23){
                     var text = document.createTextNode(dataArray[y]);
                 } else {
                     var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
