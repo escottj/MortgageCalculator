@@ -112,3 +112,21 @@ th{
 ul > li > a {
     cursor: pointer;
 }
+
+.cell-input {
+    border-radius: 4px !important; 
+}
+
+.glyphicon-remove {
+    cursor: pointer !important;
+}
+
+::-ms-clear {
+  display: none;
+}
+
+.form-control-clear {
+  z-index: 10;
+  pointer-events: auto;
+  cursor: pointer;
+}
