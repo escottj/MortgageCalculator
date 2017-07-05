@@ -33,220 +33,222 @@
 
 <body>
 	<div class="container col-sm-12">
-		<form class="form-horizontal col-sm-12">
-			<div class="row">
-				<div id="home-cost-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Cost</label>
-					<div id="home-cost-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="300,000.00" aria-describedby="home-cost-help-block">
-							<span id="home-cost-glyph" class="glyphicon form-control-feedback glyphicon-right" aria-hidden="true"></span>
-						</div>
-						<span style="display: none;" id="home-cost-help-block" class="help-block">Please enter a value between 10,000 and 1,000,000,000.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="down-payment-group" class="form-group form-group-md nopadding required">
-					<label id="down-payment-label" class="col-sm-3 control-label" for="formGroupInputSmall">Down Payment</label>
-					<div id="down-payment-dollars-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="60,000.00" aria-describedby="down-payment-dollars-help-block">
-							<span id="down-payment-dollars-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-						</div>
-						<span style="display: none;" id="down-payment-dollars-help-block" class="help-block">Please enter a down payment that is less than home cost.</span>
-					</div>
-					<div id="down-payment-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="down-payment" placeholder="Down Payment" value="20.000" aria-describedby="down-payment-help-block">
-							<span id="down-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
-						</div>
-						<span style="display: none;" id="down-payment-help-block" class="help-block">Please enter a value below 100.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="property-tax-rate-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
-					<div id="property-tax-rate-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value="0.840" aria-describedby="property-tax-rate-help-block">
-							<span id="property-tax-rate-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
-						</div>
-						<span style="display: none;" id="property-tax-rate-help-block" class="help-block">Please enter a value no larger than 10.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="hoi-group" class="form-group form-group-md nopadding required">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
-					<div class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="100.00" aria-describedby="hoi-help-block">
-							<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">monthly</div>
-						</div>
-						<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="pmi-group" class="form-group form-group-md nopadding">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">PMI</label>
-					<div class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<input type="text" class="form-control" id="pmi" placeholder="PMI" value="1.000" aria-describedby="pmi-help-block">
-							<span id="pmi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">%</div>
-						</div>
-						<span style="display: none;" id="pmi-help-block" class="help-block">Please enter a value no larger than 10.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="hoa-group" class="form-group form-group-md nopadding">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
-					<div id="hoa-check" class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="hoa" placeholder="HOA" value="120.00" aria-describedby="hoa-help-block">
-							<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">monthly</div>
-						</div>
-						<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
-					</div>
-				</div>
-			</div>
-			<div class="row">
-				<div id="extra-payment-group" class="form-group form-group-md nopadding">
-					<label class="col-sm-3 control-label" for="formGroupInputSmall">Extra Payment</label>
-					<div class="col-sm-4">
-						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="extra-payment" placeholder="Extra Payment" value="" aria-describedby="extra-payment-help-block">
-							<span id="extra-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-							<div class="input-group-addon">monthly</div>
-						</div>
-						<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value no larger than 5000.</span>
-					</div>
-				</div>
-			</div>
-			<div class="hidden-xs">
+		<div id="modalMe">
+			<form id="myForm" class="form-horizontal col-sm-12">
 				<div class="row">
-					<div id="interest-rate-group" class="form-group form-group-md nopadding required">
-						<label id="interest-rate-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
-						<div id="interest-rate-10-check" class="col-sm-2">
+					<div id="home-cost-group" class="form-group form-group-md nopadding required">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Cost</label>
+						<div id="home-cost-check" class="col-sm-4">
 							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-								<input type="text" class="form-control input-md" id="interest-rate-10" placeholder="10 yr APR" value="3.125" aria-describedby="interest-rate-10-block">
-								<span id="interest-rate-10-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-								<div class="input-group-addon">%</div>
+								<div class="input-group-addon">$</div>
+								<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="300,000.00" aria-describedby="home-cost-help-block">
+								<span id="home-cost-glyph" class="glyphicon form-control-feedback glyphicon-right" aria-hidden="true"></span>
 							</div>
-							<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value no larger than 20.</span>
-						</div>
-						<div id="interest-rate-15-check" class="col-sm-2">
-							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-								<input type="text" class="form-control input-md" id="interest-rate-15" placeholder="15 yr APR" value="3.250" aria-describedby="interest-rate-15-block">
-								<span id="interest-rate-15-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-								<div class="input-group-addon">%</div>
-							</div>
-							<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value no larger than 20.</span>
-						</div>
-						<div id="interest-rate-20-check" class="col-sm-2">
-							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-								<input type="text" class="form-control input-md" id="interest-rate-20" placeholder="20 yr APR" value="3.750" aria-describedby="interest-rate-20-block">
-								<span id="interest-rate-20-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-								<div class="input-group-addon">%</div>
-							</div>
-							<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value no larger than 20.</span>
-						</div>
-						<div id="interest-rate-30-check" class="col-sm-2">
-							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-								<input type="text" class="form-control input-md" id="interest-rate-30" placeholder="30 yr APR" value="4.025" aria-describedby="interest-rate-30-block">
-								<span id="interest-rate-30-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
-								<div class="input-group-addon">%</div>
-							</div>
-							<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							<span style="display: none;" id="home-cost-help-block" class="help-block">Please enter a value between 10,000 and 1,000,000,000.</span>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="form-group form-group-md nopadding">
-						<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
-						<div class="col-sm-2">
-							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
-						</div>
-						<div class="col-sm-2">
-							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
-						</div>
-						<div class="col-sm-2">
-							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
-						</div>
-						<div class="col-sm-2">
-							<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
-						</div>
-						<div class="col-sm-8 col-sm-offset-3">
-							<p></p><button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
-						</div>
-						<div class="col-sm-8 col-sm-offset-3">
-							<p></p><button type="button" id="reset" class="btn-block btn btn-danger btn-md" onclick="resetAll();">Reset</button>
-						</div>
-					</div>
-				</div>
-			</div>
-			<div class="visible-xs">
-				<div class="row">
-					<div id="interest-rate-apr-group" class="form-group form-group-md nopadding required">
-						<label id="interest-rate-apr-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
-						<div id="interest-rate-apr-check" class="col-sm-2">
+					<div id="down-payment-group" class="form-group form-group-md nopadding required">
+						<label id="down-payment-label" class="col-sm-3 control-label" for="formGroupInputSmall">Down Payment</label>
+						<div id="down-payment-dollars-check" class="col-sm-4">
 							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
-								<input type="text" class="form-control input-md" id="interest-rate-apr" placeholder="APR" value="3.250" aria-describedby="interest-rate-apr-block">
-								<span id="interest-rate-apr-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">$</div>
+								<input type="text" class="form-control" id="down-payment-dollars" placeholder="Down Payment" value="60,000.00" aria-describedby="down-payment-dollars-help-block">
+								<span id="down-payment-dollars-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+							</div>
+							<span style="display: none;" id="down-payment-dollars-help-block" class="help-block">Please enter a down payment that is less than home cost.</span>
+						</div>
+						<div id="down-payment-check" class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control" id="down-payment" placeholder="Down Payment" value="20.000" aria-describedby="down-payment-help-block">
+								<span id="down-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
 								<div class="input-group-addon">%</div>
 							</div>
-							<span style="display: none;" id="interest-rate-apr-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							<span style="display: none;" id="down-payment-help-block" class="help-block">Please enter a value below 100.</span>
 						</div>
 					</div>
 				</div>
 				<div class="row">
-					<div class="form-group form-group-md nopadding">
-						<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
-						<p>
+					<div id="property-tax-rate-group" class="form-group form-group-md nopadding required">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">Property Tax Rate</label>
+						<div id="property-tax-rate-check" class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control" id="property-tax-rate" placeholder="Property Tax Rate" value="0.840" aria-describedby="property-tax-rate-help-block">
+								<span id="property-tax-rate-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<span style="display: none;" id="property-tax-rate-help-block" class="help-block">Please enter a value no larger than 10.</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="hoi-group" class="form-group form-group-md nopadding required">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">Home Owner's Insurance</label>
+						<div class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<div class="input-group-addon">$</div>
+								<input type="text" class="form-control" id="hoi" placeholder="Home Owner's Insurance" value="100.00" aria-describedby="hoi-help-block">
+								<span id="hoi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">monthly</div>
+							</div>
+							<span style="display: none;" id="hoi-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="pmi-group" class="form-group form-group-md nopadding">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">PMI</label>
+						<div class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<input type="text" class="form-control" id="pmi" placeholder="PMI" value="1.000" aria-describedby="pmi-help-block">
+								<span id="pmi-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">%</div>
+							</div>
+							<span style="display: none;" id="pmi-help-block" class="help-block">Please enter a value no larger than 10.</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="hoa-group" class="form-group form-group-md nopadding">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">HOA</label>
+						<div id="hoa-check" class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<div class="input-group-addon">$</div>
+								<input type="text" class="form-control" id="hoa" placeholder="HOA" value="120.00" aria-describedby="hoa-help-block">
+								<span id="hoa-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">monthly</div>
+							</div>
+							<span style="display: none;" id="hoa-help-block" class="help-block">Please enter a value no larger than 1,000.</span>
+						</div>
+					</div>
+				</div>
+				<div class="row">
+					<div id="extra-payment-group" class="form-group form-group-md nopadding">
+						<label class="col-sm-3 control-label" for="formGroupInputSmall">Extra Payment</label>
+						<div class="col-sm-4">
+							<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+								<div class="input-group-addon">$</div>
+								<input type="text" class="form-control" id="extra-payment" placeholder="Extra Payment" value="" aria-describedby="extra-payment-help-block">
+								<span id="extra-payment-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+								<div class="input-group-addon">monthly</div>
+							</div>
+							<span style="display: none;" id="extra-payment-help-block" class="help-block">Please enter a value no larger than 5000.</span>
+						</div>
+					</div>
+				</div>
+				<div class="hidden-xs">
+					<div class="row">
+						<div id="interest-rate-group" class="form-group form-group-md nopadding required">
+							<label id="interest-rate-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
+							<div id="interest-rate-10-check" class="col-sm-2">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control input-md" id="interest-rate-10" placeholder="10 yr APR" value="3.125" aria-describedby="interest-rate-10-block">
+									<span id="interest-rate-10-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+									<div class="input-group-addon">%</div>
+								</div>
+								<span style="display: none;" id="interest-rate-10-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							</div>
+							<div id="interest-rate-15-check" class="col-sm-2">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control input-md" id="interest-rate-15" placeholder="15 yr APR" value="3.250" aria-describedby="interest-rate-15-block">
+									<span id="interest-rate-15-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+									<div class="input-group-addon">%</div>
+								</div>
+								<span style="display: none;" id="interest-rate-15-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							</div>
+							<div id="interest-rate-20-check" class="col-sm-2">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control input-md" id="interest-rate-20" placeholder="20 yr APR" value="3.750" aria-describedby="interest-rate-20-block">
+									<span id="interest-rate-20-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+									<div class="input-group-addon">%</div>
+								</div>
+								<span style="display: none;" id="interest-rate-20-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							</div>
+							<div id="interest-rate-30-check" class="col-sm-2">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control input-md" id="interest-rate-30" placeholder="30 yr APR" value="4.025" aria-describedby="interest-rate-30-block">
+									<span id="interest-rate-30-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+									<div class="input-group-addon">%</div>
+								</div>
+								<span style="display: none;" id="interest-rate-30-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group form-group-md nopadding">
+							<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
 							<div class="col-sm-2">
 								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
 							</div>
-						</p>
-						<p>
 							<div class="col-sm-2">
 								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
 							</div>
-						</p>
-						<p>
 							<div class="col-sm-2">
 								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
 							</div>
-						</p>
-						<p>
 							<div class="col-sm-2">
 								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
 							</div>
-						</p>
-						<p>
 							<div class="col-sm-8 col-sm-offset-3">
-								<button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
+								<p></p><button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
 							</div>
-						</p>
-						<div class="col-sm-8 col-sm-offset-3">
-							<button type="button" id="reset" class="btn-block btn btn-danger btn-md" onclick="resetAll();">Reset</button>
+							<div class="col-sm-8 col-sm-offset-3">
+								<p></p><button type="button" id="reset" class="btn-block btn btn-danger btn-md" onclick="resetAll();">Reset</button>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
-		</form>
+				<div class="visible-xs">
+					<div class="row">
+						<div id="interest-rate-apr-group" class="form-group form-group-md nopadding required">
+							<label id="interest-rate-apr-label" class="col-sm-3 control-label" for="formGroupInputSmall">Interest Rate (APR)</label>
+							<div id="interest-rate-apr-check" class="col-sm-2">
+								<div class="input-group mb-2 mr-sm-2 mb-sm-0">
+									<input type="text" class="form-control input-md" id="interest-rate-apr" placeholder="APR" value="3.250" aria-describedby="interest-rate-apr-block">
+									<span id="interest-rate-apr-glyph" class="glyphicon form-control-feedback" aria-hidden="true"></span>
+									<div class="input-group-addon">%</div>
+								</div>
+								<span style="display: none;" id="interest-rate-apr-help-block" class="help-block">Please enter a value no larger than 20.</span>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="form-group form-group-md nopadding">
+							<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
+							<p>
+								<div class="col-sm-2">
+									<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
+								</div>
+							</p>
+							<p>
+								<div class="col-sm-2">
+									<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
+								</div>
+							</p>
+							<p>
+								<div class="col-sm-2">
+									<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
+								</div>
+							</p>
+							<p>
+								<div class="col-sm-2">
+									<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
+								</div>
+							</p>
+							<p>
+								<div class="col-sm-8 col-sm-offset-3">
+									<button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate(0)" value="0">Compare All</button>
+								</div>
+							</p>
+							<div class="col-sm-8 col-sm-offset-3">
+								<button type="button" id="reset" class="btn-block btn btn-danger btn-md" onclick="resetAll();">Reset</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
 	</div>
 	<!--<p>
 	<div class="container col-sm-12">
@@ -577,14 +579,40 @@
 							</tr>
 							<tr id="-delete">
 								<th style="background-color: white;"></th>
-								<td id="0" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('0')">Delete</button></td>
-								<td id="1" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('1')">Delete</button></td>
-								<td id="2" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('2')">Delete</button></td>
-								<td id="3" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('3')">Delete</button></td>
-								<td id="4" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('4')">Delete</button></td>
+								<td id="0" style="background-color: white;" align="center"><button class="delete btn btn-danger btn-sm">Delete</button></td>
+								<td id="1" style="background-color: white;" align="center"><button class="delete btn btn-danger btn-sm">Delete</button></td>
+								<td id="2" style="background-color: white;" align="center"><button class="delete btn btn-danger btn-sm">Delete</button></td>
+								<td id="3" style="background-color: white;" align="center"><button class="delete btn btn-danger btn-sm">Delete</button></td>
+								<td id="4" style="background-color: white;" align="center"><button class="delete btn btn-danger btn-sm">Delete</button></td>
 							</tr>
 						</tbody>
 					</table>
+				</div>
+			</div>
+		</div>
+		<div id="modalHome">
+		</div>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+				</div>
+				<div class="modal-body">
+					<div id="modalAway">
+						Click here
+						<button type="button" id="awayButton" class="btn btn-primary">Save changes</button>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					<button type="button" class="btn btn-primary">Save changes</button>
 				</div>
 			</div>
 		</div>
