@@ -1,9 +1,9 @@
 //Testing
 
-$(document).ready(function() {
+/*$(document).ready(function() {
     $("tr").not(':first').hover(
     function() {
-        alert('h');
+        //alert('h');
         $(this).addClass('highlight');
     }, function() {
         $(this).removeClass('highlight');
@@ -13,13 +13,105 @@ $(document).ready(function() {
 
 $("th").not(':first').hover(
   function () {
-          alert('g');
+          //alert('g');
     $(this).css("background","yellow");
   },
   function () {
     $(this).css("background","");
   }
-);
+);*/
+
+/*$(function () { 
+    $("td").click(function () { 
+        var OriginalContent = $(this).text(); 
+        $(this).addClass("cellEditing"); 
+        $(this).html("<input type='text' value='" + OriginalContent + "' />"); 
+        $(this).children().first().focus(); 
+        $(this).children().first().keypress(function (e) { 
+            if (e.which == 13) { 
+                var newContent = $(this).val(); 
+                $(this).parent().text(newContent); 
+                $(this).parent().removeClass("cellEditing"); } }); 
+                $(this).children().first().blur(function(){ $(this).parent().text(OriginalContent); $(this).parent().removeClass("cellEditing"); }); }); });*/
+
+$(function () { 
+
+});
+
+    $("td").click(function () { 
+        var oldValue = removeCommas($(this).text());
+        var tdID = $(this).attr('id');
+        var $td = $(this);
+        //var $th = $td.closest('table').find('th').eq($td.index());
+        var $tr = $td.closest('tr');
+        //alert($th.attr('id'));
+        if (!$(this).hasClass("cellEditing")) {
+            $(this).addClass("cellEditing");
+            $(this).html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + tdID + $tr.attr('id') + "' placeholder='Home Cost' value='" + oldValue + "' />"); 
+            $(this).children().first().focus();
+            $("#" + tdID + "home-cost").select();
+            /*$(this).children().first().keypress(function (e){
+                //kp(e, this);
+                var charCode = e.keyCode;
+                var number = $(this).val().split('.');
+                if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+                    return false;
+                }
+                if(number.length > 1 && charCode == 46){
+                    return false;
+                }
+                var caratPos = getSelectionStart(this);
+                var dotPos = $(this).val().indexOf(".");x
+                
+                if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
+                    return false;
+                }
+                return true;
+                function getSelectionStart(o) {
+                    if (o.createTextRange) {
+                        var r = document.selection.createRange().duplicate()
+                        r.moveEnd('character', o.value.length)
+                        if (r.text == '') return o.value.length
+                        return o.value.lastIndexOf(r.text)
+                    } else return o.selectionStart
+                }
+            });*/
+            $(this).children().first().focusout(function () {
+                    $(this).parent().removeClass("cellEditing");
+                    var tempValue = Number($(this).val()).toFixed(2);
+                    var newValue = addCommas(tempValue);
+                    //var newValue = $(this).val(); 
+                    $(this).parent().text(newValue);
+            });
+        }
+    }); 
+
+//Monetary Amounts
+function kp(e, t) {
+    var charCode = e.keyCode;
+    var number = $(t).val().split('.');
+    if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
+        return false;
+    }
+    if(number.length > 1 && charCode == 46){
+        return false;
+    }
+    var caratPos = getSelectionStart(t);
+    var dotPos = $(t).val().indexOf(".");
+
+    if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
+        return false;
+    }
+    return true;
+    function getSelectionStart(o) {
+        if (o.createTextRange) {
+            var r = document.selection.createRange().duplicate()
+            r.moveEnd('character', o.value.length)
+            if (r.text == '') return o.value.length
+            return o.value.lastIndexOf(r.text)
+        } else return o.selectionStart
+    }
+};
 
 
 //Google Charts Global Variables
