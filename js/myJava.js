@@ -1,4 +1,4 @@
-//Validation
+//Validation (Angular Approach)
 /*
 $untouched The field has not been touched yet
 $touched The field has been touched
@@ -110,8 +110,16 @@ $(".table").on('click', 'tbody tr td div div span', function (e){
     $this.siblings('input[type="text"]').val($oldValue)
     $this.siblings('input[type="text"]').popover('hide');
     $this.siblings('input[type="text"]').siblings('.form-control-clear').addClass('hidden')
-    $td.empty()
-    $td.text("$" + $newValue)
+    const $tr = $this.closest('tr');
+    const $trID = $tr.attr('id');
+    $td.empty();
+    if ($.inArray($trID, dollarsArray) !== -1) {
+        $td.text('$' + $newValue);
+    } else if ($.inArray($trID, percentArray) !== -1) {
+        $td.text($newValue + '%');
+    } else if ($.inArray($trID, detailsArray) !== -1) {
+        $td.text($newValue);
+    }     
     $td.removeClass('editting')
     //.trigger('propertychange').focus();
 });
@@ -246,7 +254,7 @@ placeholderDict['-interest-rate'] = 'Interest Rate';
 placeholderDict['-square-footage'] = 'Square Footage';
 const percentArray = ['-down-payment', '-property-tax-rate', '-pmi', '-interest-rate'];
 const detailsArray = ['-square-footage'];
-const ignoreArray = ['-loan-term', 'delete', '-price-per-square-foot', '-loan-amount', '-monthly-mortgage-payment', '-monthly-property-tax', 
+const ignoreArray = ['-loan-term', '-delete', '-price-per-square-foot', '-loan-amount', '-monthly-mortgage-payment', '-monthly-property-tax', 
                      '-monthly-pmi', '-total-monthly-payment', '-extra-payment-months', '-extra-payment-total-interest-paid', '-total-interest-savings', 
                      '-pmi-months', '-total-pmi-paid', '-10-year-interest', '-15-year-interest', '-20-year-interest', '-30-year-interest', 
                      '-total-cost', '-extra-payment-total-cost'];
@@ -276,12 +284,14 @@ $("td").click(function (e) {
                         '</div>';
         const $html = $($.parseHTML(htmlTemp));
         const oldValue = removeCommas($td.text());
+        //$html.children().find('input');
+        
         const $sf = $('#-square-footage').find('td').eq($td.index() - 1);
         const $ppsf = $('#-price-per-square-foot').find('td').eq($td.index() - 1);
         if (!$td.hasClass("editting")) {
             $td.addClass("editting");
             var $input = $html.find('input');
-            $input.attr('size', oldValue.length).attr('id', $tdID + $trID).attr('placeholder', placeholderDict[$trID]).attr('value', oldValue);
+            $input.attr('size', oldValue.length).attr('id', $tdID + $trID).attr('placeholder', placeholderDict[$trID]).attr('value', oldValue).attr('data-old-value', oldValue);
             $td.html($html);
             //$td.html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + oldValue + "' />"); 
             $td.children().first().focus();
@@ -294,12 +304,17 @@ $("td").click(function (e) {
             $td.children().first().focusout(function () {
                 var $existingInput = $td.find('input');
                 //alert($existingInput.val())
-                var validate = cellValidate($existingInput.get(0));
-                //alert(validate);
-                if (validate == 1){
+                var cellInfo = cellValidate($existingInput.get(0));
+                //alert(cellInfo[0])
+                var validate = cellInfo[0];
+                var errorText = cellInfo[1];
+                //oldValue = $existingInput.attr('data-old-value');
+                if (validate == 1) {
+                    //alert(oldValue)
+                    //alert($existingInput.val());
                     cellEdit(oldValue, $existingInput, $td, $tdID, $tr, $trID, $sf, $ppsf);
-                } else if (validate == 0){
-                    var newValue = $(this).find('input').val();
+                } else if (validate == 0) {
+                    var newValue = $existingInput.val();
                     var htmlError = '<div id="-home-cost-group" class="form-group has-error required">' +
                                         '<div id="-home-cost-check">' +
                                             '<div class="input-group">' +
@@ -308,7 +323,6 @@ $("td").click(function (e) {
                                             '</div>' +
                                         '</div>' +
                                     '</div>';
-
                     var htmlError2 = '<div class="input-group">' +
                                         '<div class="form-group has-feedback has-clear has-error">' +
                                                 "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' data-trigger='focus' title='Dismissible popover' data-content='Please enter a value between $10,000 and $1,000,000,000' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + newValue + "' />" +
@@ -317,7 +331,7 @@ $("td").click(function (e) {
                                     '</div>';
                     var htmlError3 = '<div class="input-group">' +
                                         '<div class="form-group has-feedback has-clear has-error">' +
-                                                "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' title='Dismissible popover' data-content='Please enter a value between $10,000 and $1,000,000,000' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + newValue + "' />" +
+                                                "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + newValue + "' />" +
                                             '<span class="form-control-clear glyphicon glyphicon-remove form-control-feedback glyphicon-right"></span>' +
                                         '</div>' +
                                     '</div>';
@@ -325,6 +339,7 @@ $("td").click(function (e) {
                     $td.html(htmlError3);
                     $html3 = $.parseHTML(htmlError3);
                     var $test = $td.find('input');
+                    $test.attr('data-content', errorText);
                     //alert($('#delme').text())
                     //alert($test.attr('data-toggle'))
                     //$('[data-toggle="popover"]').popover();
@@ -348,6 +363,7 @@ $(".table").on('focusout', 'tr td div div input', function (e){
     const $tr = $input.closest('tr');
     const $trID = $tr.attr('id');
     const $oldValue = $input.attr('data-old-value');
+    //alert($input.val())
     const $newValue = $input.val();
     const htmlError3 = '<div class="input-group">' +
                         '<div class="form-group has-feedback has-clear has-error">' +
@@ -355,13 +371,15 @@ $(".table").on('focusout', 'tr td div div input', function (e){
                             '<span id="del" class="form-control-clear glyphicon glyphicon-remove form-control-feedback glyphicon-right"></span>' +
                         '</div>' +
                     '</div>';
-    const validate = cellValidate($input);
-    if (validate == 1){
+    const cellInfo = cellValidate($input);
+    //alert(cellInfo[0])
+    const validate = cellInfo[0];
+    if (validate == 1) {
         $input.popover('hide');
         const $sf = $('#-square-footage').find('td').eq($td.index() - 1);
         const $ppsf = $('#-price-per-square-foot').find('td').eq($td.index() - 1);
         cellEdit($oldValue, $input, $td, $tdID, $tr, $trID, $sf, $ppsf);
-    } else if (validate == 0){
+    } else if (validate == 0) {
         $input.popover('show');
         //$td.html(htmlError3);
     } else {
@@ -404,50 +422,68 @@ function cellEdit($oldValue, $this, $td, $tdID, $tr, $trID, $sf, $ppsf){
     let tempValue;
     let newCellText;
     let $newValue;
-    if ($.inArray($trID, detailsArray) === -1) {
+    if ($.inArray($trID, dollarsArray) !== -1) {
+        $newValue = numberRound($this.val(), 2);
+    } else if ($.inArray($trID, percentArray) !== -1) {
+        $newValue = numberRound($this.val(), 3);
+    } else if ($.inArray($trID, detailsArray) !== -1) {
+        $newValue = numberRound($this.val(), 0);
+    }     
+    if ($this.val() === '' || isNaN($newValue) === true || $newValue === $oldValue) {
+        $td.empty();
         if ($.inArray($trID, dollarsArray) !== -1) {
-            $newValue = numberRound($this.val(), 2);
+            $td.text(addCommas('$' + $oldValue));
         } else if ($.inArray($trID, percentArray) !== -1) {
-            $newValue = numberRound($this.val(), 3);
+            $td.text(addCommas($oldValue + '%'));
         } else if ($.inArray($trID, detailsArray) !== -1) {
-            $newValue = numberRound($this.val(), 0);
-        }        
-        if ($newValue !== $oldValue) {
-            recalculate($this);
-        }
-    } 
-    if ($newValue === '' || isNaN($newValue) === true) {
-        if ($.inArray($trID, dollarsArray) !== -1) {
-            $this.parent().text(addCommas('$' + $oldValue));
-        } else if ($.inArray($trID, percentArray) !== -1) {
-            $this.parent().text(addCommas($oldValue + '%'));
-        } else if ($.inArray($trID, detailsArray) !== -1) {
-            $this.parent().text(addCommas($oldValue));
+            $td.text(addCommas($oldValue));
         }
     } else {
-        if ($.inArray($trID, dollarsArray) !== -1) {
-            cellAnimate($td, $newValue, $oldValue, '$');
-            if ($trID === '-home-cost') {
-                const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($td.index() - 1);
-                const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
-                const $downPayment = numberRound(removeCommas($('#-down-payment').find('td').eq($td.index() - 1).text()), 3);
-                const $newDownPaymentDollarsValue = numberRound($newValue * ($downPayment/100), 2);
-                cellAnimate($downPaymentDollars, $newDownPaymentDollarsValue, $downPaymentDollarsValue, '$');
+        if ($newValue !== $oldValue) {
+            if ($.inArray($trID, dollarsArray) !== -1) {
+                if ($trID === '-home-cost') {
+                    const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($td.index() - 1);
+                    const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
+                    const $downPayment = $('#-down-payment').find('td').eq($td.index() - 1);
+                    const $downPaymentValue = numberRound(removeCommas($downPayment.text()), 3);
+                    const $newDownPaymentDollarsValue = numberRound($newValue * ($downPaymentValue/100), 2);
+                    cellAnimate($downPaymentDollars, $newDownPaymentDollarsValue, $downPaymentDollarsValue, '$');
 
-                const $sfValue = numberRound(removeCommas($sf.text()), 0);
-                const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
-                const $newppsfValue = numberRound($newValue/$sfValue, 2);
-                cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
-            }
-        } else if ($.inArray($trID, percentArray) !== -1) {
-            cellAnimate($td, $newValue, $oldValue, '%');
-        } else if ($.inArray($trID, detailsArray) !== -1) {
-            cellAnimate($td, $newValue, $oldValue, '');
-            if ($trID === '-square-footage') {
-                const $homeCostValue = numberRound(removeCommas($('#-home-cost').find('td').eq($td.index() - 1).text()), 2);
-                const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
-                const $newppsfValue = numberRound($homeCostValue/$newValue, 2);
-                cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
+                    const $sfValue = numberRound(removeCommas($sf.text()), 0);
+                    const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
+                    const $newppsfValue = numberRound($newValue/$sfValue, 2);
+                    cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
+                } else if ($trID === '-down-payment-dollars') {
+                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
+                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
+                    const $downPayment = $('#-down-payment').find('td').eq($td.index() - 1);
+                    const $downPaymentValue = numberRound(removeCommas($downPayment.text()), 3);
+                    const $newDownPaymentValue = numberRound(($newValue/$homeCostValue)*100, 3);
+                    cellAnimate($downPayment, $newDownPaymentValue, $downPaymentValue, '%');
+                }
+                recalculate($this);
+                cellAnimate($td, $newValue, $oldValue, '$');
+            } else if ($.inArray($trID, percentArray) !== -1) {
+                if ($trID === '-down-payment') {
+                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
+                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
+                    const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($td.index() - 1);
+                    const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
+                    const $newDownPaymentDollarsValue = numberRound($homeCostValue * ($newValue/100), 2);
+                    cellAnimate($downPaymentDollars, $newDownPaymentDollarsValue, $downPaymentDollarsValue, '$');
+                }
+                recalculate($this);
+                cellAnimate($td, $newValue, $oldValue, '%');
+            } else if ($.inArray($trID, detailsArray) !== -1) {
+                if ($trID === '-square-footage') {
+                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
+                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
+                    const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
+                    const $newppsfValue = numberRound($homeCostValue/$newValue, 2);
+                    cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
+                }
+                recalculate($this);
+                cellAnimate($td, $newValue, $oldValue, '');
             }
         }
     }
@@ -520,7 +556,7 @@ function loanPayment2(newDict, loanTerm){
     var n = lt*12;
     var M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
     var monthlyPMI = 0;
-    if (dp < 20){
+    if (dp < 20) {
         monthlyPMI = ((pmi/100)*P)/12;
     }
     var totalMonthlyPayment = M + hoa + monthlyPropertyTax + monthlyPMI + hoi;
@@ -536,15 +572,15 @@ function loanPayment2(newDict, loanTerm){
     var totalHOI = hoi*n;
     var totalHOA = hoa*n;
 
-    for (var j = 0; j < n; j++){
-            interestPayment = newP*i;
-            totalInterest = totalInterest + interestPayment;
-            principalPayment = M - interestPayment;
-            newP = newP - principalPayment;
-            if (newP/hc > .8){
-                totalPMI = totalPMI + monthlyPMI;
-                equity = equity + 1;
-            }
+    for (var j = 0; j < n; j++) {
+        interestPayment = newP*i;
+        totalInterest = totalInterest + interestPayment;
+        principalPayment = M - interestPayment;
+        newP = newP - principalPayment;
+        if (newP/hc > .8) {
+            totalPMI = totalPMI + monthlyPMI;
+            equity = equity + 1;
+        }
     }
     var totalCost = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
     var dict = {};
@@ -561,7 +597,7 @@ function loanPayment2(newDict, loanTerm){
 
     //Extra Monthly Payment
     var mdcount = 0;
-    if (xp > 0){
+    if (xp > 0) {
         var newP = P;
         var interestPayment = 0;
         var totalInterest = 0;
@@ -572,17 +608,17 @@ function loanPayment2(newDict, loanTerm){
         var mdcount = 0;
         var M = xp + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
 
-        for (var j = 0; j < n; j++){
+        for (var j = 0; j < n; j++) {
             mdcount = mdcount + 1;
             interestPayment = newP*i;
             totalInterest = totalInterest + interestPayment;
             principalPayment = M - interestPayment;
             newP = newP - principalPayment;
-            if (newP/hc > .8){
+            if (newP/hc > .8) {
                 totalPMI = totalPMI + monthlyPMI;
                 equity = equity + 1;
             }
-            if (newP < 1){
+            if (newP < 1) {
                 break;
             }
         }
@@ -604,16 +640,16 @@ function loanPayment2(newDict, loanTerm){
     return dict;
 }
 
-function cellWrongText(x, y, z){
+function cellWrongText(x, y, z) {
     //$("#"+x+"-help-block").show();
-    if (x.match(/down-payment.*/)){
-        $("#"+x+"-check").attr('class', 'has-error');
-    } else if(x.match(/interest-rate-.*/)){
-        $("#"+x+"-check").attr('class', 'has-error');
+    if (x.match(/down-payment.*/)) {
+        $("#" + x + "-check").attr('class', 'has-error');
+    } else if(x.match(/interest-rate-.*/)) {
+        $("#" + x + "-check").attr('class', 'has-error');
     } else {
-        $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-error '+y);
+        $("#" + x + "-group").attr('class', 'form-group form-group-md nopadding has-error ' + y);
     }
-    $("#"+x+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-'+z);
+    $("#" + x + "-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-' + z);
     return;
 }
 
@@ -646,44 +682,49 @@ function cellValidate(t) {
     var $pmi = removeCommas($('#-pmi').find('td').eq($td.index() - 1).text());
     var $hoi = removeCommas($('#-hoi').find('td').eq($td.index() - 1).text());
     var $extraPayment = removeCommas($('#-extra-payment').find('td').eq($td.index() - 1).text());
-    if ($input.attr('id').match(/-home-cost*/)){
+    var $squareFootage = removeCommas($('#-square-footage').find('td').eq($td.index() - 1).text());
+    if ($input.attr('id').match(/-home-cost*/)) {
         var $homeCost = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-down-payment-dollars*/)){
+    } else if ($input.attr('id').match(/-down-payment-dollars*/)) {
         var $downPaymentDollars = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-down-payment*/)){
+    } else if ($input.attr('id').match(/-down-payment*/)) {
         var $downPayment = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-loan-term*/)){
+    } else if ($input.attr('id').match(/-loan-term*/)) {
         var $loanTerm = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-interest-rate*/)){
+    } else if ($input.attr('id').match(/-interest-rate*/)) {
         var $interestRate = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-hoa*/)){
+    } else if ($input.attr('id').match(/-hoa*/)) {
         var $hoa = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-property-tax-rate*/)){
+    } else if ($input.attr('id').match(/-property-tax-rate*/)) {
         var $propertyTaxRate = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-pmi*/)){
+    } else if ($input.attr('id').match(/-pmi*/)) {
         var $pmi = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-hoi*/)){
+    } else if ($input.attr('id').match(/-hoi*/)) {
         var $hoi = removeCommas($input.val());
-    } else if ($input.attr('id').match(/-extra-payment*/)){
+    } else if ($input.attr('id').match(/-extra-payment*/)) {
         var $extraPayment = removeCommas($input.val());
+    } else if ($input.attr('id').match(/-square-footage*/)) {
+        var $squareFootage = removeCommas($input.val());
     }
 
     var validate = 1;
+    var errorText = "";
     switch($trID){
         case "-home-cost":
-            if (x.length == 0){
+            errorText = 'Please enter a value between 10,000 and 1 billion.'
+            if (x.length == 0) {
                 validate = 0;
                 textRequired($trID, "required", "right");
             } else {
-                if (x < 10000 || +x > 1000000000){
+                if (x < 10000 || +x > 1000000000) {
                     validate = 0;
                     cellWrongText($trID, "required", "right");
                 } else {
-                    if ($downPaymentDollars.length > 0 && $downPayment.length == 0){
+                    if ($downPaymentDollars.length > 0 && $downPayment.length == 0) {
                         $('#-down-payment').val(((+$downPaymentDollars/+x)*100).toFixed(3));
                         correctText("-down-payment", "required", "left");
                         $("#down-payment-label").css("color", "#3c763d");
-                    } else if ($downPayment.length > 0){
+                    } else if ($downPayment.length > 0) {
                         $('#-down-payment-dollars').val(addCommas(+$downPayment*+x));
                         correctText("-down-payment-dollars", "required", "right");
                         $("#-down-payment-label").css("color", "#3c763d");
@@ -694,8 +735,9 @@ function cellValidate(t) {
             }
             break;
         case "-down-payment-dollars":
-            if (x.length == 0){
-                if ($downPayment.length == 0){
+            errorText = 'Please enter a value less than the home cost.'
+            if (x.length == 0) {
+                if ($downPayment.length == 0) {
                     textRequired("down-payment-dollars", "required", "right");
                     $("#down-payment-label").css("color", "#a94442");
                     textRequired("down-payment", "required", "left");
@@ -704,7 +746,7 @@ function cellValidate(t) {
                     $("#down-payment-dollars").val(addCommas((+$downPayment/100)*$homeCost));
                     correctText("down-payment-dollars", "required", "right");
                     $("#down-payment-label").css("color", "#3c763d");
-                    if (+$downPayment < 20){
+                    if (+$downPayment < 20) {
                         $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                     } else {
                         $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
@@ -712,17 +754,17 @@ function cellValidate(t) {
                     correctText("down-payment", "required", "left");
                 }
             } else {
-                if ($homeCost.length == 0){
+                if ($homeCost.length == 0) {
                     validate = 0;
                     correctText($trID, "required", "right");
-                    if ($downPayment.length == 0){
+                    if ($downPayment.length == 0) {
                         //$('#down-payment').val("0.000");
                     } else {
                         correctText("down-payment", "required", "left");
                     }
                     $("#down-payment-label").css("color", "#3c763d");
                 } else {
-                    if (+x >= +$homeCost){
+                    if (+x >= +$homeCost) {
                         validate = 0;
                         wrongText($trID, "required", "right");
                         wrongText("down-payment", "required", "left");
@@ -733,7 +775,7 @@ function cellValidate(t) {
                         $("#down-payment-label").css("color", "#3c763d");
                         $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
                         $downPayment = $('#down-payment').val();
-                        if (+$downPayment < 20){
+                        if (+$downPayment < 20) {
                             $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                         } else {
                             $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
@@ -742,20 +784,21 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "down-payment":
-            if (x.length == 0){
-                if ($downPaymentDollars.length == 0){
+        case "-down-payment":
+            errorText = 'Please enter a value between 0 and 99.'
+            if (x.length == 0) {
+                if ($downPaymentDollars.length == 0) {
                     textRequired("down-payment", "required", "left");
                     $("#down-payment-label").css("color", "#a94442");
                     textRequired("down-payment-dollars", "required", "right");
                     textNotRequired("pmi", "", "left");
                 } else {
-                    if (+$homeCost >= 10000 && +$homeCost <= 1000000000){
+                    if (+$homeCost >= 10000 && +$homeCost <= 1000000000) {
                         $("#down-payment").val(((+$downPaymentDollars/+$homeCost)*100).toFixed(3));
                         correctText("down-payment", "required", "right");
                         $("#down-payment-label").css("color", "#3c763d");
                         $downPayment = $('#down-payment').val();
-                        if (+$downPayment < 20){
+                        if (+$downPayment < 20) {
                             $("#pmi-group").attr('class', 'form-group form-group-md nopadding required')
                         } else {
                             $("#pmi-group").attr('class', 'form-group form-group-md nopadding')
@@ -766,23 +809,23 @@ function cellValidate(t) {
                     }
                 }
             } else {
-                if (+x >= 100 ){
+                if (+x > 99 ) {
                     validate = 0;
                     wrongText($trID, "required", "left");
                     wrongText("down-payment-dollars", "required", "right");
                     $("#down-payment-label").css("color", "#a94442");
                 } else {
-                    if (+x >= 20){
+                    if (+x >= 20) {
                         textNotRequired("pmi", "", "left");
                     } else {
-                        if ($pmi.length > 0){
-                            if (+$pmi > 10){
+                        if ($pmi.length > 0) {
+                            if (+$pmi > 10) {
                                 wrongText("pmi", "required", "left");
                             } else {
                                 correctText("pmi", "required", "left");
                             }
                         } else {
-                            if ($('#pmi-group').hasClass("has-error")){
+                            if ($('#pmi-group').hasClass("has-error")) {
                             } else {
                                 $("#pmi-group").attr('class', 'form-group form-group-md nopadding required');
                             }
@@ -794,11 +837,12 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "hoa":
-            if (x.length == 0){
+        case "-hoa":
+            errorText = 'Please enter a value between 0 and 1,000.'
+            if (x.length == 0) {
                 textNotRequired($trID, "", "center");
             } else {
-                if (+$hoa > 1000 ){
+                if (+$hoa > 1000 ) {
                     validate = 0;
                     wrongText($trID, "", "center");
                 } else {
@@ -806,11 +850,13 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "property-tax-rate":
-            if (x.length == 0){
+        case "-property-tax-rate":
+            errorText = 'Please enter a value between 0 and 10.'
+            if (x.length == 0) {
+                validate = 0;
                 textRequired($trID, "required", "left");
             } else {
-                if (+$propertyTaxRate > 10 ){
+                if (+$propertyTaxRate > 10 ) {
                     validate = 0;
                     wrongText($trID, "required", "left");
                 } else {
@@ -818,12 +864,14 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "pmi":
+        case "-pmi":
+            errorText = 'Please enter a value between 0 and 10.'
             if (x.length == 0){
-                if ($downPayment.length > 0){
-                    if (+$downPayment >= 20){
+                if ($downPayment.length > 0) {
+                    if (+$downPayment >= 20) {
                         textNotRequired($trID, "", "left");
                     } else {
+                        validate = 0;
                         textRequired($trID, "required", "left");
                         $("#pmi-group").attr('class', 'form-group form-group-md nopadding required has-error');
                     }
@@ -831,11 +879,11 @@ function cellValidate(t) {
                     textNotRequired("pmi", "", "left");
                 }
             } else {
-                if ($downPayment.length > 0){
-                    if (+$downPayment >= 20){
+                if ($downPayment.length > 0) {
+                    if (+$downPayment >= 20) {
                         textNotRequired("pmi", "", "left");
                     } else {
-                        if (+$pmi > 10 ){
+                        if (+$pmi > 10 ) {
                             validate = 0;
                             wrongText($trID, "required", "left");
                         } else {
@@ -847,11 +895,12 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "hoi":
-            if (x.length == 0){
+        case "-hoi":
+            errorText = 'Please enter a value between 0 and 1,000.'
+            if (x.length == 0) {
                 textRequired($trID, "required", "center");
             } else {
-                if (+$hoi > 1000 ){
+                if (+$hoi > 1000 ) {
                     validate = 0;
                     wrongText($trID, "required", "center");
                 } else {
@@ -859,11 +908,40 @@ function cellValidate(t) {
                 }
             }
             break;
-        case "extra-payment":
-            if (x.length == 0){
+        case "-extra-payment":
+            errorText = 'Please enter a value between 0 and 5,000.'
+            if (x.length == 0) {
                 textNotRequired($trID, "", "center");
             } else {
-                if (+$extraPayment > 5000){
+                if (+$extraPayment > 5000) {
+                    validate = 0;
+                    wrongText($trID, "", "center");
+                } else {
+                    correctText($trID, "", "center");
+                }
+            }
+            break;
+        case "-square-footage":
+            errorText = 'Please enter a value between 100 and 100,000.'
+            if (x.length == 0 || x < 100) {
+                validate = 0;
+                textRequired($trID, "", "center");
+            } else {
+                if (+$squareFootage > 100000) {
+                    validate = 0;
+                    wrongText($trID, "", "center");
+                } else {
+                    correctText($trID, "", "center");
+                }
+            }
+            break;
+        case "-interest-rate":
+            errorText = 'Please enter a value between 1 and 25.'
+            if (x.length == 0 || x < 1) {
+                validate = 0;
+                textRequired($trID, "", "center");
+            } else {
+                if (+$interestRate > 25) {
                     validate = 0;
                     wrongText($trID, "", "center");
                 } else {
@@ -872,7 +950,7 @@ function cellValidate(t) {
             }
             break;
     }
-    return(validate);
+    return [validate, errorText];
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -959,7 +1037,14 @@ function drawVisualization() {
     chart.draw(data, options);
 }
 
-
+$("#myForm").on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(){
+    if ($("#myForm").hasClass('boxDown')) {
+        $("#myForm").removeClass('boxDown');
+        $( "#myForm" ).addClass("boxUp");
+    } else {
+        $("#myForm").removeClass('boxUp');
+    }
+});
 
 function resetAll() {
     //Google Charts Clear
@@ -970,6 +1055,53 @@ function resetAll() {
     $("#chart_div").empty();
 
     $("#table8").empty();
+        var formHeight = $( "#myForm" ).height();
+        var windowHeight = $(window).height();
+        var newTop = (windowHeight - formHeight)/2;
+        $( "#modalMe" ).addClass("modal-me");
+        $( "#myForm" ).addClass("modal-content-me");
+        $( "#myForm" ).addClass("boxDown");
+        
+        /*
+        var target = document.getElementById('myForm');
+        var player = target.animate([
+        {left: '50%', top: 0, transform: 'translate(-50%, 0)'},
+        {left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}
+        ], {duration: 500,
+            fill: 'forwards'
+        });
+        /*
+        player.addEventListener('finish', function() {
+            target.style.transform = 'translate(-50%, -50%)';
+            target.setAttribute('left', '50%');
+            target.setAttribute('top', '50%');
+        });
+        /*
+          $( "#myForm" ).animate(
+              {fake: 200, fake2: 10},
+                {
+                    step: function(now, fx) {
+                        $(this).css('top', "50%");
+                        $(this).css('left', "50%");
+                        $(this).css('transform', "translate(-50%, -50%)");
+                    }, 
+                    duration:'slow'
+                }, 'linear' );
+        */
+        /*var offX, offY;
+        $('#myForm').animate({  fake1: "50%", fake2: "50%" }, {
+        step: function(now,fx) {
+            if (fx.prop === "fake1") {
+            offX = now;
+            } else if (fx.prop === "fake2") {
+            offY = now;
+            $(this).css('-webkit-transform','translate('+ offX +'%,'+ offY +'%)');
+            }
+        },
+        duration:300
+        },'linear');*/
+
+//transform: "translate(-50%, -50%)"
     rowArray = [];
     for (var x = 0; x < textArray.length; x++){
         var row = document.createElement("tr");
@@ -987,10 +1119,114 @@ function resetAll() {
     }
 };
 
+/*
+$("#awayButton").click(function() {
+    $("#myModal").modal('hide');
+     var current = $("#modalAway");      
+     var prependToDiv = $('#modalHome');
+    current.animate({top, 500}), 2000)
+    current.prependTo(prependToDiv
+  });
+*/
+$( "#awayButton" ).click(function() {
+  $( "#myForm" ).animate({
+    width: "100%",
+    opacity: 0.4,
+    marginLeft: "0.6in",
+    fontSize: "3em",
+    borderWidth: "10px"
+  }, 1500 );
+});
+
+/*
+$(document).ready(function() {  
+    $("#awayButton").click(function() {  
+        $("#div_1").swap({  
+            target: "div_2", // Mandatory. The ID of the element we want to swap with  
+            opacity: "0.5", // Optional. If set will give the swapping elements a translucent effect while in motion  
+            speed: 1000, // Optional. The time taken in milliseconds for the animation to occur  
+            callback: function() { // Optional. Callback function once the swap is complete  
+                alert("Swap Complete");  
+            }  
+        });  
+    });  
+});  
+*/
+
+$(".delete").on('click', 'tbody tr td div div span', function (e){
+    e.stopPropagation();
+    const $this = $(this);
+});
+
+$(".delete").click(function (e){
+    e.stopPropagation();
+    const $this = $(this);
+    const $td = $this.closest('td');
+    $("tr").each(function() {
+        $(this).find('td').eq($td.index() - 1).remove();
+    });
+    var tdCount = 0;
+    $("td").each(function() {
+        tdCount += 1;
+    });
+    if (tdCount === 0) {
+        $("#table8").empty();
+        
+        //$("#myModal").modal('show');
+        var formHeight = $( "#myForm" ).height();
+        var windowHeight = $(window).height();
+        var newTop = (windowHeight - formHeight)/2;
+        $( "#modalMe" ).addClass("modal-me");
+        $( "#myForm" ).addClass("modal-content-me");
+          $( "#myForm" ).animate({
+                "top": newTop
+            }, 1500 );
+            
+            //modal.style.display = "block";
+    }
+});
+/*
+// Get the modal
+var modal = document.getElementById('modalMe');
+
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+*/
+
+
+/*
 //Delete Column
 function deleteCol(x){
-    var a = '[id="'+x+'"]';
-    $(a).remove();
+    //alert($(this).attr('id'))
+    var $td = $(this).closest('td');
+    //alert($td.attr('id'))
+    //var a = '[id="'+x+'"]';
+    //var $index = $('#table8').find('td').eq(x);
+    //alert($index.get(0))
+    //$(a).remove();
+    //$index.remove();
+    $("tr").each(function() {
+        //$(this).find("td:eq("+x+")").remove();
+        $(this).find('td').eq(x).remove();
+    });
+
     if (gArrayID.length == 2) {
         gArrayID = ["Loan"];
         gArrayMortgage = ["Mortgage"];
@@ -1010,7 +1246,7 @@ function deleteCol(x){
         }
     }
 }
-
+*/
 //Number Validation
 //Monetary Amounts
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(function (e) {
