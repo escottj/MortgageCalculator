@@ -1,3 +1,9 @@
+//Google Charts Global Variables
+var gData2 = {};
+var gArrayID = ["Loan"];
+var gArrayMortgage = ["Mortgage"];
+
+
 var columnID = 0;
 var textArray = ["Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Loan Amount", 
                  "Monthly Payment Breakdown", "Monthly Mortgage Payment", "Monthly Property Tax", "Monthly Home Owner's Insurance",
@@ -25,6 +31,10 @@ for (var x = 0; x < textArray.length; x++){
 }
 
 function resetAll() {
+    //Google Charts Clear
+    gArray = [];
+    $("#chart_div").empty();
+
     $("#table8").empty();
     rowArray = [];
     for (var x = 0; x < textArray.length; x++){
@@ -47,6 +57,13 @@ function resetAll() {
 function deleteCol(x){
     var a = '[id="'+x+'"]';
     $(a).remove();
+    for (var h = 0; h < gArrayID.length; h++) {
+        if (gArrayID[h] == x) {
+            gArrayID.splice(h, 1);
+            gArrayMortgage.splice(h, 1);
+
+        }
+    }
 }
 
 //Number Validation
@@ -852,7 +869,21 @@ function calculate(kl){
         google.charts.setOnLoadCallback(googleChart);
 
         function googleChart() {
+
             var data = google.visualization.arrayToDataTable([
+                //['Monthly Payment', '$'],
+                //['test', 0]
+            ]);
+
+            data.addColumn('string', 'Monthly Payment');
+            data.addColumn('number', '$');
+
+            for (var key in gData) {
+                data.addRows([
+                    [key, gData[key]]
+                ]);
+            }
+            /*var data = google.visualization.arrayToDataTable([
                 ['Monthly Payment', '$'],
                 //['Mortgage: $'+addCommas(gData["Mortgage"]), gData["Mortgage"]],
                 ['Mortgage', gData["Mortgage"]],
@@ -860,7 +891,7 @@ function calculate(kl){
                 ["Home Owner's Insurance", gData["Home Owner's Insurance"]],
                 ['HOA', gData["HOA"]],
                 ['PMI', gData["PMI"]]
-            ]);
+            ]);*/
             var options = {
                 title: 'Monthly Payment Breakdown',
                 is3D: true,
@@ -872,6 +903,13 @@ function calculate(kl){
         }
 
         //Chart 2
+        gData2["Mortgage"] = +dict["monthlyMortgagePayment"].toFixed(2);
+        gData2["Property Tax"] = +dict["monthlyPropertyTax"].toFixed(2);
+        gArrayID.push((columnID-1).toString())
+        gArrayMortgage.push(+dict["monthlyMortgagePayment"].toFixed(2));
+        //gArray.push(gData2);
+        //alert(gArray);
+
         var $container = $('#charts');
         var activeCheck = 0;
         if ($container.hasClass("active")) {
@@ -885,21 +923,56 @@ function calculate(kl){
 
         function drawVisualization() {
         // Some raw data (not necessarily accurate)
-        var data = google.visualization.arrayToDataTable([
-            ['Month', 'Bolivia', 'Ecuador', 'Madagascar', 'Papua New Guinea', 'Rwanda', 'Average'],
-            ['Total Monthly Payment',  165,      938,         522,             998,           450,      614.6],
-            ['Mortgage',  135,      1120,        599,             1268,          288,      682],
-            ['Total Interest',  157,      1167,        587,             807,           397,      623],
-            ['Total PMI',  139,      1110,        615,             968,           215,      609.4],
-            ['Total Cost',  139,      1110,        615,             968,           215,      609.4]
-        ]);
+            /*var data = google.visualization.arrayToDataTable([
+                ['Loan', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'],
+                ['Total Monthly Payment', 165,      938,         522,             998,           450,      614.6],
+                ['Mortgage',              135,      1120,        599,             1268,          288,      682],
+                ['Total Interest',        157,      1167,        587,             807,           397,      623],
+                ['Total PMI',             139,      1110,        615,             968,           215,      609.4],
+                ['Total Cost',            139,      1110,        615,             968,           215,      609.4]
+            ]);
+
+            data.addRows([
+                ['New Cost', 100, 200, 300, 400, 500, 600]
+            ]);*/
+            var testArray = ["Mortgage", 10, 20];
+            var data = google.visualization.arrayToDataTable([
+                //["Loan", 'One', 'Two'],
+                gArrayID,
+                gArrayMortgage
+                //["Mortgage", Number(gArray.join(", "))]
+                //testArray
+            ]);
+
+            /*data.addColumn('string', 'Monthly Payment');
+            data.addColumn('number', '$');
+            data.addColumn('number', '$');
+            
+            data.addRows([
+                ["Mortgage", gArray]
+            ]);*/
+
+            /*for (var g = 0; g < gArray.length; g++) {
+                /*for (var key in gArray[g]) {
+                    data.addRows([
+                        [key, gArray[g][key]]
+                    ]);
+                }
+
+            }*/
+
+            /*for (var key in gData2) {
+                data.addRows([
+                    [key, gData2[key]]
+                ]);
+            }*/
 
             var options = {
-                title : 'Monthly Coffee Production by Country',
-                vAxis: {title: 'Cups'},
-                hAxis: {title: 'Month'},
+                title : 'Loan Comparison',
+                vAxis: {title: '$'},
+                hAxis: {title: 'Cost'},
                 seriesType: 'bars',
-                series: {5: {type: 'line'}}
+                //series: {5: {type: 'line'}}
             };
 
             var chart = new google.visualization.ComboChart(document.getElementById('chart_div'));
@@ -911,8 +984,6 @@ function calculate(kl){
             chartStyle = $("#chart_div").css({"width":"1000px", "height":"500px"})
             chart.draw(data, options);
         }
-
-
     }
 
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
