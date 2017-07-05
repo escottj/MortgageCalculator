@@ -109,3 +109,6 @@ th{
     background: yellow;
 }
 
+ul > li > a {
+    cursor: pointer;
+}
