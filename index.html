@@ -38,7 +38,7 @@
 					<div id="home-cost-check" class="col-sm-4">
 						<div class="input-group mb-2 mr-sm-2 mb-sm-0">
 							<div class="input-group-addon">$</div>
-							<input type="text" class="form-control" id="home-cost" placeholder="Home Cost" value="300,000.00" aria-describedby="home-cost-help-block">
+							<input type="text" class="form-control" id="home-cost2" placeholder="Home Cost" value="300,000.00" aria-describedby="home-cost-help-block">
 							<span id="home-cost-glyph" class="glyphicon form-control-feedback glyphicon-right" aria-hidden="true"></span>
 						</div>
 						<span style="display: none;" id="home-cost-help-block" class="help-block">Please enter a value between 10,000 and 1,000,000,000.</span>
@@ -246,35 +246,80 @@
 			</div>
 		</form>
 	</div>
-	<p>
-		<div class="container col-sm-12">
-			<ul class="nav nav-tabs" id="myTab">
-				<li id="tab1" class="active">
-					<a href="#table" data-toggle="tab">Table</a>
-				</li>
-				<li id="tab2">
-					<a id="chartsTab" href="#charts" data-toggle="tab">Charts</a>
-				</li>
-			</ul>
-			<div class="tab-content">
-				<div class="tab-pane" id="table">
-					<div class="table-responsive">
-						<table class="table table-striped table-hover" align="center">
-							<tbody id="table8">
-							</tbody>
-						</table>
-					</div>
-				</div>
-				<div class="tab-pane" id="charts">
-					<div id="graph">
-						<div id="chart_div"></div>
-						<div id="piechart"></div>
-					</div>
+	<!--<p>
+	<div class="container col-sm-12">
+		<ul class="nav nav-tabs" id="myTab">
+			<li id="tab1" class="active">
+				<a href="#table" data-toggle="tab">Table</a>
+			</li>
+			<li id="tab2">
+				<a id="chartsTab" href="#charts" data-toggle="tab">Charts</a>
+			</li>
+		</ul>
+		<div class="tab-content">
+			<div class="tab-pane" id="table">
+				<div class="table-responsive">
+
 				</div>
 			</div>
-		</div>
-	</p>
-	</div>
+			<div class="tab-pane" id="charts">
+				<div id="graph">
+					<div id="chart_div"></div>
+					<div id="piechart"></div>
+				</div>
+			</div>
+			</div>
+			</div>
+			</p>
+			</div>-->
+	<table class="table table-striped" align="center">
+		<tbody id="table8">
+			<tr>
+				<th class="mergedTitle" colspan="100%">Home Details</th>
+			</tr>
+			<tr id="home-cost">
+				<th>Home Cost</th>
+				<td id="0">300,000.00</td>
+				<td id="1">300,000.00</td>
+				<td id="2">300,000.00</td>
+				<td id="3">300,000.00</td>
+				<td id="4">300,000.00</td>
+			</tr>
+			<tr>
+				<th>Square Footage</th>
+				<td id="0">2,900</td>
+				<td id="1">2,900</td>
+				<td id="2">2,900</td>
+				<td id="3">2,900</td>
+				<td id="4">2,900</td>
+			</tr>
+			<tr>
+				<th>Price per Square Foot</th>
+				<td id="0">$103.45</td>
+				<td id="1">$103.45</td>
+				<td id="2">$103.45</td>
+				<td id="3">$103.45</td>
+				<td id="4">$103.45</td>
+			</tr>
+			<tr>
+				<th>Property Tax Rate</th>
+				<td id="0">0.840%</td>
+				<td id="1">0.840%</td>
+				<td id="2">0.840%</td>
+				<td id="3">0.840%</td>
+				<td id="4">0.840%</td>
+			</tr>
+			<tr>
+				<th style="background-color: white;"></th>
+				<td id="0" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('0')">Delete</button></td>
+				<td id="1" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('1')">Delete</button></td>
+				<td id="2" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('2')">Delete</button></td>
+				<td id="3" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('3')">Delete</button></td>
+				<td id="4" style="background-color: white;" align="center"><button class="btn btn-danger btn-sm" onclick="deleteCol('4')">Delete</button></td>
+			</tr>
+		</tbody>
+	</table>
+
 </body>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJava.js"></script>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJavaBeta.js"></script>
