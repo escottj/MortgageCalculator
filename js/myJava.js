@@ -34,69 +34,239 @@ $("th").not(':first').hover(
                 $(this).parent().removeClass("cellEditing"); } }); 
                 $(this).children().first().blur(function(){ $(this).parent().text(OriginalContent); $(this).parent().removeClass("cellEditing"); }); }); });*/
 
-
-$(".dropdown-menu li a").click(function(){
-  var selText = $(this).text();
-  $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
+//Arrow Function Example
+/*var arr = 5;
+var squares = (x, y) => x*y;
+alert(squares(arr, arr));*/
+$(".dropdown-toggle").click(function(){
+    //alert($(this).text());
 });
 
-var dollarsArray = ["home-cost", "down-payment-dollars", "hoi", "hoa" ,"extra-payment"];
-var dollarsDictPH = {};
-dollarsDictPH["home-cost"] = "Home Cost";
-dollarsDictPH["down-payment-dollars"] = "Down Payment";
-dollarsDictPH["hoi"] = "Home Owner&#39;s Insurance";
-dollarsDictPH["hoa"] = "HOA";
-dollarsDictPH["extra-payment"] = "Extra Payment";
-var percentArray = ["down-payment", "property-tax-rate", "pmi", "interest-rate"];
+$(".dropdown-menu li a").first().focusin(function(){
+    
+});
+
+$('.dropdown-menu').on('focusin', function(){
+    //alert('h')
+    /*console.log("Saving value " + $(this).val());
+    $(this).data('val', $(this).val());*/
+});
+
+$(document).on('click', '.dropdown-menu li a', function (e) {
+  var sel = $(this).prevAll('.dropdown-menu li a:first'),
+      val = sel.val(),
+      text = sel.find(':selected').text();    
+      //alert(text);
+});
+
+
+
+$(function () { 
+    var oldLoanTerm;
+    $(".dropdown-toggle").click(function(){
+        oldLoanTerm = $(this).text().trim();
+    })
+    $(".dropdown-menu li a").click(function(){
+        var newLoanTerm = $(this).text();
+        $(this).parents('.btn-group').find('.dropdown-toggle').html(newLoanTerm+' <span class="caret"></span>');
+        if (newLoanTerm != oldLoanTerm) {
+            //Recalculate Loan Details
+            recalculate(this, newLoanTerm);
+            /*var $td = $(this).closest('td');
+            var $tdID = $td.attr('id');
+            var newDict = grab($td, $tdID);
+            var loanDict ={};
+            loanDict = loanPayment2(newDict["-home-cost"], newDict["-down-payment-dollars"], newLoanTerm.replace(" years",""), newDict["-interest-rate"], newDict["-hoa"], newDict["-property-tax-rate"], newDict["-pmi"], newDict["-hoi"], newDict["-extra-payment"]);
+            for (var key in loanDict) {
+                $item = $('#' + key).find('td').eq($td.index() - 1);
+                var $tr = $item.closest('tr');
+                $itemOldValue = removeCommas($item.text());
+                if (loanDict[key] != $itemOldValue){
+                    if ($.inArray(key, detailsArray2) == -1) {
+                        $item.text("$" + addCommas(loanDict[key].toFixed(2)));
+                    } else {
+                        $item.text(loanDict[key]);
+                    }
+                    $item.stop(true);
+                    $item.css("background-color", "yellow");
+                    if ($tr.index() % 2 == 0) {
+                        $item.animate({backgroundColor: "#F9F9F9"}, 1000);
+                    } else {
+                        $item.animate({backgroundColor: "#ADD8E6"}, 1000);
+                    }
+                }
+            }*/
+        } else {
+            //do nothing
+            //alert('same');
+        }
+    })
+});
+
+function recalculate (t, newLoanTerm) {
+    var $td = $(t).closest('td');
+    if (newLoanTerm == null) {
+        newLoanTerm = $('#-loan-term').find('td').eq($td.index() - 1).find('.dropdown-toggle').text().replace(" years","").trim();
+    }
+    var $tdID = $td.attr('id');
+    var $tr = $td.closest('tr');
+    var $trID = $tr.attr('id');
+    var newDict = grab($td, $trID, t);
+    //alert(tdID);
+    var loanDict ={};
+    loanDict = loanPayment2(newDict["-home-cost"], newDict["-down-payment-dollars"], newLoanTerm.replace(" years","").trim(), newDict["-interest-rate"], newDict["-hoa"], newDict["-property-tax-rate"], newDict["-pmi"], newDict["-hoi"], newDict["-extra-payment"]);
+    for (var key in loanDict) {
+        $item = $('#' + key).find('td').eq($td.index() - 1);
+        var $tr = $item.closest('tr');
+        $itemOldValue = removeCommas($item.text());
+        if (loanDict[key] != $itemOldValue){
+            if ($.inArray(key, detailsArray2) == -1) {
+                $item.text("$" + addCommas(loanDict[key].toFixed(2)));
+            } else {
+                $item.text(loanDict[key]);
+            }
+            $item.stop(true);
+            $item.css("background-color", "yellow");
+            if ($tr.index() % 2 == 0) {
+                $item.animate({backgroundColor: "#F9F9F9"}, 1000);
+            } else {
+                $item.animate({backgroundColor: "#ADD8E6"}, 1000);
+            }
+        }
+    }
+}
+
+//function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp)
+function grab($td, $trID, t) {
+    var newDict = {};
+    for(var i = 0; i < dollarsArray.length; i++){
+        if (dollarsArray[i] == $trID) {
+            newDict[dollarsArray[i]] = $(t).val();
+        } else {
+            newDict[dollarsArray[i]] = removeCommas($('#' + dollarsArray[i]).find('td').eq($td.index() - 1).text());
+        }
+    }
+    for(var i = 0; i < percentArray.length; i++){
+        if (percentArray[i] == $trID) {
+            newDict[percentArray[i]] = $(t).val();
+        } else {
+            newDict[percentArray[i]] = removeCommas($('#' + percentArray[i]).find('td').eq($td.index() - 1).text());
+        }
+    }
+    return newDict;
+}
+
+function emptyTest(e){
+    if (e == null) {
+        alert("undefined");
+    } else {
+        alert("defined");
+    }
+}
+
+var dollarsArray = ["-home-cost", "-down-payment-dollars", "-hoi", "-hoa" ,"-extra-payment"];
+var placeholderDict = {};
+placeholderDict["-home-cost"] = "Home Cost";
+placeholderDict["-down-payment-dollars"] = "Down Payment";
+placeholderDict["-down-payment"] = "Down Payment";
+placeholderDict["-property-tax-rate"] = "Property Tax Rate";
+placeholderDict["-hoi"] = "Home Owner&#39;s Insurance";
+placeholderDict["-pmi"] = "PMI";
+placeholderDict["-hoa"] = "HOA";
+placeholderDict["-extra-payment"] = "Extra Payment";
+placeholderDict["-interest-rate"] = "Interest Rate";
+placeholderDict["-square-footage"] = "Square Footage";
+var percentArray = ["-down-payment", "-property-tax-rate", "-pmi", "-interest-rate"];
+var detailsArray = ["-square-footage"];
+var ignoreArray =["-loan-term", "-delete", "-price-per-square-foot", "-loan-amount", "-monthly-mortgage-payment", "-monthly-property-tax", 
+                  "-monthly-pmi", "-total-monthly-payment", "-extra-payment-months", "-extra-payment-total-interest-paid", "-total-interest-savings", 
+                  "-pmi-months", "-total-pmi-paid", "-10-year-interest", "-15-year-interest", "-20-year-interest", "-30-year-interest", 
+                  "-total-cost", "-extra-payment-total-cost"];
+var detailsArray2 = ["-extra-payment-months", "-pmi-months"];
 
 $("td").click(function () {
     var $td = $(this);
+    var $tdID = $td.attr('id');
     var $tr = $td.closest('tr');
-    if ($tr.attr('id') != "loan-term" && $tr.attr('id') != "delete") {
-        var oldValue = removeCommas($td.text()).replace("$","").replace("%","");
-        var $tdID = $td.attr('id');
-        var $trID = $tr.attr('id');
-        var $sf = $('#square-footage').find('td').eq($td.index() - 1);
-        var $ppsf = $('#price-per-square-foot').find('td').eq($td.index() - 1);
-        if (!$td.hasClass("cellEditing")) {
-            $td.addClass("cellEditing");
-            $td.html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + dollarsDictPH[$trID] + "' value='" + oldValue + "' />"); 
+    var $trID = $tr.attr('id');
+    if ($.inArray($trID, ignoreArray) == -1) {
+        var oldValue = removeCommas($td.text());
+        var $sf = $('#-square-footage').find('td').eq($td.index() - 1);
+        var $ppsf = $('#-price-per-square-foot').find('td').eq($td.index() - 1);
+        if (!$td.hasClass("edit")) {
+            $td.addClass("edit");
+            $td.html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + oldValue + "' />"); 
             $td.children().first().focus();
             $("#" + $tdID + $trID).select();
             $(this).children().first().keypress(function (e) {
                 kp(e, '#' + $tdID + $trID);
+                if (e.which == 13) {
+
+                }
             });
             $td.children().first().focusout(function () {
-                $(this).parent().removeClass("cellEditing");
+                if ($.inArray($trID, detailsArray) == -1) {
+                    if ($(this).val() != oldValue) {
+                        recalculate(this);
+                    }
+                }
+                $(this).parent().removeClass("edit");
                 if ($(this).val() == "" || isNaN($(this).val()) == true) {
                     if ($.inArray($trID, dollarsArray) != -1) {
                         $(this).parent().text(addCommas("$" + oldValue));
                     } else if ($.inArray($trID, percentArray) != -1) {
                         $(this).parent().text(addCommas(oldValue + "%"));
+                    } else if ($.inArray($trID, detailsArray) != -1) {
+                        $(this).parent().text(addCommas(oldValue));
                     }
                 } else {
                     if ($.inArray($trID, dollarsArray) != -1) {
                         var tempValue = Number($(this).val()).toFixed(2);
                         var newValue = addCommas(tempValue);
                         $(this).parent().text("$" + newValue);
-                        if ($trID == "home-cost"){
+                        if ($trID == "-home-cost"){
                             var price = (tempValue/parseInt($sf.text().replace(",",""))).toFixed(2);
                             if ($ppsf.text().replace("$","") != price) {
                                 $ppsf.text("$" + addCommas(price));
                                 $ppsf.css("background-color", "yellow");
-                                $ppsf.animate({backgroundColor: "#F9F9F9"}, 1000);
+                                var $ppsftr = $ppsf.closest('tr');
+                                $ppsftr.stop(true);
+                                if ($ppsftr.index() % 2 == 0) {
+                                    $ppsf.animate({backgroundColor: "#F9F9F9"}, 1000);
+                                } else {
+                                    $ppsf.animate({backgroundColor: "#ADD8E6"}, 1000);
+                                }
                             }
                         }
                     } else if ($.inArray($trID, percentArray) != -1) {
                         var tempValue = Number($(this).val()).toFixed(3);
                         var newValue = addCommas(tempValue);
                         $(this).parent().text(newValue + "%");
+                    } else if ($.inArray($trID, detailsArray) != -1) {
+                        var tempValue = Number($(this).val()).toFixed(0);
+                        var newValue = addCommas(tempValue);
+                        $(this).parent().text(newValue);
+                        if ($trID == "-square-footage"){
+                            var $hc = removeCommas($('#-home-cost').find('td').eq($td.index() - 1).text());
+                            var price = ($hc/tempValue).toFixed(2);
+                            if ($ppsf.text().replace("$","") != price) {
+                                $ppsf.text("$" + addCommas(price));
+                                $ppsf.css("background-color", "yellow");
+                                var $ppsftr = $ppsf.closest('tr');
+                                $ppsftr.stop(true);
+                                if ($ppsftr.index() % 2 == 0) {
+                                    $ppsf.animate({backgroundColor: "#F9F9F9"}, 1000);
+                                } else {
+                                    $ppsf.animate({backgroundColor: "#ADD8E6"}, 1000);
+                                }
+                            }
+                        }
                     }
                 }
             });
         }
     }
-}); 
+});
 
 //Monetary Amounts
 function kp(e, t) {
@@ -125,6 +295,110 @@ function kp(e, t) {
     }
 };
 
+function loanPayment2(hc, dpd, lt, ir, hoa, ptr, pmi, hoi, xp){
+    //alert(hc);
+    hc = parseInt(hc);
+    dpd = parseInt(dpd);
+    lt = parseInt(lt);
+    //ir = parseInt(ir);
+    hoa = parseInt(hoa);
+    //ptr = parseInt(ptr);
+    pmi = parseInt(pmi);
+    hoi = parseInt(hoi);
+    xp = parseInt(xp);
+
+    alert(hc + "," + dpd + "," + lt + "," + ir + "," + hoa + "," + ptr + "," + pmi + "," + hoi + "," + xp)
+
+    var monthlyPropertyTax = ((ptr/100)*hc)/12;
+    var downPaymentAmount = dpd;
+    var dp = (downPaymentAmount/hc)*100;
+    var P = hc - downPaymentAmount;
+    var i = ir/100/12;
+    var n = lt*12;
+    var M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+    var monthlyPMI = 0;
+    if (dp < 20){
+        monthlyPMI = ((pmi/100)*P)/12;
+    }
+    var totalMonthlyPayment = M + hoa + monthlyPropertyTax + monthlyPMI + hoi;
+    var newP = P;
+    var interestPayment = 0;
+    var totalInterest = 0;
+    var newPMI = 0;
+    var principalPayment = 0;
+    var totalPMI = 0;
+    var equity = 0;
+    var totalPropertyTax = monthlyPropertyTax*n;
+    var totalHOI = hoi*n;
+    var totalHOA = hoa*n;
+
+    for (var j = 0; j < n; j++){
+            interestPayment = newP*i;
+            totalInterest = totalInterest + interestPayment;
+            principalPayment = M - interestPayment;
+            newP = newP - principalPayment;
+            if (newP/hc > .8){
+                totalPMI = totalPMI + monthlyPMI;
+                equity = equity + 1;
+            }
+    }
+    var totalCost = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+    var dict = {};
+    //dict["downPaymentAmount"] = downPaymentAmount;
+    dict["-loan-amount"] = P;
+    dict["-monthly-mortgage-payment"] = M;
+    dict["-monthly-property-tax"] = monthlyPropertyTax;
+    dict["-monthly-pmi"] = monthlyPMI;
+    dict["-total-monthly-payment"] = totalMonthlyPayment;
+    dict["-pmi-months"] = equity;
+    dict["-total-pmi-paid"] = totalPMI;
+    dict["-total-cost"] = totalCost;
+    dict["-total-interest-paid"] = totalInterest;
+
+    //Extra Monthly Payment
+    var mdcount = 0;
+    if (xp > 0){
+        var newP = P;
+        var interestPayment = 0;
+        var totalInterest = 0;
+        var newPMI = 0;
+        var principalPayment = 0;
+        var totalPMI = 0;
+        var equity = 0;
+        var mdcount = 0;
+        var M = xp + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
+
+        for (var j = 0; j < n; j++){
+            mdcount = mdcount + 1;
+            interestPayment = newP*i;
+            totalInterest = totalInterest + interestPayment;
+            principalPayment = M - interestPayment;
+            newP = newP - principalPayment;
+            if (newP/hc > .8){
+                totalPMI = totalPMI + monthlyPMI;
+                equity = equity + 1;
+            }
+            if (newP < 1){
+                break;
+            }
+        }
+        var totalPropertyTax = monthlyPropertyTax*mdcount;
+        var totalHOI = hoi*mdcount;
+        var totalHOA = hoa*mdcount;
+        dict["-extra-payment-total-interest-paid"] = totalInterest;
+        var totalCost2 = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+        dict["-total-interest-savings"] = totalCost - totalCost2;
+    } else {
+        dict["-extra-payment-total-interest-paid"] = 0;
+        var totalCost2 = 0;
+        dict["-total-interest-savings"] = 0;
+    }
+
+    dict["-extra-payment-months"] = mdcount;
+    dict["-extra-payment-total-cost"] = totalCost2;
+
+    return dict;
+}
 
 //Google Charts Global Variables
 var gData2 = {};
@@ -263,7 +537,7 @@ function deleteCol(x){
 
 //Number Validation
 //Monetary Amounts
-$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(function (e) {
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars, #-home-cost, #-extra-payment, #-hoa, #-hoi, #-down-payment-dollars").keypress(function (e) {
     var charCode = e.keyCode;
     var number = $(this).val().split('.');
     if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -290,7 +564,7 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(func
 });
 
 //Percentages
-$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi, #interest-rate").keypress(function (e) {
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi, #-down-payment, #-interest-rate, #-property-tax-rate, #-pmi").keypress(function (e) {
     var charCode = e.keyCode;
     var number = $(this).val().split('.');
     if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
@@ -883,7 +1157,7 @@ function addCommas(x) {
 }
 
 function removeCommas(x) {
-    return x.toString().replace(/,/g,"").replace("$","");
+    return x.toString().replace(/,/g,"").replace("$","").replace("%","");
 }
 
 function calculate(kl){
