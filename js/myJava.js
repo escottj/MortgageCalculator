@@ -34,57 +34,69 @@ $("th").not(':first').hover(
                 $(this).parent().removeClass("cellEditing"); } }); 
                 $(this).children().first().blur(function(){ $(this).parent().text(OriginalContent); $(this).parent().removeClass("cellEditing"); }); }); });*/
 
-$(function () { 
 
+$(".dropdown-menu li a").click(function(){
+  var selText = $(this).text();
+  $(this).parents('.btn-group').find('.dropdown-toggle').html(selText+' <span class="caret"></span>');
 });
 
-    $("td").click(function () { 
-        var oldValue = removeCommas($(this).text());
-        var tdID = $(this).attr('id');
-        var $td = $(this);
-        //var $th = $td.closest('table').find('th').eq($td.index());
-        var $tr = $td.closest('tr');
-        //alert($th.attr('id'));
-        if (!$(this).hasClass("cellEditing")) {
-            $(this).addClass("cellEditing");
-            $(this).html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + tdID + $tr.attr('id') + "' placeholder='Home Cost' value='" + oldValue + "' />"); 
-            $(this).children().first().focus();
-            $("#" + tdID + "home-cost").select();
-            /*$(this).children().first().keypress(function (e){
-                //kp(e, this);
-                var charCode = e.keyCode;
-                var number = $(this).val().split('.');
-                if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
-                    return false;
+var dollarsArray = ["home-cost", "down-payment-dollars", "hoi", "hoa" ,"extra-payment"];
+var dollarsDictPH = {};
+dollarsDictPH["home-cost"] = "Home Cost";
+dollarsDictPH["down-payment-dollars"] = "Down Payment";
+dollarsDictPH["hoi"] = "Home Owner&#39;s Insurance";
+dollarsDictPH["hoa"] = "HOA";
+dollarsDictPH["extra-payment"] = "Extra Payment";
+var percentArray = ["down-payment", "property-tax-rate", "pmi", "interest-rate"];
+
+$("td").click(function () {
+    var $td = $(this);
+    var $tr = $td.closest('tr');
+    if ($tr.attr('id') != "loan-term" && $tr.attr('id') != "delete") {
+        var oldValue = removeCommas($td.text()).replace("$","").replace("%","");
+        var $tdID = $td.attr('id');
+        var $trID = $tr.attr('id');
+        var $sf = $('#square-footage').find('td').eq($td.index() - 1);
+        var $ppsf = $('#price-per-square-foot').find('td').eq($td.index() - 1);
+        if (!$td.hasClass("cellEditing")) {
+            $td.addClass("cellEditing");
+            $td.html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + dollarsDictPH[$trID] + "' value='" + oldValue + "' />"); 
+            $td.children().first().focus();
+            $("#" + $tdID + $trID).select();
+            $(this).children().first().keypress(function (e) {
+                kp(e, '#' + $tdID + $trID);
+            });
+            $td.children().first().focusout(function () {
+                $(this).parent().removeClass("cellEditing");
+                if ($(this).val() == "" || isNaN($(this).val()) == true) {
+                    if ($.inArray($trID, dollarsArray) != -1) {
+                        $(this).parent().text(addCommas("$" + oldValue));
+                    } else if ($.inArray($trID, percentArray) != -1) {
+                        $(this).parent().text(addCommas(oldValue + "%"));
+                    }
+                } else {
+                    if ($.inArray($trID, dollarsArray) != -1) {
+                        var tempValue = Number($(this).val()).toFixed(2);
+                        var newValue = addCommas(tempValue);
+                        $(this).parent().text("$" + newValue);
+                        if ($trID == "home-cost"){
+                            var price = (tempValue/parseInt($sf.text().replace(",",""))).toFixed(2);
+                            if ($ppsf.text().replace("$","") != price) {
+                                $ppsf.text("$" + addCommas(price));
+                                $ppsf.css("background-color", "yellow");
+                                $ppsf.animate({backgroundColor: "#F9F9F9"}, 1000);
+                            }
+                        }
+                    } else if ($.inArray($trID, percentArray) != -1) {
+                        var tempValue = Number($(this).val()).toFixed(3);
+                        var newValue = addCommas(tempValue);
+                        $(this).parent().text(newValue + "%");
+                    }
                 }
-                if(number.length > 1 && charCode == 46){
-                    return false;
-                }
-                var caratPos = getSelectionStart(this);
-                var dotPos = $(this).val().indexOf(".");x
-                
-                if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
-                    return false;
-                }
-                return true;
-                function getSelectionStart(o) {
-                    if (o.createTextRange) {
-                        var r = document.selection.createRange().duplicate()
-                        r.moveEnd('character', o.value.length)
-                        if (r.text == '') return o.value.length
-                        return o.value.lastIndexOf(r.text)
-                    } else return o.selectionStart
-                }
-            });*/
-            $(this).children().first().focusout(function () {
-                    $(this).parent().removeClass("cellEditing");
-                    var tempValue = Number($(this).val()).toFixed(2);
-                    var newValue = addCommas(tempValue);
-                    //var newValue = $(this).val(); 
-                    $(this).parent().text(newValue);
             });
         }
-    }); 
+    }
+}); 
 
 //Monetary Amounts
 function kp(e, t) {
@@ -263,7 +275,7 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(func
     var caratPos = getSelectionStart(this);
     var dotPos = $(this).val().indexOf(".");
     
-    if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)){
+    if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
         return false;
     }
     return true;
@@ -278,9 +290,9 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(func
 });
 
 //Percentages
-$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keypress(function (e) {
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi, #interest-rate").keypress(function (e) {
     var charCode = e.keyCode;
-    var number = this.value.split('.');
+    var number = $(this).val().split('.');
     if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
         return false;
     }
@@ -288,7 +300,7 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").keypress(func
         return false;
     }
     var caratPos = getSelectionStart(this);
-    var dotPos = this.value.indexOf(".");
+    var dotPos = $(this).val().indexOf(".");
     
     if( caratPos > dotPos && dotPos > -1 && (number[1].length > 2)){
         return false;
