@@ -103,3 +103,8 @@ th{
     border: 3px solid #ddd;
     border-bottom-color: transparent;
 }
+
+.highlight {
+    color: green;
+    background: yellow;
+}
