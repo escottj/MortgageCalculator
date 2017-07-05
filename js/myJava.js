@@ -11,21 +11,20 @@ $valid The field content is valid
 var inputStatus = "untouched";
 
 //Inputs: input id, required/not required, min value, max value, dependents' id)
-function inputCheck($input, min, max, $dependent, dependentType){
+function inputCheck($input, min, max, $dependent, dependentType) {
     $inputValue = $input.val();
     $dependentValue = parseFloat(removeCommas($dependent.val()));
-    alert($dependentValue)
+    //alert($dependentValue)
     if ($inputValue >= min && $inputValue <= max) {
         if (dependentType == "min") {
             if ($inputValue >= $dependentValue) {
-                alert('good value!')
+                //alert('good value!')
             } else {
-                alert('bad value!')
+                //alert('bad value!')
             }
         }
     }
 }
-
 
 //Test function
 $("input").on('focusout', function (e) {
@@ -36,72 +35,7 @@ $("input").on('focusout', function (e) {
     }
 });
 
-
-
-//Testing
-
-/*$(document).ready(function() {
-    $("tr").not(':first').hover(
-    function() {
-        //alert('h');
-        $(this).addClass('highlight');
-    }, function() {
-        $(this).removeClass('highlight');
-    }
-    )
-});
-
-$("th").not(':first').hover(
-  function () {
-          //alert('g');
-    $(this).css("background","yellow");
-  },
-  function () {
-    $(this).css("background","");
-  }
-);*/
-
-/*$(function () { 
-    $("td").click(function () { 
-        var OriginalContent = $(this).text(); 
-        $(this).addClass("cellEditing"); 
-        $(this).html("<input type='text' value='" + OriginalContent + "' />"); 
-        $(this).children().first().focus(); 
-        $(this).children().first().keypress(function (e) { 
-            if (e.which == 13) { 
-                var newContent = $(this).val(); 
-                $(this).parent().text(newContent); 
-                $(this).parent().removeClass("cellEditing"); } }); 
-                $(this).children().first().blur(function(){ $(this).parent().text(OriginalContent); $(this).parent().removeClass("cellEditing"); }); }); });*/
-
-//Arrow Function Example
-/*var arr = 5;
-var squares = (x, y) => x*y;
-alert(squares(arr, arr));*/
-$(".dropdown-toggle").click(function(){
-    //alert($(this).text());
-});
-
-$(".dropdown-menu li a").first().focusin(function(){
-    
-});
-
-$('.dropdown-menu').on('focusin', function(){
-    //alert('h')
-    /*console.log("Saving value " + $(this).val());
-    $(this).data('val', $(this).val());*/
-});
-
-
-/*$('.has-clear input[type="text"]').on('input propertychange', function() {
-  var $this = $(this);
-  var visible = Boolean($this.val());
-  //$this.siblings('.form-control-clear').toggleClass('hidden', !visible);
-  alert($this.siblings('.form-control-clear').attr('id'))
-  $this.siblings('.form-control-clear').addClass('hidden');
-}).trigger('propertychange');*/
-
-$(".table").on('click', 'tbody tr td div div span', function (e){
+$(".table").on('click', 'tbody tr td div div span', function (e) {
     //e.stopPropagation();
     const $this = $(this);
     const $oldValue = $this.siblings('input[type="text"]').attr('data-old-value');
@@ -121,41 +55,14 @@ $(".table").on('click', 'tbody tr td div div span', function (e){
         $td.text($newValue);
     }     
     $td.removeClass('editting')
-    //.trigger('propertychange').focus();
 });
 
-/*$('.form-control-clear').click(function(){
-    alert('j');
-});*/
-
-$(".table").on('focus', 'tr td div div input', function (e){
+$(".table").on('focus', 'tr td div div input', function (e) {
     //e.stopPropagation();
-    this.select();
+    const $input = $(this);
+    $input.select();
+    //$input.popover('hide');
 });
-
-/*$(".table > tr > td > div > div > span").click(function (e){
-    e.stopPropagation();
-    $(this).siblings('input[type="text"]').val('')
-    .trigger('propertychange').focus();
-});*/
-
-
-/*$('.form-control-clear').click(function(e) {
-    e.stopPropagation();
-    alert('g')
-    //alert($(this).attr('id'));
-  $(this).siblings('input[type="text"]').val('')
-    .trigger('propertychange').focus();
-});
-
-$('div span').click(function(e) {
-    e.stopPropagation();
-    alert('g')
-    //alert($(this).attr('id'));
-  $(this).siblings('input[type="text"]').val('')
-    .trigger('propertychange').focus();
-});*/
-
 
 $(document).on('click', '.dropdown-menu li a', function (e) {
     const $this = $(this);
@@ -164,16 +71,14 @@ $(document).on('click', '.dropdown-menu li a', function (e) {
     const text = sel.find(':selected').text();
 });
 
-
-
 $(function () {
     let $this;
     let $oldLoanTerm;
-    $(".dropdown-toggle").click(function(){
+    $(".dropdown-toggle").click(function() {
         $this = $(this);
         $oldLoanTerm = $this.text().trim();
     })
-    $(".dropdown-menu li a").click(function(){
+    $(".dropdown-menu li a").click(function() {
         $this = $(this);
         const $newLoanTerm = $this.text();
         $this.parents('.btn-group').find('.dropdown-toggle').html($newLoanTerm+' <span class="caret"></span>');
@@ -188,53 +93,44 @@ $(function () {
 
 function recalculate ($this, $newLoanTerm) {
     const $td = $this.closest('td');
+    const $tdIndex = $td.index();
     if ($newLoanTerm == null) {
-        $newLoanTerm = $('#-loan-term').find('td').eq($td.index() - 1).find('.dropdown-toggle').text().replace(" years","").trim();
+        $newLoanTerm = $('#-loan-term').find('td').eq($tdIndex - 1).find('.dropdown-toggle').text().replace(" years","").trim();
     }
-    const $tdID = $td.attr('id');
     let $tr = $td.closest('tr');
     const $trID = $tr.attr('id');
     let newDict = grab($td, $trID, $this);
     let loanDict = {};
-    //loanDict = loanPayment2(newDict["-home-cost"], newDict["-down-payment-dollars"], $newLoanTerm.replace(" years","").trim(), newDict["-interest-rate"], newDict["-hoa"], newDict["-property-tax-rate"], newDict["-pmi"], newDict["-hoi"], newDict["-extra-payment"]);
     loanDict = loanPayment2(newDict, $newLoanTerm.replace(" years","").trim());
     for (let key in loanDict) {
-        $item = $('#' + key).find('td').eq($td.index() - 1);
+        $item = $('#' + key).find('td').eq($tdIndex - 1);
         $tr = $item.closest('tr');
         $itemOldValue = removeCommas($item.text());
-        if (loanDict[key] != $itemOldValue){
-            if ($.inArray(key, detailsArray2) == -1) {
-                //$item.text("$" + addCommas(loanDict[key]));
+        if (loanDict[key] != $itemOldValue) {
+            if ($.inArray(key, detailsArray2) === -1) {
                 cellAnimate($item, loanDict[key], $itemOldValue, '$');
             } else {
                 $item.text(loanDict[key]);
             }
-            /*$item.stop(true);
-            $item.css("background-color", "yellow");
-            if ($tr.index() % 2 == 0) {
-                $item.animate({backgroundColor: "#F9F9F9"}, 1000);
-            } else {
-                $item.animate({backgroundColor: "#ADD8E6"}, 1000);
-            }*/
         }
     }
 }
 
-//function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp)
-function grab($td, $trID, t) {
+function grab($td, $trID, $this) {
+    const $tdIndex = $td.index();
     let newDict = {};
     for(let i = 0; i < dollarsArray.length; i++) {
         if (dollarsArray[i] === $trID) {
-            newDict[dollarsArray[i]] = $(t).val();
+            newDict[dollarsArray[i]] = $this.val();
         } else {
-            newDict[dollarsArray[i]] = numberRound(removeCommas($('#' + dollarsArray[i]).find('td').eq($td.index() - 1).text()), 2);
+            newDict[dollarsArray[i]] = numberRound(removeCommas($('#' + dollarsArray[i]).find('td').eq($tdIndex - 1).text()), 2);
         }
     }
     for(let i = 0; i < percentArray.length; i++) {
         if (percentArray[i] === $trID) {
-            newDict[percentArray[i]] = $(t).val();
+            newDict[percentArray[i]] = $this.val();
         } else {
-            newDict[percentArray[i]] = removeCommas($('#' + percentArray[i]).find('td').eq($td.index() - 1).text());
+            newDict[percentArray[i]] = numberRound(removeCommas($('#' + percentArray[i]).find('td').eq($tdIndex - 1).text()), 3);
         }
     }
     return newDict;
@@ -260,92 +156,60 @@ const ignoreArray = ['-loan-term', '-delete', '-price-per-square-foot', '-loan-a
                      '-total-cost', '-extra-payment-total-cost'];
 const detailsArray2 = ['-extra-payment-months', '-pmi-months'];
 
-/*$(".table").on('click', 'tr td div div span', function (){
-    //alert('g')
-});
-$(".table").on('click', 'tr td div div input', function (){
-    //$(this).popover('hide');
-});*/
-
-
-
 $("td").click(function (e) {
     //e.stopPropagation();
     const $td = $(this);
-    const $tdID = $td.attr('id');
+    const $tdIndex = $td.index();
     const $tr = $td.closest('tr');
     const $trID = $tr.attr('id');    
     if ($.inArray($trID, ignoreArray) == -1) {
         const htmlTemp =  '<div class="input-group">' +
                             '<div class="form-group has-feedback has-clear">' +
-                                    "<input type='text' class='cell-input form-control'/>" +
-                                '<span class="glyphicon form-control-feedback glyphicon-right"></span>' +
+                                "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' class='cell-input form-control'/>" +
+                                '<span class="form-control-clear glyphicon form-control-feedback glyphicon-right"></span>' +
                             '</div>' +
                         '</div>';
         const $html = $($.parseHTML(htmlTemp));
-        const oldValue = removeCommas($td.text());
-        //$html.children().find('input');
-        
+        const oldValue = removeCommas($td.text());      
         const $sf = $('#-square-footage').find('td').eq($td.index() - 1);
         const $ppsf = $('#-price-per-square-foot').find('td').eq($td.index() - 1);
         if (!$td.hasClass("editting")) {
             $td.addClass("editting");
-            var $input = $html.find('input');
-            $input.attr('size', oldValue.length).attr('id', $tdID + $trID).attr('placeholder', placeholderDict[$trID]).attr('value', oldValue).attr('data-old-value', oldValue);
+            let $input = $html.find('input');
+            $input.attr('size', oldValue.length);
+            $input.attr('id', $tdIndex + $trID);
+            $input.attr('placeholder', placeholderDict[$trID]);
+            $input.attr('value', oldValue);
+            $input.attr('data-old-value', oldValue);
             $td.html($html);
-            //$td.html("<input type='text' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + oldValue + "' />"); 
             $td.children().first().focus();
-            $("#" + $tdID + $trID).select();
+            $("#" + $tdIndex + $trID).select();
             $(this).children().first().keypress(function (e) {
                 if (e.which == 13) {
-                    cellEdit(oldValue, this, $td, $tdID, $tr, $trID, $sf, $ppsf);
+                    cellEdit(oldValue, this, $td, $tdIndex, $tr, $trID, $sf, $ppsf);
                 }
             });
             $td.children().first().focusout(function () {
-                var $existingInput = $td.find('input');
-                //alert($existingInput.val())
-                var cellInfo = cellValidate($existingInput.get(0));
-                //alert(cellInfo[0])
-                var validate = cellInfo[0];
-                var errorText = cellInfo[1];
-                //oldValue = $existingInput.attr('data-old-value');
+                $input = $td.find('input');
+                const cellInfo = cellValidate($input);
+                const validate = cellInfo[0];
+                const errorText = cellInfo[1];
                 if (validate == 1) {
-                    //alert(oldValue)
-                    //alert($existingInput.val());
-                    cellEdit(oldValue, $existingInput, $td, $tdID, $tr, $trID, $sf, $ppsf);
+                    cellEdit(oldValue, $input, $td, $tdIndex, $tr, $trID, $sf, $ppsf);
                 } else if (validate == 0) {
-                    var newValue = $existingInput.val();
-                    var htmlError = '<div id="-home-cost-group" class="form-group has-error required">' +
-                                        '<div id="-home-cost-check">' +
-                                            '<div class="input-group">' +
-                                                "<input type='text' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + oldValue + "' />" +
-                                                '<span id="-home-cost-glyph" class="glyphicon glyphicon-remove form-control-feedback glyphicon-right" aria-hidden="true"></span>' +
-                                            '</div>' +
-                                        '</div>' +
-                                    '</div>';
-                    var htmlError2 = '<div class="input-group">' +
-                                        '<div class="form-group has-feedback has-clear has-error">' +
-                                                "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' data-trigger='focus' title='Dismissible popover' data-content='Please enter a value between $10,000 and $1,000,000,000' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + newValue + "' />" +
-                                            '<span class="form-control-clear glyphicon glyphicon-remove form-control-feedback glyphicon-right"></span>' +
-                                        '</div>' +
-                                    '</div>';
-                    var htmlError3 = '<div class="input-group">' +
-                                        '<div class="form-group has-feedback has-clear has-error">' +
-                                                "<input type='text' tabindex='0' role='button' data-toggle='popover' data-container='body' data-old-value='" + oldValue + "' class='cell-input form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + newValue + "' />" +
-                                            '<span class="form-control-clear glyphicon glyphicon-remove form-control-feedback glyphicon-right"></span>' +
-                                        '</div>' +
-                                    '</div>';
-                    //$td.html("<input type='text' data-old-value='" + oldValue + "' class='form-control' size='" + oldValue.length + "' id='" + $tdID + $trID + "' placeholder='" + placeholderDict[$trID] + "' value='" + oldValue + "' />");
-                    $td.html(htmlError3);
-                    $html3 = $.parseHTML(htmlError3);
-                    var $test = $td.find('input');
-                    $test.attr('data-content', errorText);
-                    //alert($('#delme').text())
-                    //alert($test.attr('data-toggle'))
-                    //$('[data-toggle="popover"]').popover();
-                    //$test.popover({'placement':'bottom'}).popover('show');
-                    //$("[data-toggle=popover]").popover();
-                    $test.popover('show');
+                    const $newValue = $input.val();
+                    $input.attr('size', oldValue.length);
+                    $input.attr('id', $tdIndex + $trID);
+                    $input.attr('placeholder', placeholderDict[$trID]);
+                    $input.attr('value', oldValue);
+                    $input.attr('data-old-value', oldValue);
+                    $input.attr('data-content', errorText);
+                    $input.val($newValue);
+                    const $formGroup = $input.closest('.form-group');
+                    $formGroup.addClass('has-error');
+                    const $glyphicon = $formGroup.children('.glyphicon');
+                    $glyphicon.addClass('glyphicon-remove');
+                    $input.popover('show');
                 } else {
                     //Do Nothing
                     alert('nothing')
@@ -355,7 +219,7 @@ $("td").click(function (e) {
     }
 });
 
-$(".table").on('focusout', 'tr td div div input', function (e){
+$(".table").on('focusout', 'tr td div div input', function (e) {
     e.stopPropagation();
     const $input = $(this);
     const $td = $input.closest('td');
@@ -363,7 +227,6 @@ $(".table").on('focusout', 'tr td div div input', function (e){
     const $tr = $input.closest('tr');
     const $trID = $tr.attr('id');
     const $oldValue = $input.attr('data-old-value');
-    //alert($input.val())
     const $newValue = $input.val();
     const htmlError3 = '<div class="input-group">' +
                         '<div class="form-group has-feedback has-clear has-error">' +
@@ -372,7 +235,6 @@ $(".table").on('focusout', 'tr td div div input', function (e){
                         '</div>' +
                     '</div>';
     const cellInfo = cellValidate($input);
-    //alert(cellInfo[0])
     const validate = cellInfo[0];
     if (validate == 1) {
         $input.popover('hide');
@@ -381,10 +243,9 @@ $(".table").on('focusout', 'tr td div div input', function (e){
         cellEdit($oldValue, $input, $td, $tdID, $tr, $trID, $sf, $ppsf);
     } else if (validate == 0) {
         $input.popover('show');
-        //$td.html(htmlError3);
     } else {
-        alert('nothing2')
         //Do Nothing
+        alert('nothing')
     }
 });
 
@@ -398,9 +259,8 @@ function cellAnimate($cell, $newValue, $oldValue, symbol) {
             $cell.text(addCommas($newValue));
         }
         $cell.css('background-color', 'yellow');
-        const $cellTR = $cell.closest('tr');
-        //$cellTR.stop(true);
         $cell.stop(true);
+        const $cellTR = $cell.closest('tr');
         if ($cellTR.index() % 2 === 0) {
             $cell.animate({backgroundColor: '#F9F9F9'}, 1000);
         } else {
@@ -418,7 +278,7 @@ function cellAnimate($cell, $newValue, $oldValue, symbol) {
     }
 }
 
-function cellEdit($oldValue, $this, $td, $tdID, $tr, $trID, $sf, $ppsf){
+function cellEdit($oldValue, $this, $td, $tdIndex, $tr, $trID, $sf, $ppsf){
     let tempValue;
     let newCellText;
     let $newValue;
@@ -440,72 +300,61 @@ function cellEdit($oldValue, $this, $td, $tdID, $tr, $trID, $sf, $ppsf){
         }
     } else {
         if ($newValue !== $oldValue) {
+            const $homeCost = $('#-home-cost').find('td').eq($tdIndex - 1);
+            const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
+            const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($tdIndex - 1);
+            const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
+            const $downPayment = $('#-down-payment').find('td').eq($tdIndex - 1);
+            const $downPaymentValue = numberRound(removeCommas($downPayment.text()), 3);
+            const $sfValue = numberRound(removeCommas($sf.text()), 0);
+            const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
+            let symbol;
             if ($.inArray($trID, dollarsArray) !== -1) {
+                symbol = '$';
                 if ($trID === '-home-cost') {
-                    const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($td.index() - 1);
-                    const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
-                    const $downPayment = $('#-down-payment').find('td').eq($td.index() - 1);
-                    const $downPaymentValue = numberRound(removeCommas($downPayment.text()), 3);
                     const $newDownPaymentDollarsValue = numberRound($newValue * ($downPaymentValue/100), 2);
                     cellAnimate($downPaymentDollars, $newDownPaymentDollarsValue, $downPaymentDollarsValue, '$');
-
-                    const $sfValue = numberRound(removeCommas($sf.text()), 0);
-                    const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
                     const $newppsfValue = numberRound($newValue/$sfValue, 2);
                     cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
                 } else if ($trID === '-down-payment-dollars') {
-                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
-                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
-                    const $downPayment = $('#-down-payment').find('td').eq($td.index() - 1);
-                    const $downPaymentValue = numberRound(removeCommas($downPayment.text()), 3);
                     const $newDownPaymentValue = numberRound(($newValue/$homeCostValue)*100, 3);
                     cellAnimate($downPayment, $newDownPaymentValue, $downPaymentValue, '%');
                 }
-                recalculate($this);
-                cellAnimate($td, $newValue, $oldValue, '$');
             } else if ($.inArray($trID, percentArray) !== -1) {
+                symbol = '%';
                 if ($trID === '-down-payment') {
-                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
-                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
-                    const $downPaymentDollars = $('#-down-payment-dollars').find('td').eq($td.index() - 1);
-                    const $downPaymentDollarsValue = numberRound(removeCommas($downPaymentDollars.text()), 2);
                     const $newDownPaymentDollarsValue = numberRound($homeCostValue * ($newValue/100), 2);
                     cellAnimate($downPaymentDollars, $newDownPaymentDollarsValue, $downPaymentDollarsValue, '$');
                 }
-                recalculate($this);
-                cellAnimate($td, $newValue, $oldValue, '%');
             } else if ($.inArray($trID, detailsArray) !== -1) {
+                symbol = '';
                 if ($trID === '-square-footage') {
-                    const $homeCost = $('#-home-cost').find('td').eq($td.index() - 1);
-                    const $homeCostValue = numberRound(removeCommas($homeCost.text()), 2);
-                    const $ppsfValue = numberRound(removeCommas($ppsf.text()), 2);
                     const $newppsfValue = numberRound($homeCostValue/$newValue, 2);
                     cellAnimate($ppsf, $newppsfValue, $ppsfValue, '$');
                 }
-                recalculate($this);
-                cellAnimate($td, $newValue, $oldValue, '');
             }
+            recalculate($this);
+            cellAnimate($td, $newValue, $oldValue, symbol);
         }
     }
     $td.removeClass('editting');
 }
 
-//Monetary Amounts
+//Input Character Validation
 $("td").keypress(function (e) {
-    var $input = $(this).closest('td').find("input");
-    var $tr = $(this).closest('tr');
-    var $trID = $tr.attr('id');
-    var charCode = e.keyCode;
-    var number = $input.val().split('.');
+    const $input = $(this).closest('td').find("input");
+    const $tr = $input.closest('tr');
+    const $trID = $tr.attr('id');
+    const charCode = e.keyCode;
+    const number = $input.val().split('.');
     if (charCode != 46 && charCode > 31 && (charCode < 48 || charCode > 57)) {
         return false;
     }
     if(number.length > 1 && charCode == 46){
         return false;
     }
-    var caratPos = getSelectionStart($input.get(0));
-    var dotPos = $input.val().indexOf(".");
-
+    const caratPos = getSelectionStart($input.get(0));
+    const dotPos = $input.val().indexOf(".");
     if ($.inArray($trID, dollarsArray) != -1) {
         if( caratPos > dotPos && dotPos > -1 && (number[1].length > 1)) {
             return false;
@@ -519,7 +368,7 @@ $("td").keypress(function (e) {
     }
     function getSelectionStart(o) {
         if (o.createTextRange) {
-            var r = document.selection.createRange().duplicate()
+            const r = document.selection.createRange().duplicate()
             r.moveEnd('character', o.value.length)
             if (r.text == '') return o.value.length
             return o.value.lastIndexOf(r.text)
@@ -534,33 +383,40 @@ function numberRound(number, decimals) {
     return newNumber;
 }
 
-function loanPayment2(newDict, loanTerm){
-    hc = Number(numberRound(newDict["-home-cost"], 2));
-    dpd = Number(numberRound(newDict["-down-payment-dollars"], 2));
-    lt = parseInt(loanTerm);
-    ir = Number(numberRound(newDict["-interest-rate"], 3));
-    hoa = Number(numberRound(newDict["-hoa"], 2));
-    ptr = Number(numberRound(newDict["-property-tax-rate"], 3));
-    pmi = Number(numberRound(newDict["-pmi"], 3));
-    hoi = Number(numberRound(newDict["-hoi"], 2));
-    xp = Number(numberRound(newDict["-extra-payment"], 2));
-
-    //alert(typeof(xp));
-    //alert(hc + " , " + dpd + " , " + lt + " , " + ir + " , " + hoa + " , " + ptr + " , " + pmi + " , " + hoi + " , " + xp)
-
-    var monthlyPropertyTax = ((ptr/100)*hc)/12;
-    var downPaymentAmount = dpd;
-    var dp = (downPaymentAmount/hc)*100;
-    var P = hc - downPaymentAmount;
-    var i = ir/100/12;
-    var n = lt*12;
+function loanPayment2(newDict, newLoanTerm) {
+    const homeCost = Number(numberRound(newDict["-home-cost"], 2));
+    const downPaymentDollars = Number(numberRound(newDict["-down-payment-dollars"], 2));
+    const downPayment = Number(numberRound(newDict["-down-payment"], 3));
+    const propertyTaxRate = Number(numberRound(newDict["-property-tax-rate"], 3));
+    const hoi = Number(numberRound(newDict["-hoi"], 2));
+    const pmi = Number(numberRound(newDict["-pmi"], 3));
+    const hoa = Number(numberRound(newDict["-hoa"], 2));
+    const extraPayment = Number(numberRound(newDict["-extra-payment"], 2));
+    const interestRate = Number(numberRound(newDict["-interest-rate"], 3));
+    const loanTerm = parseInt(newLoanTerm);
+    /*
+    var hc = Number(numberRound(newDict["-home-cost"], 2));
+    var dpd = Number(numberRound(newDict["-down-payment-dollars"], 2));
+    var lt = parseInt(newLoanTerm);
+    var ir = Number(numberRound(newDict["-interest-rate"], 3));
+    var hoa = Number(numberRound(newDict["-hoa"], 2));
+    var ptr = Number(numberRound(newDict["-property-tax-rate"], 3));
+    var pmi = Number(numberRound(newDict["-pmi"], 3));
+    var hoi = Number(numberRound(newDict["-hoi"], 2));
+    var xp = Number(numberRound(newDict["-extra-payment"], 2));
+    */
+    var monthlyPropertyTax = ((propertyTaxRate/100)*homeCost)/12;
+    //var downPaymentAmount = dpd;
+    //var dp = (downPaymentDollars/homeCost)*100;
+    var P = homeCost - downPaymentDollars;
+    var i = interestRate/100/12;
+    var n = loanTerm*12;
     var M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
     var monthlyPMI = 0;
-    if (dp < 20) {
+    if (downPayment < 20) {
         monthlyPMI = ((pmi/100)*P)/12;
     }
     var totalMonthlyPayment = M + hoa + monthlyPropertyTax + monthlyPMI + hoi;
-    //alert(totalMonthlyPayment)
     var newP = P;
     var interestPayment = 0;
     var totalInterest = 0;
@@ -577,12 +433,12 @@ function loanPayment2(newDict, loanTerm){
         totalInterest = totalInterest + interestPayment;
         principalPayment = M - interestPayment;
         newP = newP - principalPayment;
-        if (newP/hc > .8) {
+        if (newP/homeCost > .8) {
             totalPMI = totalPMI + monthlyPMI;
             equity = equity + 1;
         }
     }
-    var totalCost = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+    var totalCost = homeCost + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
     var dict = {};
     //dict["downPaymentAmount"] = downPaymentAmount;
     dict["-loan-amount"] = numberRound(P, 2);
@@ -597,7 +453,7 @@ function loanPayment2(newDict, loanTerm){
 
     //Extra Monthly Payment
     var mdcount = 0;
-    if (xp > 0) {
+    if (extraPayment > 0) {
         var newP = P;
         var interestPayment = 0;
         var totalInterest = 0;
@@ -606,15 +462,14 @@ function loanPayment2(newDict, loanTerm){
         var totalPMI = 0;
         var equity = 0;
         var mdcount = 0;
-        var M = xp + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
-
+        var M = extraPayment + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
         for (var j = 0; j < n; j++) {
             mdcount = mdcount + 1;
             interestPayment = newP*i;
             totalInterest = totalInterest + interestPayment;
             principalPayment = M - interestPayment;
             newP = newP - principalPayment;
-            if (newP/hc > .8) {
+            if (newP/homeCost > .8) {
                 totalPMI = totalPMI + monthlyPMI;
                 equity = equity + 1;
             }
@@ -626,17 +481,15 @@ function loanPayment2(newDict, loanTerm){
         var totalHOI = hoi*mdcount;
         var totalHOA = hoa*mdcount;
         dict["-extra-payment-total-interest-paid"] = numberRound(totalInterest, 2);
-        var totalCost2 = hc + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
+        var totalCost2 = homeCost + totalInterest + totalPMI + totalHOI + totalHOA + totalPropertyTax;
         dict["-total-interest-savings"] = numberRound(totalCost - totalCost2, 2);
     } else {
         dict["-extra-payment-total-interest-paid"] = 0;
         var totalCost2 = 0;
         dict["-total-interest-savings"] = 0;
     }
-
     dict["-extra-payment-months"] = mdcount;
     dict["-extra-payment-total-cost"] = numberRound(totalCost2, 2);
-
     return dict;
 }
 
@@ -654,35 +507,33 @@ function cellWrongText(x, y, z) {
 }
 
 function cellValidate(t) {
-    //alert($(t).val())
-    //var $input = $(t).closest('td').find("input");
-    //alert($input)
     var $input = $(t);
     
     if ($input.length == 0) {
         return 2;
     }
     
-    var $td = $(t).closest('td');
-    var $tdID = $td.attr('id');
-    var $tr = $(t).closest('tr');
+    var $td = $input.closest('td');
+    //var $tdID = $td.attr('id');
+    var $tdIndex = $td.index();
+    var $tr = $input.closest('tr');
     var $trID = $tr.attr('id');
     
     //alert($input.val());
     var x = removeCommas($input.val());
     //alert(x);
 
-    var $homeCost = removeCommas($('#-home-cost').find('td').eq($td.index() - 1).text());
-    var $downPaymentDollars = removeCommas($('#-down-payment-dollars').find('td').eq($td.index() - 1).text());
-    var $downPayment = removeCommas($('#-down-payment').find('td').eq($td.index() - 1).text());
-    var $loanTerm = $('#-loan-term').find('td').eq($td.index() - 1).find('.dropdown-toggle').text().replace(" years","").trim();
-    var $interestRate = removeCommas($('#-interest-rate').find('td').eq($td.index() - 1).text());
-    var $hoa = removeCommas($('#-hoa').find('td').eq($td.index() - 1).text());
-    var $propertyTaxRate = removeCommas($('#-property-tax-rate').find('td').eq($td.index() - 1).text());
-    var $pmi = removeCommas($('#-pmi').find('td').eq($td.index() - 1).text());
-    var $hoi = removeCommas($('#-hoi').find('td').eq($td.index() - 1).text());
-    var $extraPayment = removeCommas($('#-extra-payment').find('td').eq($td.index() - 1).text());
-    var $squareFootage = removeCommas($('#-square-footage').find('td').eq($td.index() - 1).text());
+    var $homeCost = removeCommas($('#-home-cost').find('td').eq($tdIndex - 1).text());
+    var $downPaymentDollars = removeCommas($('#-down-payment-dollars').find('td').eq($tdIndex - 1).text());
+    var $downPayment = removeCommas($('#-down-payment').find('td').eq($tdIndex - 1).text());
+    var $loanTerm = $('#-loan-term').find('td').eq($tdIndex - 1).find('.dropdown-toggle').text().replace(" years","").trim();
+    var $interestRate = removeCommas($('#-interest-rate').find('td').eq($tdIndex - 1).text());
+    var $hoa = removeCommas($('#-hoa').find('td').eq($tdIndex - 1).text());
+    var $propertyTaxRate = removeCommas($('#-property-tax-rate').find('td').eq($tdIndex - 1).text());
+    var $pmi = removeCommas($('#-pmi').find('td').eq($tdIndex - 1).text());
+    var $hoi = removeCommas($('#-hoi').find('td').eq($tdIndex - 1).text());
+    var $extraPayment = removeCommas($('#-extra-payment').find('td').eq($tdIndex - 1).text());
+    var $squareFootage = removeCommas($('#-square-footage').find('td').eq($tdIndex - 1).text());
     if ($input.attr('id').match(/-home-cost*/)) {
         var $homeCost = removeCommas($input.val());
     } else if ($input.attr('id').match(/-down-payment-dollars*/)) {
@@ -1037,15 +888,6 @@ function drawVisualization() {
     chart.draw(data, options);
 }
 
-$("#myForm").on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(){
-    if ($("#myForm").hasClass('boxDown')) {
-        $("#myForm").removeClass('boxDown');
-        $( "#myForm" ).addClass("boxUp");
-    } else {
-        $("#myForm").removeClass('boxUp');
-    }
-});
-
 function resetAll() {
     //Google Charts Clear
     gArrayID = ["Loan"];
@@ -1059,49 +901,12 @@ function resetAll() {
         var windowHeight = $(window).height();
         var newTop = (windowHeight - formHeight)/2;
         $( "#modalMe" ).addClass("modal-me");
+        $( "#modalMe" ).addClass("veilDown");
+        $( "#modalMe" ).removeClass("boxShow");
         $( "#myForm" ).addClass("modal-content-me");
         $( "#myForm" ).addClass("boxDown");
-        
-        /*
-        var target = document.getElementById('myForm');
-        var player = target.animate([
-        {left: '50%', top: 0, transform: 'translate(-50%, 0)'},
-        {left: '50%', top: '50%', transform: 'translate(-50%, -50%)'}
-        ], {duration: 500,
-            fill: 'forwards'
-        });
-        /*
-        player.addEventListener('finish', function() {
-            target.style.transform = 'translate(-50%, -50%)';
-            target.setAttribute('left', '50%');
-            target.setAttribute('top', '50%');
-        });
-        /*
-          $( "#myForm" ).animate(
-              {fake: 200, fake2: 10},
-                {
-                    step: function(now, fx) {
-                        $(this).css('top', "50%");
-                        $(this).css('left', "50%");
-                        $(this).css('transform', "translate(-50%, -50%)");
-                    }, 
-                    duration:'slow'
-                }, 'linear' );
-        */
-        /*var offX, offY;
-        $('#myForm').animate({  fake1: "50%", fake2: "50%" }, {
-        step: function(now,fx) {
-            if (fx.prop === "fake1") {
-            offX = now;
-            } else if (fx.prop === "fake2") {
-            offY = now;
-            $(this).css('-webkit-transform','translate('+ offX +'%,'+ offY +'%)');
-            }
-        },
-        duration:300
-        },'linear');*/
-
-//transform: "translate(-50%, -50%)"
+        $( "#results" ).css("display", "none");
+        $( "#mortgageCalculator" ).css("display", "none");
     rowArray = [];
     for (var x = 0; x < textArray.length; x++){
         var row = document.createElement("tr");
@@ -1117,7 +922,79 @@ function resetAll() {
         row.appendChild(column);
         rowArray.push(row);
     }
-};
+}
+
+$("#myForm").on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(){
+    if ($("#myForm").hasClass('boxDown')) {
+        /*$( "#myForm" ).addClass("boxUp");
+        $("#myForm").removeClass('boxDown');
+        $( "#modalMe" ).addClass("veilUp");
+        $( "#modalMe" ).removeClass("veilDown");*/
+    } else if ($("#myForm").hasClass('boxUp')) {
+        $("#myForm").removeClass('boxUp');
+        $( "#myForm" ).removeClass("modal-content-me");
+        $( "#myForm" ).css('background-color', '#fefefe');
+        $( "#mortgageCalculator" ).css("display", "block");
+    }
+});
+
+$("#modalMe").on("animationend webkitAnimationEnd oAnimationEnd MSAnimationEnd", function(){
+    if ($("#myForm").hasClass('boxDown') === false && $("#myForm").hasClass('boxUp') === false) {
+        var filtered = $("#myForm").not(":animated");
+        if (filtered !== null) {
+            if ($("#modalMe").hasClass('veilUp') === false) {
+                //$( "#modalMe" ).css('background-color', '#fefefe');
+                //$( "#modalMe" ).addClass("veilUp");
+            } else if ($("#modalMe").hasClass('veilUp') === true) {
+                $("#modalMe").removeClass('veilUp');
+                $("#modalMe").removeClass('modal-me');
+                calculate(loanTerm);
+                $( "#results" ).css("display", "");
+                $( "#results" ).removeClass("tableShow");
+                $( "#results" ).removeClass("tableHide");
+            }
+        }
+    }
+});
+
+var loanTerm;
+function calculate2(lt) {
+    var validate = myValidate(lt);
+    if (validate == 0){
+        return;
+    }
+    loanTerm = lt;
+    if ($("#myForm").hasClass('boxDown')) {
+        $("#myForm").addClass("boxUp");
+        $("#myForm").removeClass('boxDown');
+        $("#modalMe").addClass("veilUp");
+        $("#modalMe").removeClass("veilDown");
+    }
+}
+
+function toggleCalculator() {
+    if ($("#modalMe").hasClass("boxHide")) {
+        $("#modalMe").addClass("boxShow");
+        $("#modalMe").removeClass("boxHide");
+        $("#mortgageCalculator").text("^ Hide Calculator ^");
+        $("#results").addClass("tableShow");
+        $("#results").removeClass("tableHide");
+    } else if ($("#modalMe").hasClass("boxShow")) {
+        $("#modalMe").addClass("boxHide");
+        $("#modalMe").removeClass("boxShow");
+        $("#mortgageCalculator").text("v Show Calculator v");
+        $("#results").addClass("tableHide");
+        $("#results").removeClass("tableShow");
+    } else {
+        $("#modalMe").addClass("boxHide");
+        $("#mortgageCalculator").text("v Show Calculator v");
+        $("#results").addClass("tableHide");
+    }
+}
+
+
+
+
 
 /*
 $("#awayButton").click(function() {
@@ -1171,9 +1048,16 @@ $(".delete").click(function (e){
     });
     if (tdCount === 0) {
         $("#table8").empty();
-        
+        $( "#modalMe" ).addClass("modal-me");
+        $( "#modalMe" ).addClass("veilDown");
+        $( "#modalMe" ).removeClass("boxShow");
+        $( "#myForm" ).addClass("modal-content-me");
+        $( "#myForm" ).addClass("boxDown");
+        $( "#results" ).css("display", "none");
+        $( "#mortgageCalculator" ).css("display", "none");
+
         //$("#myModal").modal('show');
-        var formHeight = $( "#myForm" ).height();
+        /*var formHeight = $( "#myForm" ).height();
         var windowHeight = $(window).height();
         var newTop = (windowHeight - formHeight)/2;
         $( "#modalMe" ).addClass("modal-me");
@@ -1181,7 +1065,7 @@ $(".delete").click(function (e){
           $( "#myForm" ).animate({
                 "top": newTop
             }, 1500 );
-            
+            */
             //modal.style.display = "block";
     }
 });
@@ -1542,7 +1426,7 @@ $("#home-cost, #down-payment-dollars, #down-payment, #hoa, #property-tax-rate, #
     return(validate);
 });
 
-function myValidate(kl){
+function myValidate(kl) {
     var formArray = ["home-cost", "down-payment-dollars", "down-payment", "hoa", "property-tax-rate", "pmi", "hoi", "extra-payment"];
     var formGlypPositionArray = ["right", "right", "left", "center", "left", "left", "center", "center"];
     var formRequired = ["required", "required", "required", "", "required", "", "required", ""];
@@ -1554,7 +1438,7 @@ function myValidate(kl){
     //Check if Mobile
     if ($('#interest-rate-apr').is(':visible')) {
         //Mobile
-        if ($loanTerm != 0){
+        if ($loanTerm != 0) {
             var $interestRate = $('#interest-rate-apr').val().replace("%","");
         } else {
             var interestArray = [$('#interest-rate-apr').val().replace("%",""),
@@ -1564,7 +1448,7 @@ function myValidate(kl){
         }
     } else {
         //Desktop
-        if ($loanTerm != 0){
+        if ($loanTerm != 0) {
             var $interestRate = $('#interest-rate-'+$loanTerm).val().replace("%","");
         } else {
             var interestArray = [$('#interest-rate-10').val().replace("%",""),
@@ -1581,22 +1465,22 @@ function myValidate(kl){
 
     var validate = 1;
 
-    for (var j = 0; j < formArray.length; j++){
+    for (var j = 0; j < formArray.length; j++) {
         var x = $('#'+formArray[j]).val().replace(/,/g,"");
-        if (x.length == 0){
-            if (formRequired[j] == "required"){
+        if (x.length == 0) {
+            if (formRequired[j] == "required") {
                 validate = 0;
                 textRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
-                if (formArray[j] == "down-payment-dollars"){
+                if (formArray[j] == "down-payment-dollars") {
                     $("#down-payment-label").css("color", "#a94442");
                 }
             } else {
                 textNotRequired(formArray[j], formRequired[j], formGlypPositionArray[j]);
             }
         } else {
-            switch(formArray[j]){
+            switch(formArray[j]) {
                 case "home-cost":
-                    if (+$homeCost < 10000 || +$homeCost > 1000000000){
+                    if (+$homeCost < 10000 || +$homeCost > 1000000000) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1604,8 +1488,8 @@ function myValidate(kl){
                     }
                     break;
                 case "down-payment-dollars":
-                    if (+$homeCost >= 10000 && +$homeCost <= 1000000000){
-                        if (+$downPaymentDollars >= +$homeCost){
+                    if (+$homeCost >= 10000 && +$homeCost <= 1000000000) {
+                        if (+$downPaymentDollars >= +$homeCost) {
                             validate = 0;
                             wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                             $("#down-payment-label").css("color", "#a94442");
@@ -1616,7 +1500,7 @@ function myValidate(kl){
                     }
                     break;
                 case "down-payment":
-                    if (+$downPayment >= 100 ){
+                    if (+$downPayment >= 100 ) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1624,7 +1508,7 @@ function myValidate(kl){
                     }
                     break;
                 case "hoa":
-                    if (+$hoa > 1000 ){
+                    if (+$hoa > 1000 ) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1632,7 +1516,7 @@ function myValidate(kl){
                     }
                     break;
                 case "property-tax-rate":
-                    if (+$propertyTaxRate > 10 ){
+                    if (+$propertyTaxRate > 10 ) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1640,7 +1524,7 @@ function myValidate(kl){
                     }
                     break;
                 case "pmi":
-                    if (+$pmi > 10 ){
+                    if (+$pmi > 10 ) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1648,7 +1532,7 @@ function myValidate(kl){
                     }
                     break;
                 case "hoi":
-                    if (+$hoi > 1000 ){
+                    if (+$hoi > 1000 ) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1656,7 +1540,7 @@ function myValidate(kl){
                     }
                     break;
                 case "extra-payment":
-                    if (+$extraPayment > 5000){
+                    if (+$extraPayment > 5000) {
                         validate = 0;
                         wrongText(formArray[j], formRequired[j], formGlypPositionArray[j]);
                     } else {
@@ -1670,13 +1554,13 @@ function myValidate(kl){
     //Check if Mobile
     if ($('#interest-rate-apr').is(':visible')) {
         //Mobile
-        if ($loanTerm != 0){
-            if ($interestRate.length == 0){
+        if ($loanTerm != 0) {
+            if ($interestRate.length == 0) {
                 validate = 0;
                 textRequired('interest-rate-apr', "required", "left");
                 $("#interest-rate-apr-label").css("color", "#a94442");
             } else {
-                if (+$interestRate >= 20){
+                if (+$interestRate >= 20) {
                     validate = 0;
                     wrongText('interest-rate-apr', "required", "left");
                     $("#interest-rate-apr-label").css("color", "#a94442");
@@ -1687,13 +1571,13 @@ function myValidate(kl){
             }
         } else {
             var iTest = 0;
-            for (var k = 0; k < interestArray.length; k++){
-                if (interestArray[k].length == 0){
+            for (var k = 0; k < interestArray.length; k++) {
+                if (interestArray[k].length == 0) {
                     validate = 0;
                     textRequired('interest-rate-apr', "required", "left");
                     iTest = 1;
                 } else {
-                    if (+interestArray[k] >= 20){
+                    if (+interestArray[k] >= 20) {
                         validate = 0;
                         wrongText('interest-rate-apr', "required", "left");
                         iTest = 1;
@@ -1702,7 +1586,7 @@ function myValidate(kl){
                     }
                 }
             }
-            if (iTest == 1){
+            if (iTest == 1) {
                 $("#interest-rate-apr-label").css("color", "#a94442");
             } else {
                 $("#interest-rate-apr-label").css("color", "#3c763d");
@@ -1710,13 +1594,13 @@ function myValidate(kl){
         }
     } else {
         //Desktop
-        if ($loanTerm != 0){
-            if ($interestRate.length == 0){
+        if ($loanTerm != 0) {
+            if ($interestRate.length == 0) {
                 validate = 0;
                 textRequired('interest-rate-'+$loanTerm, "required", "left");
                 $("#interest-rate-label").css("color", "#a94442");
             } else {
-                if (+$interestRate >= 20){
+                if (+$interestRate >= 20) {
                     validate = 0;
                     wrongText('interest-rate-'+$loanTerm, "required", "left");
                     $("#interest-rate-label").css("color", "#a94442");
@@ -1726,20 +1610,20 @@ function myValidate(kl){
                 }
             }
 
-            for (var k = 0; k < loanTermArray.length; k++){
-                if (+loanTermArray[k] != +$loanTerm){
+            for (var k = 0; k < loanTermArray.length; k++) {
+                if (+loanTermArray[k] != +$loanTerm) {
                     textNotRequired('interest-rate-'+loanTermArray[k], "required", "left");
                 }
             }
         } else {
             var iTest = 0;
-            for (var k = 0; k < interestArray.length; k++){
-                if (interestArray[k].length == 0){
+            for (var k = 0; k < interestArray.length; k++) {
+                if (interestArray[k].length == 0) {
                     validate = 0;
                     textRequired('interest-rate-'+loanTermArray[k], "required", "left");
                     iTest = 1;
                 } else {
-                    if (+interestArray[k] >= 20){
+                    if (+interestArray[k] >= 20) {
                         validate = 0;
                         wrongText('interest-rate-'+loanTermArray[k], "required", "left");
                         iTest = 1;
@@ -1748,19 +1632,18 @@ function myValidate(kl){
                     }
                 }
             }
-            if (iTest == 1){
+            if (iTest == 1) {
                 $("#interest-rate-label").css("color", "#a94442");
             } else {
                 $("#interest-rate-label").css("color", "#3c763d");
             }
         }
     }
-    
     return(validate);
 }
-function textNotRequired(x, y, z){
+function textNotRequired(x, y, z) {
     $("#"+x+"-help-block").hide();
-    if (x.match(/interest-rate-.*/)){
+    if (x.match(/interest-rate-.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-2');
     } else {
         $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding '+y);
@@ -1768,11 +1651,11 @@ function textNotRequired(x, y, z){
     $("#"+x+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-'+z);
     return;
 }
-function textRequired(x, y, z){
+function textRequired(x, y, z) {
     $("#"+x+"-help-block").hide();
-    if (x.match(/down-payment.*/)){
+    if (x.match(/down-payment.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-4 has-error');
-    } else if (x.match(/interest-rate-.*/)){
+    } else if (x.match(/interest-rate-.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-2 has-error');
     } else {
         $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-error '+y);
@@ -1780,11 +1663,11 @@ function textRequired(x, y, z){
     $("#"+x+"-glyph").attr('class', 'glyphicon form-control-feedback glyphicon-'+z);
     return;
 }
-function wrongText(x, y, z){
+function wrongText(x, y, z) {
     $("#"+x+"-help-block").show();
-    if (x.match(/down-payment.*/)){
+    if (x.match(/down-payment.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-4 has-error');
-    } else if(x.match(/interest-rate-.*/)){
+    } else if(x.match(/interest-rate-.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-2 has-error');
     } else {
         $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-error '+y);
@@ -1792,11 +1675,11 @@ function wrongText(x, y, z){
     $("#"+x+"-glyph").attr('class', 'glyphicon glyphicon-remove form-control-feedback glyphicon-'+z);
     return;
 }
-function correctText(x, y, z){
+function correctText(x, y, z) {
     $("#"+x+"-help-block").hide();
-    if (x.match(/down-payment.*/)){
+    if (x.match(/down-payment.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-4 has-success');
-    } else if(x.match(/interest-rate-.*/)){
+    } else if(x.match(/interest-rate-.*/)) {
         $("#"+x+"-check").attr('class', 'col-sm-2 has-success');
     } else {
         $("#"+x+"-group").attr('class', 'form-group form-group-md nopadding has-success '+y);
@@ -1805,24 +1688,24 @@ function correctText(x, y, z){
     return;
 }
 
-$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function(){
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(function() {
     var a = $(this);
     var x = removeCommas(a.val());
-    if (x.length != 0){
+    if (x.length != 0) {
         x = Number(x).toFixed(2);
         a.val(addCommas(x));
-        if (this.id == "down-payment-dollars"){
+        if (this.id == "down-payment-dollars") {
             var $homeCost = removeCommas($("#home-cost").val());
-            if ($homeCost != ""){
+            if ($homeCost != "") {
                 var newdp = (x/$homeCost)*100;
                 $("#down-payment").val(Number(Math.round(newdp+'e3')+'e-3').toFixed(3));
             }
         }
-        if (this.id == "home-cost"){
+        if (this.id == "home-cost") {
             var $homeCost = removeCommas($("#home-cost").val());
-            if ($homeCost != ""){
+            if ($homeCost != "") {
                 var dp = $("#down-payment").val().replace("%","");
-                if (dp.length != 0){
+                if (dp.length != 0) {
                     var newdp = (dp/100)*$homeCost;
                     var y = addCommas(Number(Math.round(newdp)).toFixed(2));
                     $("#down-payment-dollars").val(y);
@@ -1832,20 +1715,20 @@ $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusout(func
     }
 });
 
-$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusin(function(){
+$("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").focusin(function() {
     var a = $(this);
     var x = a.val();
     a.val(removeCommas(x));
     a.select();
 });
 
-$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(function(){
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(function() {
     var a = $(this);
     var x = a.val();
-    if (x != ""){
+    if (x != "") {
         var temp = Number(a.val()).toFixed(3);
         a.val(temp);
-        if (this.id == "down-payment"){
+        if (this.id == "down-payment") {
             var $homeCost = removeCommas($("#home-cost").val());
             var newDownPaymentDollars = ((temp/100)*$homeCost);
             var y = addCommas(Number(newDownPaymentDollars).toFixed(2));
@@ -1854,7 +1737,7 @@ $("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusout(func
     }
 });
 
-$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(function(){
+$("#down-payment, [id^=interest-rate-], #property-tax-rate, #pmi").focusin(function() {
     var a = $(this);
     var x = a.val();
     a.val(a.val().replace("%",""));
@@ -1869,10 +1752,10 @@ function removeCommas(x) {
     return x.toString().replace(/,/g,"").replace("$","").replace("%","");
 }
 
-function calculate(kl){
+function calculate(kl) {
     //Validate Form Fields
     var validate = myValidate(kl);
-    if (validate == 0){
+    if (validate == 0) {
         return;
     }
 
@@ -1885,7 +1768,7 @@ function calculate(kl){
     //Check if Mobile
     if ($('#interest-rate-apr').is(':visible')) {
         //Mobile
-        if ($loanTerm != 0){
+        if ($loanTerm != 0) {
             var $interestRate = +$('#interest-rate-apr').val().replace("%","");
         } else {
             var interestArray = [+$('#interest-rate-apr').val().replace("%",""),
@@ -1895,7 +1778,7 @@ function calculate(kl){
         }
     } else {
         //Desktop
-        if ($loanTerm != 0){
+        if ($loanTerm != 0) {
             var $interestRate = +$('#interest-rate-'+$loanTerm).val().replace("%","");
         } else {
             var interestArray = [+$('#interest-rate-10').val().replace("%",""),
@@ -1912,8 +1795,8 @@ function calculate(kl){
     var $extraPayment = +$('#extra-payment').val().replace(/,/g,"").replace("$","");
     var termArray = [10, 15, 20, 30];
 
-    if ($loanTerm == 0){
-        for (var t = 0; t < termArray.length; t++){
+    if ($loanTerm == 0) {
+        for (var t = 0; t < termArray.length; t++) {
             var dict = loanPayment($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
             //var googleSend = $homeCost + ";" + $downPayment + ";" + $propertyTaxRate + ";" + $hoi + ";" + $pmi + ";" + $hoa + ";" + $extraPayment + ";" + interestArray[t] + ";" + termArray[t];
             //ga('send', 'event', 'Calculations', 'Calculate', googleSend);
@@ -1922,8 +1805,8 @@ function calculate(kl){
             var n = termArray[t]*12;
             var tempArray = [];
             var temploop = [10, 15, 20, 30];
-            for (var w = 0; w < temploop.length; w++){
-                if (lt >= temploop[w]){
+            for (var w = 0; w < temploop.length; w++) {
+                if (lt >= temploop[w]) {
                     var tentemp = earlymploop2(temploop[w], lt, i);
                     tempArray.push(tentemp[2]);
                 } else {
@@ -1938,13 +1821,13 @@ function calculate(kl){
                             "PMI Details", dict["equity"], dict["totalPMI"],
                             "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
                             "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
-            for (var y = 0; y < dataArray.length; y++){
-                if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25){
+            for (var y = 0; y < dataArray.length; y++) {
+                if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25) {
                     var column = document.createElement("td");
                     column.id = columnID;
-                    if (y == 1){
+                    if (y == 1) {
                         var text = document.createTextNode(dataArray[y]+" years");
-                    } else if (y == 2 || y == 14 || y == 18){
+                    } else if (y == 2 || y == 14 || y == 18) {
                         var text = document.createTextNode(dataArray[y]);
                     } else {
                         var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
@@ -1952,7 +1835,7 @@ function calculate(kl){
                     column.appendChild(text);
                     rowArray[y].appendChild(column);
 
-                    if (y == dataArray.length - 1){
+                    if (y == dataArray.length - 1) {
                         var column = document.createElement("td");
                         column.id = columnID;
 
@@ -1968,7 +1851,7 @@ function calculate(kl){
                     }
                 }
             }
-            for (var z = 0; z <= rowArray.length; z++){
+            for (var z = 0; z <= rowArray.length; z++) {
                 $table8.append(rowArray[z]);
             }
             columnID++;
@@ -1981,8 +1864,8 @@ function calculate(kl){
         var temploop = [10, 15, 20, 30];
         var n = $loanTerm*12;
         var i = $interestRate/100/12;
-        for (var w = 0; w < temploop.length; w++){
-            if ($loanTerm >= temploop[w]){
+        for (var w = 0; w < temploop.length; w++) {
+            if ($loanTerm >= temploop[w]) {
                 var tentemp = earlymploop2(temploop[w], $loanTerm, i);
                 tempArray.push(tentemp[2]);
             } else {
@@ -1999,15 +1882,15 @@ function calculate(kl){
                          "PMI Details", dict["equity"], dict["totalPMI"],
                          "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
                          "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
-        for (var y = 0; y < dataArray.length; y++){
+        for (var y = 0; y < dataArray.length; y++) {
             if (y != 0 && y != 5 && y != 10 && y != 17 && y != 22 && y != 25 && y != 30){
                 var column = document.createElement("td");
                 column.id = columnID;
-                if (y == 2){
+                if (y == 2) {
                     var text = document.createTextNode(addCommas(dataArray[y]));
-                } else if (y == 6){
+                } else if (y == 6) {
                     var text = document.createTextNode(dataArray[y]+" years");
-                } else if (y == 4 || y == 7 || y == 19 || y == 23){
+                } else if (y == 4 || y == 7 || y == 19 || y == 23) {
                     var text = document.createTextNode(dataArray[y]);
                 } else {
                     var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
@@ -2015,7 +1898,7 @@ function calculate(kl){
                 column.appendChild(text);
                 rowArray[y].appendChild(column);
 
-                if (y == dataArray.length - 1){
+                if (y == dataArray.length - 1) {
                     var column = document.createElement("td");
                     column.id = columnID;
 
@@ -2032,7 +1915,7 @@ function calculate(kl){
             }
         }
 
-        for (var z = 0; z < rowArray.length; z++){
+        for (var z = 0; z < rowArray.length; z++) {
             $table8.append(rowArray[z]);
         }
         columnID++;
@@ -2095,14 +1978,12 @@ function calculate(kl){
         //gArray.push(gData2);
         //alert(gArray);
 
-
-
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawVisualization);
     }
 
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
-    function earlymploop2(d, lt, i){
+    function earlymploop2(d, lt, i) {
         //var array1 = [21000, 1100, 110, 11, 1.1, .11, .011, .0011];
         //var array2 = [1000, 100, 10, 1, .1, .01, .001, .0001];
         var array1 = [10000, 1];
@@ -2117,7 +1998,7 @@ function calculate(kl){
         interestPayment = 0;
         var totalInterest2 = 0;
         principalPayment = 0;
-        for (var j = 0; j < n; j++){
+        for (var j = 0; j < n; j++) {
             mdcount = mdcount + 1;
             interestPayment = newP*i;
             totalInterest2 = totalInterest2 + interestPayment;
@@ -2132,8 +2013,8 @@ function calculate(kl){
         var mdcount = 0;
         var xm = 0;
         
-        for (var q = 0; q < array1.length; q++){
-            for (var m = 0; m < array1[q]; m+=array2[q]){
+        for (var q = 0; q < array1.length; q++) {
+            for (var m = 0; m < array1[q]; m+=array2[q]) {
                 var mdcount = 0;
                 P2 = $homeCost - $downPaymentDollars;
                 n2 = lt*12;
@@ -2144,23 +2025,23 @@ function calculate(kl){
                 interestPayment = 0;
                 totalInterest2 = 0;
                 principalPayment = 0;
-                for (var j = 0; j < n; j++){
+                for (var j = 0; j < n; j++) {
                     mdcount = mdcount + 1;
                     interestPayment = newP*i;
                     totalInterest2 = totalInterest2 + interestPayment;
                     principalPayment = M2 - interestPayment;
                     newP = newP - principalPayment;
-                    if (newP < 1){
+                    if (newP < 1) {
                         break;
                     }
-                    if (mdcount > md){
+                    if (mdcount > md) {
                         break;
                     }
                 }
                 var addM = M2 - minM;
-                if (mdcount > md){
+                if (mdcount > md) {
                     low = low + m;
-                }else if (mdcount < md){
+                }else if (mdcount < md) {
                     //low = low;
                 }else{
                     break;
@@ -2172,7 +2053,7 @@ function calculate(kl){
     }
 }
 
-function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
+function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp) {
     
     var monthlyPropertyTax = ((ptr/100)*hc)/12;
     var downPaymentAmount = (dp/100)*hc;
@@ -2181,7 +2062,7 @@ function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     var n = lt*12;
     var M = P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
     var monthlyPMI = 0;
-    if (dp < 20){
+    if (dp < 20) {
         monthlyPMI = ((pmi/100)*P)/12;
     }
     var totalMonthlyPayment = M + hoa + monthlyPropertyTax + monthlyPMI + hoi;
@@ -2196,12 +2077,12 @@ function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
     var totalHOI = hoi*n;
     var totalHOA = hoa*n;
 
-    for (var j = 0; j < n; j++){
+    for (var j = 0; j < n; j++) {
             interestPayment = newP*i;
             totalInterest = totalInterest + interestPayment;
             principalPayment = M - interestPayment;
             newP = newP - principalPayment;
-            if (newP/hc > .8){
+            if (newP/hc > .8) {
                 totalPMI = totalPMI + monthlyPMI;
                 equity = equity + 1;
             }
@@ -2222,7 +2103,7 @@ function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
 
     //Extra Monthly Payment
     var mdcount = 0;
-    if (xp > 0){
+    if (xp > 0) {
         var newP = P;
         var interestPayment = 0;
         var totalInterest = 0;
@@ -2233,17 +2114,17 @@ function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
         var mdcount = 0;
         var M = xp + P*i*Math.pow(1+i,n)/(Math.pow(1+i,n)-1);
 
-        for (var j = 0; j < n; j++){
+        for (var j = 0; j < n; j++) {
             mdcount = mdcount + 1;
             interestPayment = newP*i;
             totalInterest = totalInterest + interestPayment;
             principalPayment = M - interestPayment;
             newP = newP - principalPayment;
-            if (newP/hc > .8){
+            if (newP/hc > .8) {
                 totalPMI = totalPMI + monthlyPMI;
                 equity = equity + 1;
             }
-            if (newP < 1){
+            if (newP < 1) {
                 break;
             }
         }
@@ -2264,3 +2145,34 @@ function loanPayment(hc, dp, lt, ir, hoa, ptr, pmi, hoi, xp){
 
     return dict;
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//Testing
+//Column Highlighting
+/*
+$(document).ready(function() {
+    $("tr").not(':first').hover(
+    function() {
+        //alert('h');
+        $(this).addClass('highlight');
+    }, function() {
+        $(this).removeClass('highlight');
+    }
+    )
+});
+
+$("th").not(':first').hover(
+  function () {
+          //alert('g');
+    $(this).css("background","yellow");
+  },
+  function () {
+    $(this).css("background","");
+  }
+);
+*/
+
+//Arrow Function Example
+/*var arr = 5;
+var squares = (x, y) => x*y;
+alert(squares(arr, arr));*/
