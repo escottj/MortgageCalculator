@@ -7,6 +7,9 @@
 </header>
 
 <head>
+	<title>Erick's Mortgage Calculator</title>
+	<meta name="description" content="Mortage calculator used to compare various loan details side by side. Calculate how soon you can pay off a loan as well as how much you would save with extra payments.">
+	<meta name="keywords" content="Mortgage Calculator, Loan Comparison Tool, Home Payment Calculator">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	 crossorigin="anonymous"></script>
@@ -179,16 +182,16 @@
 						<div class="form-group form-group-md nopadding">
 							<label class="col-sm-3 control-label" for="formGroupInputSmall">Loan Term</label>
 							<div class="col-sm-2">
-								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(10)" value="10">10 years</button>
+								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate2(10)" value="10">10 years</button>
 							</div>
 							<div class="col-sm-2">
-								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(15)" value="15">15 years</button>
+								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate2(15)" value="15">15 years</button>
 							</div>
 							<div class="col-sm-2">
-								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(20)" value="20">20 years</button>
+								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate2(20)" value="20">20 years</button>
 							</div>
 							<div class="col-sm-2">
-								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate(30)" value="30">30 years</button>
+								<button type="button" id="loan-term" class="btn-block btn btn-primary btn-md" onclick="calculate2(30)" value="30">30 years</button>
 							</div>
 							<div class="col-sm-8 col-sm-offset-3">
 								<p></p><button type="button" id="loan-term" class="btn-block btn btn-success btn-md" onclick="calculate2(0)" value="0">Compare All</button>
@@ -254,42 +257,42 @@
 			</div>
 		</div>
 	</div>
+	<!--
+	<p>
+		<div class="container col-sm-12">
+			<ul class="nav nav-tabs" id="myTab">
+				<li id="tab1" class="active">
+					<a href="#table" data-toggle="tab">Table</a>
+				</li>
+				<li id="tab2">
+					<a id="chartsTab" href="#charts" data-toggle="tab">Charts</a>
+				</li>
+			</ul>
+			<div class="tab-content">
+				<div class="tab-pane" id="table">
+					<div class="table-responsive">
 
-	<!--<p>
-	<div class="container col-sm-12">
-		<ul class="nav nav-tabs" id="myTab">
-			<li id="tab1" class="active">
-				<a href="#table" data-toggle="tab">Table</a>
-			</li>
-			<li id="tab2">
-				<a id="chartsTab" href="#charts" data-toggle="tab">Charts</a>
-			</li>
-		</ul>
-		<div class="tab-content">
-			<div class="tab-pane" id="table">
-				<div class="table-responsive">
-
+					</div>
+				</div>
+				<div class="tab-pane" id="charts">
+					<div id="graph">
+						<div id="chart_div"></div>
+						<div id="piechart"></div>
+					</div>
 				</div>
 			</div>
-			<div class="tab-pane" id="charts">
-				<div id="graph">
-					<div id="chart_div"></div>
-					<div id="piechart"></div>
-				</div>
-			</div>
-			</div>
-			</div>
-			</p>
-			</div>-->
+		</div>
+	</p>
+	-->
 	<div id="results" class="container-fluid col-sm-12">
 		<div class="row">
 			<div class="col-sm-12">
 				<div id="scrollMe" class="scrollThis">
-					<div class="table-responsive">
+					<div class="table-responsiveh">
 						<table class="table table-striped" align="center">
 							<tbody id="table8">
 								<tr id="-home-cost">
-									<th>Home Cost</th>
+									<th data-field="glyphicons"><span class="glyphicon glyphicon-pencil"></span> Home Cost</th>
 									<td id="0">$100,000.00</td>
 									<td id="1">$200,000.00</td>
 									<td id="2">$300,000.00</td>
@@ -598,7 +601,6 @@
 			</div>
 		</div>
 	</div>
-
 </body>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJava.js"></script>
 <script type="text/javascript" src="https://rawgit.com/escottj/MortgageCalculator/master/js/myJavaBeta.js"></script>
