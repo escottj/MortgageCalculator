@@ -53,7 +53,7 @@ $(".table").on('click', 'tbody tr td div div span', function (e) {
         $td.text($newValue + '%');
     } else if ($.inArray($trID, detailsArray) !== -1) {
         $td.text($newValue);
-    }     
+    }
     $td.removeClass('editting')
 });
 
@@ -74,11 +74,11 @@ $(document).on('click', '.dropdown-menu li a', function (e) {
 $(function () {
     let $this;
     let $oldLoanTerm;
-    $(".dropdown-toggle").click(function() {
+    $(".table").on('click', 'tr td div .dropdown-toggle', function (e){
         $this = $(this);
         $oldLoanTerm = $this.text().trim();
     })
-    $(".dropdown-menu li a").click(function() {
+    $(".table").on('click', 'tr td div .dropdown-menu li a', function (e){
         $this = $(this);
         const $newLoanTerm = $this.text();
         $this.parents('.btn-group').find('.dropdown-toggle').html($newLoanTerm+' <span class="caret"></span>');
@@ -151,12 +151,12 @@ placeholderDict['-square-footage'] = 'Square Footage';
 const percentArray = ['-down-payment', '-property-tax-rate', '-pmi', '-interest-rate'];
 const detailsArray = ['-square-footage'];
 const ignoreArray = ['-loan-term', '-delete', '-price-per-square-foot', '-loan-amount', '-monthly-mortgage-payment', '-monthly-property-tax', 
-                     '-monthly-pmi', '-total-monthly-payment', '-extra-payment-months', '-extra-payment-total-interest-paid', '-total-interest-savings', 
+                     '-monthly-pmi', '-total-monthly-payment', '-extra-payment-months', '-extra-payment-total-interest-paid', '-extra-payment-total-interest-savings', 
                      '-pmi-months', '-total-pmi-paid', '-10-year-interest', '-15-year-interest', '-20-year-interest', '-30-year-interest', 
                      '-total-cost', '-extra-payment-total-cost'];
 const detailsArray2 = ['-extra-payment-months', '-pmi-months'];
 
-$("td").click(function (e) {
+$(".table").on('click', 'tr td', function (e){
     //e.stopPropagation();
     const $td = $(this);
     const $tdIndex = $td.index();
@@ -394,20 +394,8 @@ function loanPayment2(newDict, newLoanTerm) {
     const extraPayment = Number(numberRound(newDict["-extra-payment"], 2));
     const interestRate = Number(numberRound(newDict["-interest-rate"], 3));
     const loanTerm = parseInt(newLoanTerm);
-    /*
-    var hc = Number(numberRound(newDict["-home-cost"], 2));
-    var dpd = Number(numberRound(newDict["-down-payment-dollars"], 2));
-    var lt = parseInt(newLoanTerm);
-    var ir = Number(numberRound(newDict["-interest-rate"], 3));
-    var hoa = Number(numberRound(newDict["-hoa"], 2));
-    var ptr = Number(numberRound(newDict["-property-tax-rate"], 3));
-    var pmi = Number(numberRound(newDict["-pmi"], 3));
-    var hoi = Number(numberRound(newDict["-hoi"], 2));
-    var xp = Number(numberRound(newDict["-extra-payment"], 2));
-    */
+
     var monthlyPropertyTax = ((propertyTaxRate/100)*homeCost)/12;
-    //var downPaymentAmount = dpd;
-    //var dp = (downPaymentDollars/homeCost)*100;
     var P = homeCost - downPaymentDollars;
     var i = interestRate/100/12;
     var n = loanTerm*12;
@@ -514,14 +502,11 @@ function cellValidate(t) {
     }
     
     var $td = $input.closest('td');
-    //var $tdID = $td.attr('id');
     var $tdIndex = $td.index();
     var $tr = $input.closest('tr');
     var $trID = $tr.attr('id');
     
-    //alert($input.val());
     var x = removeCommas($input.val());
-    //alert(x);
 
     var $homeCost = removeCommas($('#-home-cost').find('td').eq($tdIndex - 1).text());
     var $downPaymentDollars = removeCommas($('#-down-payment-dollars').find('td').eq($tdIndex - 1).text());
@@ -815,24 +800,63 @@ var gArrayTotalInterest = ["Total Interest"];
 
 var columnID = 0;
 var textArray = ["Home Details", "Home Cost", "Square Footage", "Price per Square Foot", "Property Tax Rate", 
-                 "Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Loan Amount", 
+                 "Loan Details", "Loan Term", "Interest Rate", "Down Payment", "Down Payment Percent", "Loan Amount", 
                  "Monthly Payment Breakdown", "Monthly Mortgage Payment", "Monthly Property Tax", "Monthly Home Owner's Insurance",
                  "Monthly PMI", "Monthly HOA", "Total Monthly Payment",
                  "Early Mortgage Payoff", "Extra Monthly Payment", "Months Until Mortgage is Paid Off", "Total Interest Paid", "Total Interest Savings",
-                 "PMI Details", "Months Until 20% Equity", "Total PMI Paid",
+                 "PMI Details", "PMI Percent", "Months Until 20% Equity", "Total PMI Paid",
                  "Total Interest Paid", "If Paid Off in 10 years", "If Paid Off in 15 years", "If Paid Off in 20 years", "If Paid Off in 30 years",
                  "Total Out Of Pocket Cost Over Life of Loan", "Total Cost (w/o Extra Payment)", "Total Cost (w/ Extra Payment)", ""];
+
+var idDict = {};
+idDict["Home Details"] = '-home-details';
+idDict["Home Cost"] = '-home-cost';
+idDict["Square Footage"] = '-square-footage';
+idDict["Price per Square Foot"] = '-price-per-square-foot';
+idDict["Property Tax Rate"] = '-property-tax-rate';
+idDict["Loan Details"] = '-loan-details';
+idDict["Loan Term"] = '-loan-term';
+idDict["Interest Rate"] = '-interest-rate';
+idDict["Down Payment"] = '-down-payment-dollars';
+idDict["Down Payment Percent"] = '-down-payment';
+idDict["Loan Amount"] = '-loan-amount';
+idDict["Monthly Payment Breakdown"] = '-monthly-payment=breakdown';
+idDict["Monthly Mortgage Payment"] = '-monthly-mortgage-payment';
+idDict["Monthly Property Tax"] = '-monthly-property-tax';
+idDict["Monthly Home Owner's Insurance"] = '-hoi';
+idDict["Monthly PMI"] = '-monthly-pmi';
+idDict["Monthly HOA"] = '-hoa';
+idDict["Total Monthly Payment"] = '-total-monthly-payment';
+idDict["Early Mortgage Payoff"] = '-early-mortgage-payoff';
+idDict["Extra Monthly Payment"] = '-extra-payment';
+idDict["Months Until Mortgage is Paid Off"] = '-extra-payment-months';
+idDict["Total Interest Paid"] = '-extra-payment-total-interest-paid';
+idDict["Total Interest Savings"] = '-extra-payment-total-interest-savings';
+idDict["PMI Details"] = '-pmi-details';
+idDict["PMI Percent"] = '-pmi';
+idDict["Months Until 20% Equity"] = '-pmi-months';
+idDict["Total PMI Paid"] = '-total-pmi-paid';
+//idDict["Total Interest Paid"] = '-total-interest-paid';
+idDict["If Paid Off in 10 years"] = '-10-year-interest';
+idDict["If Paid Off in 15 years"] = '-15-year-interest';
+idDict["If Paid Off in 20 years"] = '-20-year-interest';
+idDict["If Paid Off in 30 years"] = '-30-year-interest';
+idDict["Total Out Of Pocket Cost Over Life of Loan"] = '-total-out-of-pocket-cost';
+idDict["Total Cost (w/o Extra Payment)"] = '-total-cost';
+idDict["Total Cost (w/ Extra Payment)"] = '-extra-payment-total-cost';
+idDict[""] = '-delete';
 
 var $table8 = $("#table8");
 var rowArray = [];
 for (var x = 0; x < textArray.length; x++){
     var row = document.createElement("tr");
+    row.setAttribute('id', idDict[textArray[x]]);
     var column = document.createElement("th");
     var text = document.createTextNode(textArray[x]);
     column.appendChild(text);
     if (textArray[x] == ""){
         column.setAttribute("style", "background-color: white;");
-    } else if (x == 0 || x == 5 || x == 10 || x == 17 || x == 22 || x == 25 || x == 30) {
+    } else if (x == 0 || x == 5 || x == 11 || x == 18 || x == 23 || x == 27 || x == 32) {
         column.className = "mergedTitle";
         column.setAttribute("colspan", "100%");
     }
@@ -849,8 +873,8 @@ function drawVisualization() {
     } else {
         $container.addClass("active");
     }
-    // Some raw data (not necessarily accurate)
-    /*var data = google.visualization.arrayToDataTable([
+    /*
+    var data = google.visualization.arrayToDataTable([
         ['Loan', 'One', 'Two', 'Three', 'Four', 'Five', 'Six'],
         ['Total Monthly Payment', 165,      938,         522,             998,           450,      614.6],
         ['Mortgage',              135,      1120,        599,             1268,          288,      682],
@@ -861,7 +885,8 @@ function drawVisualization() {
 
     data.addRows([
         ['New Cost', 100, 200, 300, 400, 500, 600]
-    ]);*/
+    ]);
+    */
     var data = google.visualization.arrayToDataTable([
         gArrayID,
         gArrayMortgage,
@@ -910,12 +935,13 @@ function resetAll() {
     rowArray = [];
     for (var x = 0; x < textArray.length; x++){
         var row = document.createElement("tr");
+        row.setAttribute('id', idDict[textArray[x]]);
         var column = document.createElement("th");
         var text = document.createTextNode(textArray[x]);
         column.appendChild(text);
         if (textArray[x] == ""){
             column.setAttribute("style", "background-color: white;");
-        } else if (x == 0 || x == 5 || x == 10 || x == 17 || x == 22 || x == 25 || x == 30) {
+        } else if (x == 0 || x == 5 || x == 11 || x == 18 || x == 23 || x == 27 || x == 32) {
             column.className = "mergedTitle";
             column.setAttribute("colspan", "100%");
         }
@@ -969,6 +995,8 @@ function calculate2(lt) {
         $("#myForm").removeClass('boxDown');
         $("#modalMe").addClass("veilUp");
         $("#modalMe").removeClass("veilDown");
+    } else {
+        calculate(loanTerm);
     }
 }
 
@@ -992,19 +1020,6 @@ function toggleCalculator() {
     }
 }
 
-
-
-
-
-/*
-$("#awayButton").click(function() {
-    $("#myModal").modal('hide');
-     var current = $("#modalAway");      
-     var prependToDiv = $('#modalHome');
-    current.animate({top, 500}), 2000)
-    current.prependTo(prependToDiv
-  });
-*/
 $( "#awayButton" ).click(function() {
   $( "#myForm" ).animate({
     width: "100%",
@@ -1015,27 +1030,7 @@ $( "#awayButton" ).click(function() {
   }, 1500 );
 });
 
-/*
-$(document).ready(function() {  
-    $("#awayButton").click(function() {  
-        $("#div_1").swap({  
-            target: "div_2", // Mandatory. The ID of the element we want to swap with  
-            opacity: "0.5", // Optional. If set will give the swapping elements a translucent effect while in motion  
-            speed: 1000, // Optional. The time taken in milliseconds for the animation to occur  
-            callback: function() { // Optional. Callback function once the swap is complete  
-                alert("Swap Complete");  
-            }  
-        });  
-    });  
-});  
-*/
-
-$(".delete").on('click', 'tbody tr td div div span', function (e){
-    e.stopPropagation();
-    const $this = $(this);
-});
-
-$(".delete").click(function (e){
+$(".table").on('click', 'tr td .delete', function (e){
     e.stopPropagation();
     const $this = $(this);
     const $td = $this.closest('td');
@@ -1047,6 +1042,9 @@ $(".delete").click(function (e){
         tdCount += 1;
     });
     if (tdCount === 0) {
+        if ($("#modalMe").hasClass("boxHide")) {
+            toggleCalculator();
+        }
         $("#table8").empty();
         $( "#modalMe" ).addClass("modal-me");
         $( "#modalMe" ).addClass("veilDown");
@@ -1055,20 +1053,48 @@ $(".delete").click(function (e){
         $( "#myForm" ).addClass("boxDown");
         $( "#results" ).css("display", "none");
         $( "#mortgageCalculator" ).css("display", "none");
-
-        //$("#myModal").modal('show');
-        /*var formHeight = $( "#myForm" ).height();
-        var windowHeight = $(window).height();
-        var newTop = (windowHeight - formHeight)/2;
-        $( "#modalMe" ).addClass("modal-me");
-        $( "#myForm" ).addClass("modal-content-me");
-          $( "#myForm" ).animate({
-                "top": newTop
-            }, 1500 );
-            */
-            //modal.style.display = "block";
     }
+    /*
+    if (gArrayID.length == 2) {
+        gArrayID = ["Loan"];
+        gArrayMortgage = ["Mortgage"];
+        gArrayMonthlyPropertyTax = ["Property Tax"];
+        gArrayTotalInterest = ["Total Interest"];
+        $("#chart_div").empty();
+    } else {
+        for (var h = 0; h < gArrayID.length; h++) {
+            if (gArrayID[h] == x) {
+                gArrayID.splice(h, 1);
+                gArrayMortgage.splice(h, 1);
+                gArrayMonthlyPropertyTax.splice(h, 1);
+                gArrayTotalInterest.splice(h, 1);
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(drawVisualization);
+            }
+        }
+    }
+    */
 });
+
+//Highlighting
+$(".table").on('mouseenter', 'tr td .delete', function (e){
+    e.stopPropagation();
+    const $this = $(this);
+    const $td = $this.closest('td');
+    $("tr").each(function() {
+        $(this).find('td').eq($td.index() - 1).addClass('highlightCell');
+    });
+});
+
+$(".table").on('mouseleave', 'tr td .delete', function (e){
+    e.stopPropagation();
+    const $this = $(this);
+    const $td = $this.closest('td');
+    $("tr").each(function() {
+        $(this).find('td').eq($td.index() - 1).removeClass('highlightCell');
+    });
+});
+
 /*
 // Get the modal
 var modal = document.getElementById('modalMe');
@@ -1094,43 +1120,6 @@ window.onclick = function(event) {
 
 */
 
-
-/*
-//Delete Column
-function deleteCol(x){
-    //alert($(this).attr('id'))
-    var $td = $(this).closest('td');
-    //alert($td.attr('id'))
-    //var a = '[id="'+x+'"]';
-    //var $index = $('#table8').find('td').eq(x);
-    //alert($index.get(0))
-    //$(a).remove();
-    //$index.remove();
-    $("tr").each(function() {
-        //$(this).find("td:eq("+x+")").remove();
-        $(this).find('td').eq(x).remove();
-    });
-
-    if (gArrayID.length == 2) {
-        gArrayID = ["Loan"];
-        gArrayMortgage = ["Mortgage"];
-        gArrayMonthlyPropertyTax = ["Property Tax"];
-        gArrayTotalInterest = ["Total Interest"];
-        $("#chart_div").empty();
-    } else {
-        for (var h = 0; h < gArrayID.length; h++) {
-            if (gArrayID[h] == x) {
-                gArrayID.splice(h, 1);
-                gArrayMortgage.splice(h, 1);
-                gArrayMonthlyPropertyTax.splice(h, 1);
-                gArrayTotalInterest.splice(h, 1);
-                google.charts.load('current', {'packages':['corechart']});
-                google.charts.setOnLoadCallback(drawVisualization);
-            }
-        }
-    }
-}
-*/
 //Number Validation
 //Monetary Amounts
 $("#home-cost, #extra-payment, #hoa, #hoi, #down-payment-dollars").keypress(function (e) {
@@ -1764,6 +1753,9 @@ function calculate(kl) {
     var $downPaymentDollars = +$('#down-payment-dollars').val().replace(/,/g,"").replace("$","");
     var $downPayment = +$('#down-payment').val().replace("%","");
     var $loanTerm = kl;
+    var $squareFootage = 1000;
+    var $ppsf = 100;
+
 
     //Check if Mobile
     if ($('#interest-rate-apr').is(':visible')) {
@@ -1795,6 +1787,24 @@ function calculate(kl) {
     var $extraPayment = +$('#extra-payment').val().replace(/,/g,"").replace("$","");
     var termArray = [10, 15, 20, 30];
 
+    const dollarsArray = ['Home Cost', 'Price per Square Foot',
+                            'Down Payment', 'Loan Amount',
+                            'Monthly Mortgage Payment', 'Monthly Property Tax', 'Monthly Home Owner&#39;s Insurance', 'Monthly PMI', 'Monthly HOA', 'Total Monthly Payment',
+                            'Extra Monthly Payment', 'Total Interest Paid', 'Total Interest Savings',
+                            'Total PMI Paid',
+                            'If Paid Off in 10 years', 'If Paid Off in 15 years', 'If Paid Off in 20 years', 'If Paid Off in 30 years',
+                            'Total Cost (w/o Extra Payment)', 'Total Cost (w/ Extra Payment)'];
+
+    const percentArray = ['Property Tax Rate',
+                            'Interest Rate', 'Down Payment Percent',
+                            'PMI Percent'];
+
+    const yearsArray = ['Loan Term'];
+
+    const detailsArray = ['Square Footage',
+                            'Months Until Mortgage is Paid Off',
+                            'Months Until 20% Equity'];
+
     if ($loanTerm == 0) {
         for (var t = 0; t < termArray.length; t++) {
             var dict = loanPayment($homeCost, $downPayment, termArray[t], interestArray[t], $hoa, $propertyTaxRate, $pmi, $hoi, $extraPayment);
@@ -1815,39 +1825,93 @@ function calculate(kl) {
             }
 
             var istring =  Number(Math.round(interestArray[t]+'e3')+'e-3').toFixed(3)+"%";
-            var dataArray = ["Loan Details", termArray[t], istring, dict["downPaymentAmount"], dict["loanAmount"],
-                            "Monthly Payment Breakdown", dict["monthlyMortgagePayment"], dict["monthlyPropertyTax"], $hoi, dict["monthlyPMI"], $hoa, dict["totalMonthlyPayment"],
-                            "Early Mortgage Payoff", $extraPayment, dict["mdcount"], dict["totalInterest2"], dict["totalSavings"],
-                            "PMI Details", dict["equity"], dict["totalPMI"],
-                            "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
-                            "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
-            for (var y = 0; y < dataArray.length; y++) {
-                if (y != 0 && y != 5 && y != 12 && y != 17 && y != 20 && y != 25) {
+            //Responsive Update Array
+            const resultsDict = {};
+            resultsDict['Title_1'] = 'Home Details';
+            resultsDict['Home Cost'] = $homeCost;
+            resultsDict['Square Footage'] = $squareFootage;
+            resultsDict['Price per Square Foot'] = $ppsf;
+            resultsDict['Property Tax Rate'] = $propertyTaxRate;
+            resultsDict['Title_2'] = 'Loan Details';
+            resultsDict['Loan Term'] = termArray[t];
+            resultsDict['Interest Rate'] = interestArray[t];
+            resultsDict['Down Payment'] = $downPaymentDollars;
+            resultsDict['Down Payment Percent'] = $downPayment;
+            resultsDict['Loan Amount'] = dict["loanAmount"];
+            resultsDict['Title_3'] = 'Monthly Payment Breakdown';
+            resultsDict['Monthly Mortgage Payment'] = dict["monthlyMortgagePayment"];
+            resultsDict['Monthly Property Tax'] = dict["monthlyPropertyTax"];
+            resultsDict['Monthly Home Owner&#39;s Insurance'] = $hoi;
+            resultsDict['Monthly PMI'] = dict["monthlyPMI"];
+            resultsDict['Monthly HOA'] = $hoa;
+            resultsDict['Total Monthly Payment'] = dict["totalMonthlyPayment"];
+            resultsDict['Title_4'] = 'Early Mortgage Payoff';
+            resultsDict['Extra Monthly Payment'] = $extraPayment;
+            resultsDict['Months Until Mortgage is Paid Off'] = dict["mdcount"];
+            resultsDict['Total Interest Paid'] = dict["totalInterest2"];
+            resultsDict['Total Interest Savings'] = dict["totalSavings"];
+            resultsDict['Title_5'] = 'PMI Details';
+            resultsDict['PMI Percent'] = $pmi;
+            resultsDict['Months Until 20% Equity'] = dict["equity"];
+            resultsDict['Total PMI Paid'] = dict["totalPMI"];
+            resultsDict['Title_6'] = 'Total Interest Paid';
+            resultsDict['If Paid Off in 10 years'] = tempArray[0];
+            resultsDict['If Paid Off in 15 years'] = tempArray[1];
+            resultsDict['If Paid Off in 20 years'] = tempArray[2];
+            resultsDict['If Paid Off in 30 years'] = tempArray[3];
+            resultsDict['Title_7'] = 'Total Out Of Pocket Cost Over Life of Loan';
+            resultsDict['Total Cost (w/o Extra Payment)'] = dict["totalCost"];
+            resultsDict['Total Cost (w/ Extra Payment)'] = dict["totalCost2"];
+
+            let rowCount = -1;
+            for (var key in resultsDict) {
+                rowCount++;
+                if (key.includes('Title') === false) {
+                    var column = document.createElement("td");
+                    //var $column = $('<td>');
+                    //$column.attr('id', columnID)
+                    column.id = columnID;
+                    if ($.inArray(key, dollarsArray) !== -1) {
+                        var text = document.createTextNode('$' + addCommas(resultsDict[key].toFixed(2)));
+                    } else if ($.inArray(key, percentArray) !== -1) {
+                        var text = document.createTextNode(resultsDict[key].toFixed(3) + '%');
+                    } else if ($.inArray(key, detailsArray) !== -1) {
+                        var text = document.createTextNode(addCommas(resultsDict[key]));
+                    } else if ($.inArray(key, yearsArray) !== -1) {
+                        //var text = document.createTextNode(resultsDict[key] + ' years');
+                        var text = '<div class="btn-group">' +
+											'<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' + resultsDict[key] + ' years <span class="caret"></span></a>' +
+											'<ul class="dropdown-menu">' +
+												'<li><a>10 years</a></li>' +
+												'<li><a>15 years</a></li>' +
+												'<li><a>20 years</a></li>' +
+												'<li><a>30 years</a></li>' +
+											 '</ul>' +
+										 '</div>'
+                        //var text = $.parseHTML(htmlTemp);
+                    }
+                    //column.innerText = text;
+                    if (key === 'Loan Term') {
+                        column.innerHTML = text;
+                    } else {
+                        column.appendChild(text);
+                    }
+                    //$column.append(text);
+                    rowArray[rowCount].appendChild(column);
+                    //rowArray[rowCount].appendChild($column);
+                    
+                    if (rowCount === Object.keys(resultsDict).length - 1) {
                     var column = document.createElement("td");
                     column.id = columnID;
-                    if (y == 1) {
-                        var text = document.createTextNode(dataArray[y]+" years");
-                    } else if (y == 2 || y == 14 || y == 18) {
-                        var text = document.createTextNode(dataArray[y]);
-                    } else {
-                        var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
-                    }
-                    column.appendChild(text);
-                    rowArray[y].appendChild(column);
 
-                    if (y == dataArray.length - 1) {
-                        var column = document.createElement("td");
-                        column.id = columnID;
-
-                        var bt = document.createElement('button');
-                        bt.className = "btn btn-danger btn-sm";
-                        bt.setAttribute("onclick","deleteCol('"+columnID+"')");
-                        bt.innerText = "Delete";
-                        column.appendChild(bt);
-                        column.setAttribute("style", "background-color: white;");
-                        column.setAttribute("align", "center");
-
-                        rowArray[dataArray.length].appendChild(column);
+                    var bt = document.createElement('button');
+                    bt.className = "delete btn btn-danger btn-sm";
+                    //bt.setAttribute("onclick","deleteCol('"+columnID+"')");
+                    bt.innerText = "Delete";
+                    column.appendChild(bt);
+                    column.setAttribute("style", "background-color: white;");
+                    column.setAttribute("align", "center");
+                    rowArray[rowCount + 1].appendChild(column);
                     }
                 }
             }
@@ -1875,53 +1939,104 @@ function calculate(kl) {
         var costFoot = Number(Math.round($homeCost/2900+'e2')+'e-2');
         var ptrString = Number(Math.round($propertyTaxRate+'e3')+'e-3').toFixed(3)+"%";
         var istring =  Number(Math.round($interestRate+'e3')+'e-3').toFixed(3)+"%";
-        var dataArray = ["Home Details", $homeCost, 2900, costFoot, ptrString,
-                         "Loan Details", $loanTerm, istring, dict["downPaymentAmount"], dict["loanAmount"],
-                         "Monthly Payment Breakdown", dict["monthlyMortgagePayment"], dict["monthlyPropertyTax"], $hoi, dict["monthlyPMI"], $hoa, dict["totalMonthlyPayment"],
-                         "Early Mortgage Payoff", $extraPayment, dict["mdcount"], dict["totalInterest2"], dict["totalSavings"],
-                         "PMI Details", dict["equity"], dict["totalPMI"],
-                         "Total Interest Paid", tempArray[0], tempArray[1], tempArray[2], tempArray[3],
-                         "Total Out Of Pocket Cost Over Life of Loan", dict["totalCost"], dict["totalCost2"]];
-        for (var y = 0; y < dataArray.length; y++) {
-            if (y != 0 && y != 5 && y != 10 && y != 17 && y != 22 && y != 25 && y != 30){
+
+        //Responsive Update Array
+        const resultsDict = {};
+        resultsDict['Title_1'] = 'Home Details';
+        resultsDict['Home Cost'] = $homeCost;
+        resultsDict['Square Footage'] = $squareFootage;
+        resultsDict['Price per Square Foot'] = $ppsf;
+        resultsDict['Property Tax Rate'] = $propertyTaxRate;
+        resultsDict['Title_2'] = 'Loan Details';
+        resultsDict['Loan Term'] = $loanTerm;
+        resultsDict['Interest Rate'] = $interestRate;
+        resultsDict['Down Payment'] = $downPaymentDollars;
+        resultsDict['Down Payment Percent'] = $downPayment;
+        resultsDict['Loan Amount'] = dict["loanAmount"];
+        resultsDict['Title_3'] = 'Monthly Payment Breakdown';
+        resultsDict['Monthly Mortgage Payment'] = dict["monthlyMortgagePayment"];
+        resultsDict['Monthly Property Tax'] = dict["monthlyPropertyTax"];
+        resultsDict['Monthly Home Owner&#39;s Insurance'] = $hoi;
+        resultsDict['Monthly PMI'] = dict["monthlyPMI"];
+        resultsDict['Monthly HOA'] = $hoa;
+        resultsDict['Total Monthly Payment'] = dict["totalMonthlyPayment"];
+        resultsDict['Title_4'] = 'Early Mortgage Payoff';
+        resultsDict['Extra Monthly Payment'] = $extraPayment;
+        resultsDict['Months Until Mortgage is Paid Off'] = dict["mdcount"];
+        resultsDict['Total Interest Paid'] = dict["totalInterest2"];
+        resultsDict['Total Interest Savings'] = dict["totalSavings"];
+        resultsDict['Title_5'] = 'PMI Details';
+        resultsDict['PMI Percent'] = $pmi;
+        resultsDict['Months Until 20% Equity'] = dict["equity"];
+        resultsDict['Total PMI Paid'] = dict["totalPMI"];
+        resultsDict['Title_6'] = 'Total Interest Paid';
+        resultsDict['If Paid Off in 10 years'] = tempArray[0];
+        resultsDict['If Paid Off in 15 years'] = tempArray[1];
+        resultsDict['If Paid Off in 20 years'] = tempArray[2];
+        resultsDict['If Paid Off in 30 years'] = tempArray[3];
+        resultsDict['Title_7'] = 'Total Out Of Pocket Cost Over Life of Loan';
+        resultsDict['Total Cost (w/o Extra Payment)'] = dict["totalCost"];
+        resultsDict['Total Cost (w/ Extra Payment)'] = dict["totalCost2"];
+
+        let rowCount = -1;
+        for (var key in resultsDict) {
+            rowCount++;
+            if (key.includes('Title') === false) {
+                var column = document.createElement("td");
+                //var $column = $('<td>');
+                //$column.attr('id', columnID)
+                column.id = columnID;
+                if ($.inArray(key, dollarsArray) !== -1) {
+                    var text = document.createTextNode('$' + addCommas(resultsDict[key].toFixed(2)));
+                } else if ($.inArray(key, percentArray) !== -1) {
+                    var text = document.createTextNode(resultsDict[key].toFixed(3) + '%');
+                } else if ($.inArray(key, detailsArray) !== -1) {
+                    var text = document.createTextNode(addCommas(resultsDict[key]));
+                } else if ($.inArray(key, yearsArray) !== -1) {
+                    //var text = document.createTextNode(resultsDict[key] + ' years');
+                    var text = '<div class="btn-group">' +
+                                        '<a class="btn btn-primary dropdown-toggle" data-toggle="dropdown">' + resultsDict[key] + ' years <span class="caret"></span></a>' +
+                                        '<ul class="dropdown-menu">' +
+                                            '<li><a>10 years</a></li>' +
+                                            '<li><a>15 years</a></li>' +
+                                            '<li><a>20 years</a></li>' +
+                                            '<li><a>30 years</a></li>' +
+                                            '</ul>' +
+                                        '</div>'
+                    //var text = $.parseHTML(htmlTemp);
+                }
+                //column.innerText = text;
+                if (key === 'Loan Term') {
+                    column.innerHTML = text;
+                } else {
+                    column.appendChild(text);
+                }
+                //$column.append(text);
+                rowArray[rowCount].appendChild(column);
+                //rowArray[rowCount].appendChild($column);
+                
+                if (rowCount === Object.keys(resultsDict).length - 1) {
                 var column = document.createElement("td");
                 column.id = columnID;
-                if (y == 2) {
-                    var text = document.createTextNode(addCommas(dataArray[y]));
-                } else if (y == 6) {
-                    var text = document.createTextNode(dataArray[y]+" years");
-                } else if (y == 4 || y == 7 || y == 19 || y == 23) {
-                    var text = document.createTextNode(dataArray[y]);
-                } else {
-                    var text = document.createTextNode("$"+addCommas(dataArray[y].toFixed(2)));
-                }
-                column.appendChild(text);
-                rowArray[y].appendChild(column);
 
-                if (y == dataArray.length - 1) {
-                    var column = document.createElement("td");
-                    column.id = columnID;
-
-                    var bt = document.createElement('button');
-                    bt.className = "btn btn-danger btn-sm";
-                    bt.setAttribute("onclick","deleteCol('"+columnID+"')");
-                    bt.innerText = "Delete";
-                    column.appendChild(bt);
-                    column.setAttribute("style", "background-color: white;");
-                    column.setAttribute("align", "center");
-
-                    rowArray[dataArray.length].appendChild(column);
+                var bt = document.createElement('button');
+                bt.className = "delete btn btn-danger btn-sm";
+                //bt.setAttribute("onclick","deleteCol('"+columnID+"')");
+                bt.innerText = "Delete";
+                column.appendChild(bt);
+                column.setAttribute("style", "background-color: white;");
+                column.setAttribute("align", "center");
+                rowArray[rowCount + 1].appendChild(column);
                 }
             }
         }
-
         for (var z = 0; z < rowArray.length; z++) {
             $table8.append(rowArray[z]);
         }
         columnID++;
 
     //Create Google Chart
-
+        /*
         //Google Chart Data
         var gData = {};
         gData["Mortgage"] = +dict["monthlyMortgagePayment"].toFixed(2);
@@ -1949,7 +2064,7 @@ function calculate(kl) {
                     [key, gData[key]]
                 ]);
             }
-            /*var data = google.visualization.arrayToDataTable([
+            var data = google.visualization.arrayToDataTable([
                 ['Monthly Payment', '$'],
                 //['Mortgage: $'+addCommas(gData["Mortgage"]), gData["Mortgage"]],
                 ['Mortgage', gData["Mortgage"]],
@@ -1957,7 +2072,7 @@ function calculate(kl) {
                 ["Home Owner's Insurance", gData["Home Owner's Insurance"]],
                 ['HOA', gData["HOA"]],
                 ['PMI', gData["PMI"]]
-            ]);*/
+            ]);
             var options = {
                 title: 'Monthly Payment Breakdown',
                 is3D: true,
@@ -1980,6 +2095,7 @@ function calculate(kl) {
 
         google.charts.load('current', {'packages':['corechart']});
         google.charts.setOnLoadCallback(drawVisualization);
+        */
     }
 
     //Early Mortgage Payoff Loop (Extra Monthly Payment)
