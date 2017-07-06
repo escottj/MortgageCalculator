@@ -3,9 +3,10 @@
 }
 th{
     text-align: right;
+    white-space: nowrap;
 }
 .table{
-    width: 100%;
+    width: auto;
 }
 .center {
     margin: 0 auto;
@@ -113,9 +114,20 @@ ul > li > a {
     cursor: pointer;
 }
 
+td {
+    position: relative !important;
+    padding: 1px !important;
+    margin: auto !important;
+    top: 50% !important;
+    vertical-align: middle !important;
+}
+
 .cell-input {
     border-radius: 4px !important;
-    cursor: auto; 
+    cursor: auto;
+    /*
+    width: auto !important;
+    */
 }
 
 .glyphicon-remove {
@@ -270,7 +282,10 @@ ul > li > a {
 
 
 .scrollThis {
+    /*
     overflow-y: auto !important;
+    overflow-x: hidden !important;
+    */
     height: auto;
 }
 
@@ -314,7 +329,8 @@ ul > li > a {
 }
 
 #results {
-    overflow: scroll;
+    overflow: auto !important;
+    /*overflow: scroll;*/
     position: fixed;
     top: 600px;
     width: 100%;
@@ -357,3 +373,24 @@ ul > li > a {
     transform: translate(0, 0px);
   }
 }
+
+.delete {
+    width: auto;
+}
+
+.highlightCell {
+    background-color: yellow;
+}
+
+/*
+.highlightCell:after {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    height: 10px;
+    background: #c00;
+    content: "";
+    width: 100%;
+    display: block;
+}
+*/
